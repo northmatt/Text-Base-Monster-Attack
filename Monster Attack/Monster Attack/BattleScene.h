@@ -8,6 +8,7 @@ public:
 	~BattleScene() { }
 
 	void init();
+	void UpdateScene();
 private:
 	int test2;
 };

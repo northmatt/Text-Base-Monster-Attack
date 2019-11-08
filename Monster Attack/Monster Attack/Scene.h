@@ -15,7 +15,7 @@ public:
 	Scene(string name);
 	~Scene() {}
 
-	void UpdateScene();
+	virtual void UpdateScene();
 private:
 	string name;
 };

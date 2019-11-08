@@ -8,8 +8,6 @@ void Game::InitGame() {
 }
 
 bool Game::UpdateGame() {
-	cout << "update\n";
-
 	currentScene->UpdateScene();
 
 	return false;
