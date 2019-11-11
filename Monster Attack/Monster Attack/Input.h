@@ -1,15 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include <stdexcept>
 #include <windows.h>
-#include<stdio.h>
-#include<conio.h>
 
-using std::runtime_error;
-
-class Input {
+class Input abstract {
 public:
-	WORD ReadVkCode(HANDLE hIn);
-	bool GetKeyDown(WORD chr);
+	static WORD ReadVkCode(HANDLE hIn);
+	static bool GetKeyDown(WORD chr);
 };

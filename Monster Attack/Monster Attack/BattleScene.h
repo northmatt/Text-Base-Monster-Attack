@@ -10,6 +10,5 @@ public:
 	void InitScene();
 	void UpdateScene();
 private:
-	int test2;
-	Input inp;
+	double timeSinceStart{ 0 };
 };

@@ -5,15 +5,21 @@ void BattleScene::InitScene() {
 }
 
 void BattleScene::UpdateScene() {
-	if (inp.GetKeyDown(37))
-		cout << "left ";
-	if (inp.GetKeyDown(39))
-		cout << "right ";
+	timeSinceStart += Time::deltaTime;
+	cout << "Time: " << static_cast<int>(timeSinceStart) << "\n";
+	
+	string outputChar{ "" };
 
-	if (inp.GetKeyDown(38))
-		cout << "up ";
-	if (inp.GetKeyDown(40))
-		cout << "down ";
+	if (Input::GetKeyDown(37))
+		outputChar += "left ";
+	if (Input::GetKeyDown(39))
+		outputChar += "right ";
 
-	cout << "battleUpdate\n";
+	if (Input::GetKeyDown(38))
+		outputChar += "up ";
+	if (Input::GetKeyDown(40))
+		outputChar += "down ";
+
+	outputChar += "BattleScene Update";
+	cout << outputChar;
 }
