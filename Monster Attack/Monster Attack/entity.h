@@ -8,10 +8,10 @@ using std::string;
 class Entity {
 public:
 	Entity() {};
-	Entity(string theName) {name = theName};
+	Entity(string theName) { name = theName; };
 	~Entity() {}
 
-	void Update();
+	virtual void Update();
 private:
 	string name;
 	Vec2 pos{ 0, 0 };

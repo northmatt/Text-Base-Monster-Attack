@@ -4,10 +4,11 @@
 
 class BattleScene : public Scene {
 public:
-	BattleScene() { init(); };
+	BattleScene() { InitScene(); };
 	~BattleScene() { }
 
-	void init();
+	void InitScene();
+	void UpdateScene();
 private:
-	int test2;
+	double timeSinceStart{ 0 };
 };
