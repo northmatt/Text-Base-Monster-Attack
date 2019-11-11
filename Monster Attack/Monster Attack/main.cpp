@@ -1,11 +1,11 @@
 #include "main.h"
 
 int main() {
-	Game theGame;
-
-	theGame.InitGame();
+	Game::shared_instance().InitGame();
 
 	bool isRunning = true;
 	while (isRunning)
-		isRunning = theGame.UpdateGame();
+		isRunning = Game::shared_instance().UpdateGame();
+
+	return 0;
 }
