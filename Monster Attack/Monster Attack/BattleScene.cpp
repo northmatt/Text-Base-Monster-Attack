@@ -22,4 +22,10 @@ void BattleScene::UpdateScene() {
 
 	outputChar += "BattleScene Update";
 	cout << outputChar;
+
+	//switch between scenes
+	if (Input::GetKeyDown('A'))
+		Game::shared_instance().SwitchToScene(0);
+	else if (Input::GetKeyDown('D'))
+		Game::shared_instance().SwitchToScene(1);
 }

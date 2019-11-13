@@ -27,12 +27,6 @@ bool Game::UpdateGame() {
 	//cap FPS
 	Time::FpsCap();
 
-	//switch between scenes
-	if (Input::GetKeyDown('A'))
-		currentScene = loadedScenes[0];
-	else if (Input::GetKeyDown('D'))
-		currentScene = loadedScenes[1];
-
 	//clear the lower portion of the screen
 	SetCurPos(0, 2);
 	cout << string(10, ' ') + "\n" + string(40, ' ');
@@ -49,7 +43,24 @@ void Game::SetCurPos(SHORT x, SHORT y) {
 	SetConsoleCursorPosition(hConsole, theCord);
 }
 
+void Game::SwitchToScene(int index, bool addFromCurrentScene) {
+	if (addFromCurrentScene) {
+		currentSceneIndex += index;
+		int indSize = static_cast<int>(loadedScenes.size());
+
+		if (currentSceneIndex < 0)
+			currentSceneIndex += indSize;
+		else if (currentSceneIndex >= indSize)
+			currentSceneIndex -= indSize;
+	} else
+		currentSceneIndex = index;
+
+	currentScene = loadedScenes[currentSceneIndex];
+}
+
 /*
+static Game *instance() {if (!_inst) _inst = new Game(); return _inst;}
+static S& instance() { static S inst; return inst; }
    38
 37 40 39
 https://stackoverflow.com/questions/1918263/reading-pixels-of-image-in-c
