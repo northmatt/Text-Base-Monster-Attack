@@ -2,7 +2,7 @@
 
 system_clock::time_point Time::a = system_clock::now();
 system_clock::time_point Time::b = system_clock::now();
-double Time::timeWait = 20;
+double Time::timeWait = 1 / 60;
 double Time::deltaTime = 0;
 
 //https://stackoverflow.com/questions/38730273/how-to-limit-fps-in-a-loop-with-c
