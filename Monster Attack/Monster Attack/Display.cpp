@@ -35,14 +35,12 @@ DoubleBuffer::DoubleBuffer() {
 	writeScreen = new (nothrow) char[size] { ' ' };
 }
 
-void DoubleBuffer::WriteBuffer(int x, int y, char *input) {
+void DoubleBuffer::WriteBuffer(int x, int y, char *input, int col) {
 	size_t sizeInput = strlen(input);
 	int currentX{ x }, currentY{ y };
+	int colPos{ -1 };
 
 	if (currentX >= csbi.dwSize.X || currentY >= csbi.dwSize.Y) {
-		string outputChar = "test";
-		char* outChar = &outputChar[0];
-		WriteBuffer(0, 0, outChar);
 		return;
 	}
 
@@ -50,22 +48,44 @@ void DoubleBuffer::WriteBuffer(int x, int y, char *input) {
 		if (input[i] == '\n') {
 			currentX = x;
 			currentY++;
+			colPos = -1;
 		} else {
-			if (0 <= currentX && currentX < csbi.dwSize.X && 0 <= currentY && currentY < csbi.dwSize.Y)
+			if (0 <= currentX && currentX < csbi.dwSize.X && 0 <= currentY && currentY < csbi.dwSize.Y) {
 				writeScreen[currentX + (csbi.dwSize.X * currentY)] = input[i];
+				
+				if (col != -1 && colPos == -1) {
+					colors.push_back(color{ col, (size_t)currentX, (size_t)currentX });
+					colPos = currentX;
+				} else if (col != -1 && colPos >= 0) {
+					colors[colors.size() - 1].end = (size_t)colPos;
+				}
+			} else
+				colPos = -1;
+
 			currentX++;
 		}
 	}
 }
 
 void DoubleBuffer::DisplayBuffer() {
-	cout << writeScreen;
-
-	/*if (colors.size() > 1) {
+	
+	if (colors.size() == 0)
+		cout << writeScreen;
+	else {
 		size_t lastCall{ 0 };
 		for (color currentCol : colors) {
-			char* p_next_write = &writeScreen[lastCall];
-			cout.write(p_next_write, currentCol.start - lastColl - 1)
+			/*char* p_next_write = &writeScreen[lastCall];
+			cout.write(p_next_write, currentCol.start - lastCall);*/
+
+			SetConsoleTextAttribute(hConsole, currentCol.col);
+
+			char* p_next_write2 = &writeScreen[currentCol.start];
+			//cout.write(p_next_write2, currentCol.end - currentCol.start + 1);
+			cout << p_next_write2;
+
+			SetConsoleTextAttribute(hConsole, 7);
+
+			lastCall = currentCol.end + 1;
 
 			//cout << writeScreen[lastCall -> currentCol.start - 1];
 			//Change Color
@@ -74,8 +94,10 @@ void DoubleBuffer::DisplayBuffer() {
 			//lastCall = currentCol.end + 1
 		}
 
+		char* p_next_write3 = &writeScreen[lastCall];
+		cout << p_next_write3;
 		//cout << writeScreen[lastCall -> size];
-	}*/
+	}
 	
 	for (size_t i = 0; i < size - 1; i++) {
 		writeScreen[i] = ' ';

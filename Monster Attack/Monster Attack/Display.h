@@ -15,7 +15,7 @@ class DoubleBuffer {
 public:
 	DoubleBuffer();
 
-	void WriteBuffer(int x, int y, char *input);
+	void WriteBuffer(int x, int y, char *input, int color = -1);
 	void DisplayBuffer();
 private:
 	struct color {
