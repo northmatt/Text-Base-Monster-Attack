@@ -18,6 +18,12 @@ public:
 	void WriteBuffer(int x, int y, char *input);
 	void DisplayBuffer();
 private:
+	struct color {
+		int col;
+		size_t start;
+		size_t end;
+	};
+
 	HANDLE hConsole;
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	HWND wConsole;
@@ -26,4 +32,6 @@ private:
 	COORD coord = { 0 };               //Top left screen position
 
 	char* writeScreen;
+
+	vector<color> colors;
 };
