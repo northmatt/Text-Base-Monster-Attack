@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Scene.h"
 #include "Time.h"
+#include "Display.h"
 
 using std::vector;
 
@@ -15,6 +16,7 @@ public:
 	bool UpdateGame();
 	void SetCurPos(SHORT x, SHORT y);
 	void SwitchToScene(int index, bool addFromCurrentScene = false);
+	DoubleBuffer buffer;
 private:
 	HANDLE hConsole;
 	Scene* currentScene{ nullptr };

@@ -5,17 +5,6 @@ void Game::InitGame() {
 	cout << "Game Init (press 'q' to quit) (use arrow keys) (use 'a' or 'd')\n";
 
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	
-	//makes window bigger
-	HWND console = GetConsoleWindow();
-	MoveWindow(console, 0, 0, 1500, 800, true);
-
-	SetConsoleTitle(L"Monster Battle");
-	//makes cursor invisible
-	CONSOLE_CURSOR_INFO cursorinfo;
-	cursorinfo.dwSize = 1;
-	cursorinfo.bVisible = FALSE;
-	SetConsoleCursorInfo(hConsole, &cursorinfo);
 
 	loadedScenes.push_back(new BattleScene());
 	loadedScenes.push_back(new BattleScene());
@@ -24,15 +13,17 @@ void Game::InitGame() {
 }
 
 bool Game::UpdateGame() {
+	//clear the lower portion of the screen
+	/*SetCurPos(0, 2);
+	cout << string(10, ' ') + "\n" + string(40, ' ');
+	SetCurPos(0, 2);*/
+
+	currentScene->UpdateScene();
+
 	//cap FPS
 	Time::FpsCap();
 
-	//clear the lower portion of the screen
-	SetCurPos(0, 2);
-	cout << string(10, ' ') + "\n" + string(40, ' ');
-	SetCurPos(0, 2);
-
-	currentScene->UpdateScene();
+	buffer.DisplayBuffer();
 
 	return (!Input::GetKeyDown('Q'));
 }
@@ -110,11 +101,9 @@ SetConsoleCursorPosition(h, coord);
 }
 
 static char buffer[2048];
-char * p_next_write = &buffer[0];
-for (int y = 0; y < MAX_Y; y++)
-{
-	for (int x = 0; x < MAX_X; x++)
-	{
+char *p_next_write = &buffer[0];
+for (int y = 0; y < MAX_Y; y++) {
+	for (int x = 0; x < MAX_X; x++) {
 		*p_next_write++ = battleField[x][y];
 	}
 	*p_next_write++ = '\n';

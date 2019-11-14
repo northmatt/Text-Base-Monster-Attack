@@ -5,10 +5,10 @@ void BattleScene::InitScene() {
 }
 
 void BattleScene::UpdateScene() {
-	timeSinceStart += Time::deltaTime;
-	cout << "Time: " << static_cast<int>(timeSinceStart) << "\n";
-	
 	string outputChar{ "" };
+
+	timeSinceStart += Time::deltaTime;
+	outputChar += "Time: " + to_string(static_cast<int>(timeSinceStart)) + "\n";
 
 	if (Input::GetKeyDown(37))
 		outputChar += "left ";
@@ -21,7 +21,9 @@ void BattleScene::UpdateScene() {
 		outputChar += "down ";
 
 	outputChar += "BattleScene Update";
-	cout << outputChar;
+	
+	char* outChar = &outputChar[0];
+	Game::shared_instance().buffer.WriteBuffer(0, 1, outChar);
 
 	//switch between scenes
 	if (Input::GetKeyDown('A'))

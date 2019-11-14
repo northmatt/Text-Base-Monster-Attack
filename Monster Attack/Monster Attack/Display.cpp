@@ -1,61 +1,76 @@
 #include "Display.h"
 //https://stackoverflow.com/questions/45780650/c-console-application-using-double-buffer-size-limitation
 //https://stackoverflow.com/questions/34842526/update-console-without-flickering-c
+
 DoubleBuffer::DoubleBuffer() {
-	//was to use to remove flickering but didn't work. props deleting soon
-	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	wConsole = GetConsoleWindow();
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	GetConsoleScreenBufferInfo(hConsole, &csbi);
 
-	//Get a handle to the console
-	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-	GetConsoleScreenBufferInfo(h, &csbi);
+	//remove scrolling
+	COORD new_size =
+	{
+		csbi.srWindow.Right - csbi.srWindow.Left + 1,
+		csbi.srWindow.Bottom - csbi.srWindow.Top + 1
+	};
+	SetConsoleScreenBufferSize(hConsole, new_size);
 
-	WINDOW_X_SIZE = csbi.dwSize.X;
-	WINDOW_Y_SIZE = csbi.dwSize.Y;
+	//makes window bigger
+	system("mode con COLS=700");
+	ShowWindow(wConsole, SW_MAXIMIZE);
+	SendMessage(wConsole, WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
 
-	COORD size = { WINDOW_X_SIZE , WINDOW_Y_SIZE };
-	SMALL_RECT rect;
-	rect.Left = 0;
-	rect.Right = WINDOW_X_SIZE - 1;
-	rect.Top = 0;
-	rect.Bottom = WINDOW_Y_SIZE - 1;
+	SetConsoleTitle(L"Monster Battle");
 
+	//makes cursor invisible
 	CONSOLE_CURSOR_INFO cursorinfo;
 	cursorinfo.dwSize = 1;
 	cursorinfo.bVisible = FALSE;
+	SetConsoleCursorInfo(hConsole, &cursorinfo);
 
-	hBuffer[0] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, 0, NULL);
-	SetConsoleScreenBufferSize(hBuffer[0], size);
+	//Find the number of characters to overwrite
+	size = csbi.dwSize.X * csbi.dwSize.Y;
+
+	COORD rectCords = { csbi.dwSize.X, csbi.dwSize.Y };
+	SMALL_RECT rect;
+	rect.Left = 0;
+	rect.Right = rectCords.X - 1;
+	rect.Top = 0;
+	rect.Bottom = rectCords.Y - 1;
+
+	hBuffer[0] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
+	SetConsoleScreenBufferSize(hBuffer[0], rectCords);
 	SetConsoleWindowInfo(hBuffer[0], TRUE, &rect);
 	SetConsoleCursorInfo(hBuffer[0], &cursorinfo);
 
-	hBuffer[1] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, 0, NULL);
-	SetConsoleScreenBufferSize(hBuffer[1], size);
+	hBuffer[1] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
+	SetConsoleScreenBufferSize(hBuffer[1], rectCords);
 	SetConsoleWindowInfo(hBuffer[1], TRUE, &rect);
 	SetConsoleCursorInfo(hBuffer[1], &cursorinfo);
-
-	nBufferIndex = 0;
 }
 
-void DoubleBuffer::WriteBuffer(SHORT x, SHORT y, char* string) {
-	DWORD dw;
+void DoubleBuffer::WriteBuffer(SHORT x, SHORT y, char *string) {
 	COORD startposition = { x,y };
 
 	SetConsoleCursorPosition(hBuffer[nBufferIndex], startposition);
-	WriteFile(hBuffer[nBufferIndex], string, strlen(string), &dw, NULL);
+	WriteFile(hBuffer[nBufferIndex], string, strlen(string), &n, NULL);
 }
 
-void DoubleBuffer::FlipBuffer() {
+void DoubleBuffer::DisplayBuffer() {
 	SetConsoleActiveScreenBuffer(hBuffer[nBufferIndex]);
 	nBufferIndex = !nBufferIndex;
+	FillConsoleOutputCharacter(hBuffer[nBufferIndex], TEXT(' '), size, coord, &n);
 }
 
-void DoubleBuffer::ClearBuffer() {
-	COORD coord = { 0,0 };
-	DWORD dw;
-	FillConsoleOutputCharacter(hBuffer[nBufferIndex], ' ', WINDOW_X_SIZE * WINDOW_Y_SIZE, coord, &dw);
+/*
+static char buffer[2048];
+char *p_next_write = &buffer[0];
+for (int y = 0; y < MAX_Y; y++) {
+	for (int x = 0; x < MAX_X; x++) {
+		*p_next_write++ = battleField[x][y];
+	}
+	*p_next_write++ = '\n';
 }
-
-void DoubleBuffer::ReleaseBuffer() {
-	CloseHandle(hBuffer[0]);
-	CloseHandle(hBuffer[1]);
-}
+*p_next_write = '\0'; // "Insurance" for C-Style strings.
+cout.write(&buffer[0], std::distance(p_buffer - &buffer[0]));
+*/
