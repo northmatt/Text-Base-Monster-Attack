@@ -19,6 +19,7 @@ DoubleBuffer::DoubleBuffer() {
 	system("mode con COLS=700");
 	ShowWindow(wConsole, SW_MAXIMIZE);
 	SendMessage(wConsole, WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
+	GetConsoleScreenBufferInfo(hConsole, &csbi);
 
 	SetConsoleTitle(L"Monster Battle");
 
@@ -29,48 +30,55 @@ DoubleBuffer::DoubleBuffer() {
 	SetConsoleCursorInfo(hConsole, &cursorinfo);
 
 	//Find the number of characters to overwrite
-	size = csbi.dwSize.X * csbi.dwSize.Y;
+	size = csbi.dwSize.X * csbi.dwSize.Y - 8;
 
-	COORD rectCords = { csbi.dwSize.X, csbi.dwSize.Y };
-	SMALL_RECT rect;
-	rect.Left = 0;
-	rect.Right = rectCords.X - 1;
-	rect.Top = 0;
-	rect.Bottom = rectCords.Y - 1;
-
-	hBuffer[0] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
-	SetConsoleScreenBufferSize(hBuffer[0], rectCords);
-	SetConsoleWindowInfo(hBuffer[0], TRUE, &rect);
-	SetConsoleCursorInfo(hBuffer[0], &cursorinfo);
-
-	hBuffer[1] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
-	SetConsoleScreenBufferSize(hBuffer[1], rectCords);
-	SetConsoleWindowInfo(hBuffer[1], TRUE, &rect);
-	SetConsoleCursorInfo(hBuffer[1], &cursorinfo);
+	writeScreen = new (nothrow) char[size] { ' ' };
 }
 
-void DoubleBuffer::WriteBuffer(SHORT x, SHORT y, char *string) {
-	COORD startposition = { x,y };
+void DoubleBuffer::WriteBuffer(int x, int y, char *input) {
+	int sizeInput = strlen(input);
+	int currentX{ x }, currentY{ y };
 
-	SetConsoleCursorPosition(hBuffer[nBufferIndex], startposition);
-	WriteFile(hBuffer[nBufferIndex], string, strlen(string), &n, NULL);
+	for (int i = 0; i < sizeInput; i++) {
+		if (input[i] == '\n') {
+			currentX = x;
+			currentY++;
+		} else if (input[i] != '\0') {
+			writeScreen[currentX + (csbi.dwSize.X * currentY)] = input[i];
+			currentX++;
+		}
+	}
 }
 
 void DoubleBuffer::DisplayBuffer() {
-	SetConsoleActiveScreenBuffer(hBuffer[nBufferIndex]);
-	nBufferIndex = !nBufferIndex;
-	FillConsoleOutputCharacter(hBuffer[nBufferIndex], TEXT(' '), size, coord, &n);
+	cout << writeScreen;
+	
+	for (size_t i = 0; i < size - 1; i++) {
+		writeScreen[i] = ' ';
+	}
+
+	cout.flush();
+	SetConsoleCursorPosition(hConsole, coord);
 }
 
 /*
-static char buffer[2048];
-char *p_next_write = &buffer[0];
-for (int y = 0; y < MAX_Y; y++) {
-	for (int x = 0; x < MAX_X; x++) {
-		*p_next_write++ = battleField[x][y];
+char* buffer;
+buffer = new (nothrow) char[size] { ' ' };
+
+char* p_next_write = &buffer[0];
+for (int y = 0; y < csbi.dwSize.Y - 1; y++) {
+	for (int x = 0; x < csbi.dwSize.X - 1; x++) {
+		*p_next_write++ = writeScreen[x + (csbi.dwSize.X * y)];
 	}
 	*p_next_write++ = '\n';
 }
 *p_next_write = '\0'; // "Insurance" for C-Style strings.
-cout.write(&buffer[0], std::distance(p_buffer - &buffer[0]));
+
+buffer = writeScreen;
+
+for (size_t i = 1; i < csbi.dwSize.Y - 1; i++) {
+		buffer[csbi.dwSize.X * i - 1] = '\n';
+}
+
+cout.write(buffer, size);
 */

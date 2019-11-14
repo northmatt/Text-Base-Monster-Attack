@@ -14,11 +14,11 @@ using std::to_string;
 
 class Scene {
 public:
-	Scene() { InitScene(); };
+	Scene() { };
 	Scene(string name);
 	~Scene() {}
 	//want virtual so that classes that inherinent the Scene class will run the inherinented class instead of the original Scene class (this one)
-	virtual void InitScene();
+	void InitScene();
 	virtual void UpdateScene();
 private:
 	string name;

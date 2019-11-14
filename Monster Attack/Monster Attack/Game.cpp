@@ -13,15 +13,10 @@ void Game::InitGame() {
 }
 
 bool Game::UpdateGame() {
-	//clear the lower portion of the screen
-	/*SetCurPos(0, 2);
-	cout << string(10, ' ') + "\n" + string(40, ' ');
-	SetCurPos(0, 2);*/
-
-	currentScene->UpdateScene();
-
 	//cap FPS
 	Time::FpsCap();
+
+	currentScene->UpdateScene();
 
 	buffer.DisplayBuffer();
 
