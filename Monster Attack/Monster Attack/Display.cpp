@@ -36,15 +36,23 @@ DoubleBuffer::DoubleBuffer() {
 }
 
 void DoubleBuffer::WriteBuffer(int x, int y, char *input) {
-	int sizeInput = strlen(input);
+	size_t sizeInput = strlen(input);
 	int currentX{ x }, currentY{ y };
 
-	for (int i = 0; i < sizeInput; i++) {
+	if (currentX >= csbi.dwSize.X || currentY >= csbi.dwSize.Y) {
+		string outputChar = "test";
+		char* outChar = &outputChar[0];
+		WriteBuffer(0, 0, outChar);
+		return;
+	}
+
+	for (size_t i = 0; i < sizeInput; i++) {
 		if (input[i] == '\n') {
 			currentX = x;
 			currentY++;
-		} else if (input[i] != '\0') {
-			writeScreen[currentX + (csbi.dwSize.X * currentY)] = input[i];
+		} else {
+			if (0 <= currentX && currentX < csbi.dwSize.X && 0 <= currentY && currentY < csbi.dwSize.Y)
+				writeScreen[currentX + (csbi.dwSize.X * currentY)] = input[i];
 			currentX++;
 		}
 	}
@@ -52,6 +60,22 @@ void DoubleBuffer::WriteBuffer(int x, int y, char *input) {
 
 void DoubleBuffer::DisplayBuffer() {
 	cout << writeScreen;
+
+	/*if (colors.size() > 1) {
+		size_t lastCall{ 0 };
+		for (color currentCol : colors) {
+			char* p_next_write = &writeScreen[lastCall];
+			cout.write(p_next_write, currentCol.start - lastColl - 1)
+
+			//cout << writeScreen[lastCall -> currentCol.start - 1];
+			//Change Color
+			//cout << writeScreen[currentCol.start -> currentCol.end];
+			//Reset color
+			//lastCall = currentCol.end + 1
+		}
+
+		//cout << writeScreen[lastCall -> size];
+	}*/
 	
 	for (size_t i = 0; i < size - 1; i++) {
 		writeScreen[i] = ' ';
@@ -60,25 +84,3 @@ void DoubleBuffer::DisplayBuffer() {
 	cout.flush();
 	SetConsoleCursorPosition(hConsole, coord);
 }
-
-/*
-char* buffer;
-buffer = new (nothrow) char[size] { ' ' };
-
-char* p_next_write = &buffer[0];
-for (int y = 0; y < csbi.dwSize.Y - 1; y++) {
-	for (int x = 0; x < csbi.dwSize.X - 1; x++) {
-		*p_next_write++ = writeScreen[x + (csbi.dwSize.X * y)];
-	}
-	*p_next_write++ = '\n';
-}
-*p_next_write = '\0'; // "Insurance" for C-Style strings.
-
-buffer = writeScreen;
-
-for (size_t i = 1; i < csbi.dwSize.Y - 1; i++) {
-		buffer[csbi.dwSize.X * i - 1] = '\n';
-}
-
-cout.write(buffer, size);
-*/
