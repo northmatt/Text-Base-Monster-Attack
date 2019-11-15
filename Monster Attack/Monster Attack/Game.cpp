@@ -4,8 +4,6 @@
 void Game::InitGame() {
 	cout << "Game Init (press 'q' to quit) (use arrow keys) (use 'a' or 'd')\n";
 
-	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
 	loadedScenes.push_back(new BattleScene());
 	loadedScenes.push_back(new BattleScene());
 
@@ -21,12 +19,6 @@ bool Game::UpdateGame() {
 	buffer.DisplayBuffer();
 
 	return (!Input::GetKeyDown('Q'));
-}
-
-void Game::SetCurPos(SHORT x, SHORT y) {
-	cout.flush();
-	COORD theCord = { x, y };
-	SetConsoleCursorPosition(hConsole, theCord);
 }
 
 void Game::SwitchToScene(int index, bool addFromCurrentScene) {
@@ -70,39 +62,4 @@ int main(int argc, char **argv) {
  }
  return 0;
 }
-
-void clear_screen ( void )
-{
-DWORD n;                         //Number of characters written
-DWORD size;                      //number of visible characters
-COORD coord = { 0 };               //Top left screen position
-CONSOLE_SCREEN_BUFFER_INFO csbi;
-
-//Get a handle to the console
-HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-
-GetConsoleScreenBufferInfo(h, &csbi);
-
-//Find the number of characters to overwrite
-size = csbi.dwSize.X * csbi.dwSize.Y;
-
-//Overwrite the screen buffer with whitespace
-FillConsoleOutputCharacter(h, TEXT(' '), size, coord, &n);
-GetConsoleScreenBufferInfo(h, &csbi);
-FillConsoleOutputAttribute(h, csbi.wAttributes, size, coord, &n);
-
-//Reset the cursor to the top left position
-SetConsoleCursorPosition(h, coord);
-}
-
-static char buffer[2048];
-char *p_next_write = &buffer[0];
-for (int y = 0; y < MAX_Y; y++) {
-	for (int x = 0; x < MAX_X; x++) {
-		*p_next_write++ = battleField[x][y];
-	}
-	*p_next_write++ = '\n';
-}
-*p_next_write = '\0'; // "Insurance" for C-Style strings.
-cout.write(&buffer[0], std::distance(p_buffer - &buffer[0]));
 */

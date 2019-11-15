@@ -33,38 +33,32 @@ DoubleBuffer::DoubleBuffer() {
 	size = csbi.dwSize.X * csbi.dwSize.Y - 8;
 
 	writeScreen = new (nothrow) char[size] { ' ' };
+	colorScreen = new (nothrow) int[size] { 7 };
 }
 
-void DoubleBuffer::WriteBuffer(int x, int y, char *input, int col) {
+void DoubleBuffer::WriteBuffer(string strInput, int x, int y, int col) {
+	char* input = &strInput[0];
 	size_t sizeInput = strlen(input);
 	int currentX{ x }, currentY{ y };
-	int colPos{ -1 };
 
-	if (currentX >= csbi.dwSize.X || currentY >= csbi.dwSize.Y) {
+	//check if image is offscreen
+	if (currentX >= csbi.dwSize.X || currentY >= csbi.dwSize.Y)
 		return;
-	}
 
+	//write the image given into the 1D buffer array.
 	for (size_t i = 0; i < sizeInput; i++) {
 		if (input[i] == '\n') {
-			if (col != -1 && colPos >= 0)
-				colors[colors.size() - 1].end = static_cast<size_t>(currentX);
-			
 			currentX = x;
 			currentY++;
-
-			colPos = -1;
 		} else {
+			//check if character is offscreen
 			if (0 <= currentX && currentX < csbi.dwSize.X && 0 <= currentY && currentY < csbi.dwSize.Y) {
 				writeScreen[currentX + (csbi.dwSize.X * currentY)] = input[i];
-				
-				if (col != -1 && colPos == -1) {
-					colors.push_back(color{ col, static_cast<size_t>(currentX), static_cast<size_t>(currentX) });
-					colPos = currentX;
-				} else if (col != -1 && colPos >= 0) {
-					colors[colors.size() - 1].end = static_cast<size_t>(currentX);
-				}
-			} else
-				colPos = -1;
+				colorScreen[currentX + (csbi.dwSize.X * currentY)] = col;
+
+				if (col != 7)
+					colorOnFrame = true;
+			}
 
 			currentX++;
 		}
@@ -72,43 +66,37 @@ void DoubleBuffer::WriteBuffer(int x, int y, char *input, int col) {
 }
 
 void DoubleBuffer::DisplayBuffer() {
-	
-	if (colors.size() == 0)
+	if (!colorOnFrame)
 		cout << writeScreen;
 	else {
+		//looks at the colors in the list which contain starting and ending index. Draw all characters in batches to reduce the couts as much as possible as it's slow
 		size_t lastCall{ 0 };
-		for (color currentCol : colors) {
-			//0, 8
-			char* p_next_write1 = &writeScreen[lastCall];
-			cout.write(p_next_write1, currentCol.start - lastCall);
+		int intColor{ 7 };
+		for (size_t i = 0; i < size; i++)
+			if (colorScreen[i] != intColor || i == size - 1) {
+				//change color
+				SetConsoleTextAttribute(hConsole, intColor);
 
-			SetConsoleTextAttribute(hConsole, currentCol.col);
+				//draw the buffer starting from its last call to its current position
+				char* p_next_write1 = &writeScreen[lastCall];
+				cout.write(p_next_write1, i - lastCall);
 
-			char* p_next_write2 = &writeScreen[currentCol.start];
-			cout.write(p_next_write2, currentCol.end - currentCol.start);
+				intColor = colorScreen[i];
+				lastCall = i;
+			}
+		//reset color
+		SetConsoleTextAttribute(hConsole, 7);
 
-			SetConsoleTextAttribute(hConsole, 7);
-
-			lastCall = currentCol.end;
-
-			//cout << writeScreen[lastCall -> currentCol.start - 1];
-			//Change Color
-			//cout << writeScreen[currentCol.start -> currentCol.end];
-			//Reset color
-			//lastCall = currentCol.end + 1
-		}
-
-		char* p_next_write3 = &writeScreen[lastCall];
-		cout << p_next_write3;
-		//cout << writeScreen[lastCall -> size];
-
-		colors = {};
+		//clear color buffer
+		for (size_t i = 0; i < size - 1; i++)
+			colorScreen[i] = 7;
 	}
 	
-	for (size_t i = 0; i < size - 1; i++) {
+	//clear text buffer
+	for (size_t i = 0; i < size - 1; i++)
 		writeScreen[i] = ' ';
-	}
 
+	//clear the actual built-in cout buffer and reset cursor pos
 	cout.flush();
 	SetConsoleCursorPosition(hConsole, coord);
 }

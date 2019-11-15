@@ -21,9 +21,8 @@ void BattleScene::UpdateScene() {
 		outputChar += "down ";
 
 	outputChar += "BattleScene Update";
-	
-	char* outChar = &outputChar[0];
-	Game::shared_instance().buffer.WriteBuffer(0, 1, outChar, 20);
+	Game::shared_instance().buffer.WriteBuffer(outputChar, 0, 1, 20);
+	Game::shared_instance().buffer.WriteBuffer("This is a simple Test\nTessTTT", 4, 2, 25);
 
 	//switch between scenes
 	if (Input::GetKeyDown('A'))

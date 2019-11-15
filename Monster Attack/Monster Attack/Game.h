@@ -18,7 +18,6 @@ public:
 	void SwitchToScene(int index, bool addFromCurrentScene = false);
 	DoubleBuffer buffer;
 private:
-	HANDLE hConsole;
 	Scene* currentScene{ nullptr };
 	int currentSceneIndex{ 0 };
 	vector<Scene*> loadedScenes;

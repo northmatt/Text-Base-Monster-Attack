@@ -15,15 +15,9 @@ class DoubleBuffer {
 public:
 	DoubleBuffer();
 
-	void WriteBuffer(int x, int y, char *input, int color = -1);
+	void WriteBuffer(string strInput, int x, int y, int color = 7);
 	void DisplayBuffer();
 private:
-	struct color {
-		int col;
-		size_t start;
-		size_t end;
-	};
-
 	HANDLE hConsole;
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	HWND wConsole;
@@ -32,6 +26,6 @@ private:
 	COORD coord = { 0 };               //Top left screen position
 
 	char* writeScreen;
-
-	vector<color> colors;
+	int* colorScreen;
+	bool colorOnFrame{ false };
 };
