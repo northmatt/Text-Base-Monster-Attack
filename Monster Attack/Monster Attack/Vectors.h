@@ -3,12 +3,29 @@
 #include <iostream>
 #include <math.h>
 
-struct Vec2 {
-	double x;
-	double y;
+class Vec2 {
+public:
+	Vec2(double xIn = 0, double yIn = 0) { x = xIn; y = yIn; }
+	~Vec2() {}
+
+	double x{ 0 };
+	double y{ 0 };
+
+	void Zero() {
+		x = 0;
+		y = 0;
+	}
 
 	double Mag() {
 		return sqrt(x * x + y * y);
+	}
+
+	Vec2 Normalize() {
+		double theMag = Mag();
+		if (theMag > 0)
+			return Vec2{ x / theMag, y / theMag };
+
+		return Vec2{};
 	}
 
 	Vec2 Rotate(double angle) {
@@ -21,37 +38,41 @@ struct Vec2 {
 
 		return Vec2{ x, y };
 	}
+
+	Vec2 operator+(const Vec2 v2) {
+		return Vec2{ x + v2.x, y + v2.y };
+	}
+
+	Vec2 operator-(const Vec2 v2) {
+		return Vec2{ x - v2.x, y - v2.y };
+	}
+	//scale
+	Vec2 operator*(const double scale) {
+		return Vec2{ scale * x , scale * y };
+	}
+	//dot
+	double operator*(const Vec2 v2) {
+		return x * v2.x + y * v2.y;
+	}
+	//cross
+	Vec2 operator^(const Vec2 v2) {
+		return Vec2{ y * v2.x - x * v2.y, x * v2.y - y * v2.x };
+	}
 };
 
-Vec2 operator+(const Vec2 v1, const Vec2 v2) {
-	return Vec2{ v1.x + v2.x, v1.y + v2.y };
-}
+class Vec3 {
+public:
+	Vec3(double xIn = 0, double yIn = 0, double zIn = 0) { x = xIn; y = yIn; z = zIn; }
+	~Vec3() {}
 
-Vec2 operator-(const Vec2 v1, const Vec2 v2) {
-	return Vec2{ v1.x - v2.x, v1.y - v2.y };
-}
-//scale
-Vec2 operator*(const double scale, const Vec2 v1) {
-	return Vec2{ scale * v1.x , scale * v1.y };
-}
-//dot
-double operator*(const Vec2 v1, const Vec2 v2) {
-	return v1.x * v2.x + v1.y * v2.y;
-}
-//cross
-Vec2 operator^(const Vec2 v1, const Vec2 v2) {
-	return Vec2{ v1.y * v2.x - v1.x * v2.y, v1.x * v2.y - v1.y * v2.x };
-}
+	double x{ 0 };
+	double y{ 0 };
+	double z{ 0 };
 
-
-struct Vec3 {
-	double x;
-	double y;
-	double z;
-	
 	double Mag() {
 		return sqrt(x * x + y * y + z * z);
 	}
+
 	/*
 	x
 	[ 1 0     0    ]
@@ -67,7 +88,7 @@ struct Vec3 {
 	[ xCos -ySin 0 ]
 	[ xSin  yCos 0 ]
 	[ 0     0    1 ]
-	*/
+	
 	Vec3 Rotate(Vec3 angle) {
 		Vec3 outVec{ x, y, z };
 
@@ -79,24 +100,25 @@ struct Vec3 {
 		outVec.y = 1;
 		outVec.z = -outVec.x * sin(angle.x) + outVec.y * 0 + outVec.z * cos(angle.x);
 	}
+	*/
+
+	Vec3 operator+(const Vec3 v2) {
+		return Vec3{ x + v2.x, y + v2.y, z + v2.z };
+	}
+
+	Vec3 operator-(const Vec3 v2) {
+		return Vec3{ x - v2.x, y - v2.y, z - v2.z };
+	}
+	//scale
+	Vec3 operator*(const double scale) {
+		return Vec3{ scale * x, scale * y, scale * z };
+	}
+	//dot
+	double operator*(const Vec3 v2) {
+		return x * v2.x + y * v2.y + z * v2.z;
+	}
+	//cross
+	Vec3 operator^(const Vec3 v2) {
+		return Vec3{ y * v2.z - z * v2.y, z * v2.x - x * v2.z, x * v2.y - y * v2.x };
+	}
 };
-
-Vec3 operator+(const Vec3 v1, const Vec3 v2) {
-	return Vec3{ v1.x + v2.x, v1.y + v2.y, v1.z + v2.z };
-}
-
-Vec3 operator-(const Vec3 v1, const Vec3 v2) {
-	return Vec3{ v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
-}
-//scale
-Vec3 operator*(const double scale, const Vec3 v1) {
-	return Vec3{ scale * v1.x, scale * v1.y, scale * v1.z };
-}
-//dot
-double operator*(const Vec3 v1, const Vec3 v2) {
-	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-}
-//cross
-Vec3 operator^(const Vec3 v1, const Vec3 v2) {
-	return Vec3{ v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x };
-}

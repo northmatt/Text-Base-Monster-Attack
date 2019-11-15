@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include "Input.h"
 #include "Time.h"
+#include "entity.h"
 
 using std::cout;
 using std::cin;

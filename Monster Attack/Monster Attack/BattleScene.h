@@ -12,4 +12,5 @@ public:
 	void UpdateScene();
 private:
 	double timeSinceStart{ 0 };
+	vector<Entity*> entities;
 };

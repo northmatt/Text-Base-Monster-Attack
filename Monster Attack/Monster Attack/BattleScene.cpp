@@ -1,16 +1,27 @@
 #include "BattleScene.h"
+#include "TestEntity.h"
 
 void BattleScene::InitScene() {
 	cout << "battleInit\n";
+	entities.push_back(new TestEnt("    \n    ", "Player", 3, 3));
 }
 
 void BattleScene::UpdateScene() {
-	string outputChar{ "" };
-
 	timeSinceStart += Time::deltaTime;
-	outputChar += "Time: " + to_string(static_cast<int>(timeSinceStart)) + "\n";
+	string outputChar = "Time: " + to_string(static_cast<int>(timeSinceStart)) + "\n";
+	Game::shared_instance().buffer.WriteBuffer(outputChar, 0, 0, 6);
 
-	if (Input::GetKeyDown(37))
+	for (Entity* currentEnt : entities)
+		currentEnt->Update();
+
+	//switch between scenes
+	if (Input::GetKeyDown('A'))
+		Game::shared_instance().SwitchToScene(0);
+	else if (Input::GetKeyDown('D'))
+		Game::shared_instance().SwitchToScene(1);
+}
+
+/*if (Input::GetKeyDown(37))
 		outputChar += "left ";
 	if (Input::GetKeyDown(39))
 		outputChar += "right ";
@@ -22,11 +33,4 @@ void BattleScene::UpdateScene() {
 
 	outputChar += "BattleScene Update";
 	Game::shared_instance().buffer.WriteBuffer(outputChar, 0, 1, 20);
-	Game::shared_instance().buffer.WriteBuffer("This is a simple Test\nTessTTT", 4, 2, 25);
-
-	//switch between scenes
-	if (Input::GetKeyDown('A'))
-		Game::shared_instance().SwitchToScene(0);
-	else if (Input::GetKeyDown('D'))
-		Game::shared_instance().SwitchToScene(1);
-}
+	Game::shared_instance().buffer.WriteBuffer("This is a simple Test\nTessTTT", 4, 2, 25);*/

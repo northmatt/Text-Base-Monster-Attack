@@ -7,13 +7,14 @@ using std::string;
 
 class Entity {
 public:
-	Entity() {};
-	Entity(string theName) { name = theName; };
+	Entity() {}
+	Entity(string theName) { name = theName; }
 	~Entity() {}
 
 	virtual void Update();
-private:
+
 	string name;
-	Vec2 pos{ 0, 0 };
+	Vec2 pos;
 	string image{ "" };
 };
+

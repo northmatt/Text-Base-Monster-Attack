@@ -32,6 +32,10 @@ DoubleBuffer::DoubleBuffer() {
 	//Find the number of characters to overwrite
 	size = csbi.dwSize.X * csbi.dwSize.Y - 8;
 
+	RECT resSize;
+	GetWindowRect(wConsole, &resSize);
+	SetCursorPos(resSize.right / 2, resSize.bottom);
+
 	writeScreen = new (nothrow) char[size] { ' ' };
 	colorScreen = new (nothrow) int[size] { 7 };
 }
