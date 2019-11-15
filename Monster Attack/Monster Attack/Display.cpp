@@ -40,9 +40,10 @@ DoubleBuffer::DoubleBuffer() {
 	colorScreen = new (nothrow) int[size] { 7 };
 }
 
-void DoubleBuffer::WriteBuffer(string strInput, int x, int y, int col) {
+void DoubleBuffer::WriteBuffer(string strInput, double rawX, double rawY, int col) {
 	char* input = &strInput[0];
 	size_t sizeInput = strlen(input);
+	int x{ static_cast<int>(round(rawX)) }, y{ static_cast<int>(round(rawY)) };
 	int currentX{ x }, currentY{ y };
 
 	//check if image is offscreen
@@ -104,3 +105,84 @@ void DoubleBuffer::DisplayBuffer() {
 	cout.flush();
 	SetConsoleCursorPosition(hConsole, coord);
 }
+
+void DoubleBuffer::loadBackground(WCHAR fileName) {
+	//loadBackground(L"level_one.png")
+	/*static Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+	static ULONG_PTR gdiplusToken;
+	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+	HBITMAP result = NULL;
+
+	Gdiplus::Bitmap* bitmap = new Gdiplus::Bitmap(fileName, false);
+	bitmap->GetHBITMAP(NULL, &result);
+	delete bitmap;
+
+	//read image and load into map from "result"
+
+	Gdiplus::GdiplusShutdown(gdiplusToken);*/
+}
+//https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file/38440684
+unsigned char* DoubleBuffer::ReadBMP(char* filename) {
+	int i{ 0 };
+	//FILE* f = fopen(filename, "rb");
+	FILE* f = NULL;
+
+	if (f == NULL)
+		throw "Argument Exception";
+
+	unsigned char info[54];
+	fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
+
+	// extract image height and width from header
+	int width = *(int*)&info[18];
+	int height = *(int*)&info[22];
+
+	cout << std::endl;
+	cout << "  Name: " << filename << endl;
+	cout << " Width: " << width << endl;
+	cout << "Height: " << height << endl;
+
+	int row_padded = (width * 3 + 3) & (~3);
+	unsigned char* data = new unsigned char[row_padded];
+	unsigned char tmp;
+
+	for (int i = 0; i < height; i++) {
+		fread(data, sizeof(unsigned char), row_padded, f);
+		for (int j = 0; j < width * 3; j += 3) {
+			// Convert (B, G, R) to (R, G, B)
+			tmp = data[j];
+			data[j] = data[j + 2];
+			data[j + 2] = tmp;
+
+			cout << "R: " << (int)data[j] << " G: " << (int)data[j + 1] << " B: " << (int)data[j + 2] << endl;
+		}
+	}
+
+	fclose(f);
+	return data;
+}
+
+/*
+https://stackoverflow.com/questions/1918263/reading-pixels-of-image-in-c
+#include <Magick++.h>
+#include <iostream>
+
+using namespace Magick;
+using namespace std;
+
+int main(int argc, char **argv) {
+ try {
+  InitializeMagick(*argv);
+  Image img("C:/test.bmp");
+  ColorRGB rgb(img.pixelColor(0, 0));  // ie. pixel at pos x=0, y=0
+  cout << "red: " << rgb.red();
+  cout << ", green: " << rgb.green();
+  cout << ", blue: " << rgb.blue() << endl;
+ }
+  catch ( Magick::Exception & error) {
+  cerr << "Caught Magick++ exception: " << error.what() << endl;
+ }
+ return 0;
+}
+*/

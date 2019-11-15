@@ -3,6 +3,8 @@
 #include "entity.h"
 #include "Game.h"
 
+using std::round;
+
 class TestEnt : public Entity {
 public:
 	TestEnt(string inImage, string inName, double inPosX, double inPosY);

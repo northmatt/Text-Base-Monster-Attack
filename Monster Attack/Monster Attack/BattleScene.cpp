@@ -8,7 +8,7 @@ void BattleScene::InitScene() {
 
 void BattleScene::UpdateScene() {
 	timeSinceStart += Time::deltaTime;
-	string outputChar = "Time: " + to_string(static_cast<int>(timeSinceStart)) + "\n";
+	string outputChar = "Time: " + to_string(static_cast<int>(timeSinceStart));
 	Game::shared_instance().buffer.WriteBuffer(outputChar, 0, 0, 6);
 
 	for (Entity* currentEnt : entities)

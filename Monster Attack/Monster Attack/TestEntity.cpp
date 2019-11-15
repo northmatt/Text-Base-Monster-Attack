@@ -17,13 +17,13 @@ void TestEnt::Update() {
 	if (Input::GetKeyDown(40))
 		vel.y += 1;
 
-	vel = vel.Normalize();
-	vel.x *= 2;
-
-	vel = vel * Time::deltaTime;
+	vel = vel.Normalize() * Time::deltaTime;
 	pos = pos + vel * speed;
 
 	vel.Zero();
 
-	Game::shared_instance().buffer.WriteBuffer(image, static_cast<int>(pos.x) / 2 * 2, static_cast<int>(pos.y), 20);
+	string outputChar = "Pos: " + to_string(pos.x) + ", " + to_string(pos.y);
+	Game::shared_instance().buffer.WriteBuffer(outputChar, 0, 1, 5);
+
+	Game::shared_instance().buffer.WriteBuffer(image, round(pos.x) * 2, pos.y, 20);
 }
