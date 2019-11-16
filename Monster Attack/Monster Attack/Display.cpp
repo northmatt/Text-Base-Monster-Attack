@@ -39,43 +39,40 @@ DoubleBuffer::DoubleBuffer() {
 	writeScreen = new (nothrow) char[size] { ' ' };
 	colorScreen = new (nothrow) int[size] { 7 };
 
-	unsigned char* backgroundRawImage;
+	/*unsigned char* backgroundRawImage;
 	int imageHeight, imageWidth;
 	ReadBMP("testImage", backgroundRawImage, imageWidth, imageHeight);
 
 	vector<string> theColorTest;
 	vector<int> theColorTest2;
-	for (size_t i = 0; i < imageHeight * imageWidth * 3; i += 3) {
-		string addedString = "R: " + to_string((int)backgroundRawImage[i]) + "\tG: " + to_string((int)backgroundRawImage[i + 1]) + "\tB: " + to_string((int)backgroundRawImage[i + 2]);
+	for (size_t y = 0; y < imageWidth; y++)
+		for (size_t x = 0; x < imageHeight; x++) {
+			string addedString = "R: " + to_string((int)backgroundRawImage[3 * (y * imageWidth + x)]) + "\tG: " + to_string((int)backgroundRawImage[3 * (y * imageWidth + x) + 1]) + "\tB: " + to_string((int)backgroundRawImage[3 * (y * imageWidth + x) + 2]);
 
-		int theIndex{ -1 };
-		if (theColorTest.size() > 1) {
-			for (size_t x = 0; x < theColorTest.size() - 1; x++) {
-				if (theColorTest[x] == addedString) {
-					theIndex = x;
-					break;
-				}
-			}
+			int theIndex{ -1 };
+			if (theColorTest.size() > 1)
+				for (size_t i = 0; i < theColorTest.size() - 1; i++)
+					if (theColorTest[i] == addedString) {
+						theIndex = i;
+						break;
+					}
+
+			if (theIndex == -1) {
+				theColorTest.push_back(addedString);
+				theColorTest2.push_back(1);
+			} else
+				theColorTest2[theIndex] += 1;
 		}
-
-		if (theIndex == -1) {
-			theColorTest.push_back(addedString);
-			theColorTest2.push_back(1);
-		} else
-			theColorTest2[theIndex] += 1;
-	}
-
-	for (size_t i = 0; i < theColorTest.size() - 1; i++) {
+	for (size_t i = 0; i < theColorTest.size() - 1; i++)
 		cout << theColorTest[i] << "\t  ::  " << theColorTest2[i] << "\n";
-	}
 
-	system("pause");
+	system("pause");*/
 }
 
 void DoubleBuffer::WriteBuffer(string strInput, double rawX, double rawY, int col) {
 	char* input = &strInput[0];
 	size_t sizeInput = strlen(input);
-	int x{ static_cast<int>(round(rawX)) }, y{ static_cast<int>(round(rawY)) };
+	int x{ static_cast<int>(round(rawX * 2)) }, y{ static_cast<int>(round(rawY)) };
 	int currentX{ x }, currentY{ y };
 
 	//check if image is offscreen
@@ -127,6 +124,8 @@ void DoubleBuffer::DisplayBuffer() {
 		//clear color buffer
 		for (size_t i = 0; i < size - 1; i++)
 			colorScreen[i] = 7;
+
+		colorOnFrame = false;
 	}
 	
 	//clear text buffer
@@ -156,12 +155,8 @@ void DoubleBuffer::loadBackground(WCHAR fileName) {
 }
 //https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file/38440684
 void DoubleBuffer::ReadBMP(string filename, unsigned char* &imageData, int &width, int &height) {
-	int i{ 0 };
-	FILE* f = fopen(&string("backgrounds/" + filename + ".bmp")[0], "rb");
-
-	if (f == NULL)
-		throw "Argument Exception";
-
+	/*int i{ 0 };
+	FILE* f = fopen(&("backgrounds/" + filename + ".bmp")[0], "rb");
 	unsigned char info[54];
 	fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
 
@@ -169,31 +164,18 @@ void DoubleBuffer::ReadBMP(string filename, unsigned char* &imageData, int &widt
 	width = *(int*)&info[18];
 	height = *(int*)&info[22];
 
-	int row_padded = (width * 3 + 3) & (~3);
-	unsigned char* data = new unsigned char[row_padded];
-	unsigned char tmp;
+	int size = 3 * width * height;
+	unsigned char* data = new unsigned char[size]; // allocate 3 bytes per pixel
+	fread(data, sizeof(unsigned char), size, f); // read the rest of the data at once
+	fclose(f);
 
-	unsigned char* dataImage = new unsigned char[height * width * 3];
-	for (int i = 0; i < height; i++) {
-		fread(data, sizeof(unsigned char), row_padded, f);
-		for (int j = 0; j < width * 3; j += 3) {
-			// Convert (B, G, R) to (R, G, B)
-			tmp = data[j];
-			data[j] = data[j + 2];
-			data[j + 2] = tmp;
-
-			dataImage[j + (i * width)] = data[j];
-			dataImage[j + (i * width) + 1] = data[j + 1];
-			dataImage[j + (i * width) + 2] = data[j + 2];
-
-			/*cout << "R: " << (int)data[j]
-				<< "\tG: " << (int)data[j + 1]
-				<< "\tB: " << (int)data[j + 2] << "\t\t";*/
-		}
+	for (i = 0; i < size; i += 3) {
+		unsigned char tmp = data[i];
+		data[i] = data[i + 2];
+		data[i + 2] = tmp;
 	}
 
-	fclose(f);
-	imageData = dataImage;
+	imageData = data;*/
 }
 
 /*

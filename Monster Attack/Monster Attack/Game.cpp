@@ -1,11 +1,13 @@
 #include "Game.h"
 #include "BattleScene.h"
+#include "MapCreator.h"
 
 void Game::InitGame() {
 	cout << "Game Init (press 'q' to quit) (use arrow keys) (use 'a' or 'd')\n";
 
-	loadedScenes.push_back(new BattleScene());
-	loadedScenes.push_back(new BattleScene());
+	//loadedScenes.push_back(new BattleScene());
+	//loadedScenes.push_back(new BattleScene());
+	loadedScenes.push_back(new MapCreator());
 
 	currentScene = loadedScenes[0];
 }
@@ -13,6 +15,8 @@ void Game::InitGame() {
 bool Game::UpdateGame() {
 	//cap FPS
 	Time::FpsCap();
+
+	Input::updateInps();
 
 	currentScene->UpdateScene();
 

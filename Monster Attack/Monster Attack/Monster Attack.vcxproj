@@ -157,6 +157,8 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapCreator.cpp" />
+    <ClCompile Include="MapCreatorCursor.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="TestEntity.cpp" />
     <ClCompile Include="Time.cpp" />
@@ -168,6 +170,8 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="MapCreator.h" />
+    <ClInclude Include="MapCreatorCursor.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="TestEntity.h" />
     <ClInclude Include="Time.h" />

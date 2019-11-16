@@ -16,21 +16,7 @@ void BattleScene::UpdateScene() {
 
 	//switch between scenes
 	if (Input::GetKeyDown('A'))
-		Game::shared_instance().SwitchToScene(0);
+		Game::shared_instance().SwitchToScene(-1, true);
 	else if (Input::GetKeyDown('D'))
-		Game::shared_instance().SwitchToScene(1);
+		Game::shared_instance().SwitchToScene(1, true);
 }
-
-/*if (Input::GetKeyDown(37))
-		outputChar += "left ";
-	if (Input::GetKeyDown(39))
-		outputChar += "right ";
-
-	if (Input::GetKeyDown(38))
-		outputChar += "up ";
-	if (Input::GetKeyDown(40))
-		outputChar += "down ";
-
-	outputChar += "BattleScene Update";
-	Game::shared_instance().buffer.WriteBuffer(outputChar, 0, 1, 20);
-	Game::shared_instance().buffer.WriteBuffer("This is a simple Test\nTessTTT", 4, 2, 25);*/

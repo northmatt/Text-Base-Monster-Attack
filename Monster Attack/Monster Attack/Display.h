@@ -23,6 +23,10 @@ public:
 	void DisplayBuffer();
 	void loadBackground(WCHAR fileName);
 	void ReadBMP(string filename, unsigned char*& imageData, int& width, int& height);
+	HANDLE GetConsole() { return hConsole; }
+	CONSOLE_SCREEN_BUFFER_INFO GetCSBI() { return csbi; }
+	HWND GetHWND() { return wConsole; }
+	DWORD GetBufferSize() { return size; }
 private:
 	HANDLE hConsole;
 	CONSOLE_SCREEN_BUFFER_INFO csbi;

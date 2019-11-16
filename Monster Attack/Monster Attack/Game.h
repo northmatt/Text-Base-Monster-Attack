@@ -21,4 +21,5 @@ private:
 	Scene* currentScene{ nullptr };
 	int currentSceneIndex{ 0 };
 	vector<Scene*> loadedScenes;
+	Entity* MainPlayer{ nullptr };
 };
