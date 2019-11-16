@@ -1,7 +1,8 @@
 #pragma once
 
-#include <iostream>
+#define _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
+#include <iostream>
 #include <vector>
 #include <string>
 #include <gdiplus.h>
@@ -12,6 +13,7 @@ using std::nothrow;
 using std::cout;
 using std::round;
 using std::endl;
+using std::to_string;
 
 class DoubleBuffer {
 public:
@@ -20,7 +22,7 @@ public:
 	void WriteBuffer(string strInput, double x, double y, int color = 7);
 	void DisplayBuffer();
 	void loadBackground(WCHAR fileName);
-	unsigned char* ReadBMP(char* filename);
+	void ReadBMP(string filename, unsigned char*& imageData, int& width, int& height);
 private:
 	HANDLE hConsole;
 	CONSOLE_SCREEN_BUFFER_INFO csbi;

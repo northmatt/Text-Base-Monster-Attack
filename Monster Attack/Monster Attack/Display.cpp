@@ -38,6 +38,38 @@ DoubleBuffer::DoubleBuffer() {
 
 	writeScreen = new (nothrow) char[size] { ' ' };
 	colorScreen = new (nothrow) int[size] { 7 };
+
+	unsigned char* backgroundRawImage;
+	int imageHeight, imageWidth;
+	ReadBMP("testImage", backgroundRawImage, imageWidth, imageHeight);
+
+	vector<string> theColorTest;
+	vector<int> theColorTest2;
+	for (size_t i = 0; i < imageHeight * imageWidth * 3; i += 3) {
+		string addedString = "R: " + to_string((int)backgroundRawImage[i]) + "\tG: " + to_string((int)backgroundRawImage[i + 1]) + "\tB: " + to_string((int)backgroundRawImage[i + 2]);
+
+		int theIndex{ -1 };
+		if (theColorTest.size() > 1) {
+			for (size_t x = 0; x < theColorTest.size() - 1; x++) {
+				if (theColorTest[x] == addedString) {
+					theIndex = x;
+					break;
+				}
+			}
+		}
+
+		if (theIndex == -1) {
+			theColorTest.push_back(addedString);
+			theColorTest2.push_back(1);
+		} else
+			theColorTest2[theIndex] += 1;
+	}
+
+	for (size_t i = 0; i < theColorTest.size() - 1; i++) {
+		cout << theColorTest[i] << "\t  ::  " << theColorTest2[i] << "\n";
+	}
+
+	system("pause");
 }
 
 void DoubleBuffer::WriteBuffer(string strInput, double rawX, double rawY, int col) {
@@ -123,10 +155,9 @@ void DoubleBuffer::loadBackground(WCHAR fileName) {
 	Gdiplus::GdiplusShutdown(gdiplusToken);*/
 }
 //https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file/38440684
-unsigned char* DoubleBuffer::ReadBMP(char* filename) {
+void DoubleBuffer::ReadBMP(string filename, unsigned char* &imageData, int &width, int &height) {
 	int i{ 0 };
-	//FILE* f = fopen(filename, "rb");
-	FILE* f = NULL;
+	FILE* f = fopen(&string("backgrounds/" + filename + ".bmp")[0], "rb");
 
 	if (f == NULL)
 		throw "Argument Exception";
@@ -135,18 +166,14 @@ unsigned char* DoubleBuffer::ReadBMP(char* filename) {
 	fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
 
 	// extract image height and width from header
-	int width = *(int*)&info[18];
-	int height = *(int*)&info[22];
-
-	cout << std::endl;
-	cout << "  Name: " << filename << endl;
-	cout << " Width: " << width << endl;
-	cout << "Height: " << height << endl;
+	width = *(int*)&info[18];
+	height = *(int*)&info[22];
 
 	int row_padded = (width * 3 + 3) & (~3);
 	unsigned char* data = new unsigned char[row_padded];
 	unsigned char tmp;
 
+	unsigned char* dataImage = new unsigned char[height * width * 3];
 	for (int i = 0; i < height; i++) {
 		fread(data, sizeof(unsigned char), row_padded, f);
 		for (int j = 0; j < width * 3; j += 3) {
@@ -155,12 +182,18 @@ unsigned char* DoubleBuffer::ReadBMP(char* filename) {
 			data[j] = data[j + 2];
 			data[j + 2] = tmp;
 
-			cout << "R: " << (int)data[j] << " G: " << (int)data[j + 1] << " B: " << (int)data[j + 2] << endl;
+			dataImage[j + (i * width)] = data[j];
+			dataImage[j + (i * width) + 1] = data[j + 1];
+			dataImage[j + (i * width) + 2] = data[j + 2];
+
+			/*cout << "R: " << (int)data[j]
+				<< "\tG: " << (int)data[j + 1]
+				<< "\tB: " << (int)data[j + 2] << "\t\t";*/
 		}
 	}
 
 	fclose(f);
-	return data;
+	imageData = dataImage;
 }
 
 /*
