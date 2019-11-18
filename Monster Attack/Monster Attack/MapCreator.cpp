@@ -9,7 +9,9 @@ void MapCreator::InitScene() {
 	cin >> map[1];
 
 	map[0] *= 2;
+	mapSize = map[0] * map[1];
 
+	//create map border
 	string borderVert = "|" + string(map[0] + 2, ' ') + "|\n";
 	mapBorder = string(map[0] + 4, '-') + "\n";
 
@@ -18,9 +20,9 @@ void MapCreator::InitScene() {
 
 	mapBorder += string(map[0] + 4, '-');
 
-	entities.push_back(new MapCreatorCursor("  ", "cursor", map[0] / 2, map[1]));
-	mapSize = map[0] * map[1];
+	entities.push_back(new MapCreatorCursor("  ", "cursor", map[0] / 2, map[1], 20));
 
+	//init and populate the map background
 	writeScreen.assign(mapSize, 'a');
 	colorScreen.assign(mapSize, 5);
 

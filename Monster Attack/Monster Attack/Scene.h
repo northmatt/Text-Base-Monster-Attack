@@ -22,6 +22,14 @@ public:
 	void InitScene();
 	virtual void UpdateScene();
 	virtual void UpdateSwitch();
+
+	vector<int> map;
+	unsigned int mapSize{ 0 };
+	string mapBorder{ "" };
+	vector<char> writeScreen;
+	vector<int> colorScreen;
+	vector<Entity*> entities;
+
 private:
 	string name;
 };

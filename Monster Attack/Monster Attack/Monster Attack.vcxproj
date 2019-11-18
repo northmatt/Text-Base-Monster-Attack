@@ -153,7 +153,6 @@
   <ItemGroup>
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Display.cpp" />
-    <ClCompile Include="entity.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />

@@ -16,6 +16,7 @@ public:
 	bool UpdateGame();
 	void SetCurPos(SHORT x, SHORT y);
 	void SwitchToScene(int index, bool addFromCurrentScene = false);
+	Scene GetCurrentScene() { return *currentScene; }
 	DoubleBuffer buffer;
 private:
 	Scene* currentScene{ nullptr };
