@@ -17,10 +17,11 @@ class Scene {
 public:
 	Scene() { };
 	Scene(string name);
-	~Scene() {}
+
 	//want virtual so that classes that inherinent the Scene class will run the inherinented class instead of the original Scene class (this one)
 	void InitScene();
 	virtual void UpdateScene();
+	virtual void UpdateSwitch();
 private:
 	string name;
 };

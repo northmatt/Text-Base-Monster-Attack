@@ -9,7 +9,6 @@ class Entity {
 public:
 	Entity() {}
 	Entity(string theName) { name = theName; }
-	~Entity() {}
 
 	virtual void Update();
 

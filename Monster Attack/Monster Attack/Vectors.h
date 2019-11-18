@@ -6,7 +6,6 @@
 class Vec2 {
 public:
 	Vec2(double xIn = 0, double yIn = 0) { x = xIn; y = yIn; }
-	~Vec2() {}
 
 	double x{ 0 };
 	double y{ 0 };
@@ -63,7 +62,6 @@ public:
 class Vec3 {
 public:
 	Vec3(double xIn = 0, double yIn = 0, double zIn = 0) { x = xIn; y = yIn; z = zIn; }
-	~Vec3() {}
 
 	double x{ 0 };
 	double y{ 0 };

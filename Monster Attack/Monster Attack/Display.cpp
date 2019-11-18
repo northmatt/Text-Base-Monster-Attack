@@ -30,7 +30,7 @@ DoubleBuffer::DoubleBuffer() {
 	SetConsoleCursorInfo(hConsole, &cursorinfo);
 
 	//Find the number of characters to overwrite
-	size = csbi.dwSize.X * csbi.dwSize.Y - 8;
+	size = csbi.dwSize.X * csbi.dwSize.Y;
 
 	RECT resSize;
 	GetWindowRect(wConsole, &resSize);
@@ -39,40 +39,14 @@ DoubleBuffer::DoubleBuffer() {
 	writeScreen = new (nothrow) char[size] { ' ' };
 	colorScreen = new (nothrow) int[size] { 7 };
 
-	/*unsigned char* backgroundRawImage;
-	int imageHeight, imageWidth;
-	ReadBMP("testImage", backgroundRawImage, imageWidth, imageHeight);
-
-	vector<string> theColorTest;
-	vector<int> theColorTest2;
-	for (size_t y = 0; y < imageWidth; y++)
-		for (size_t x = 0; x < imageHeight; x++) {
-			string addedString = "R: " + to_string((int)backgroundRawImage[3 * (y * imageWidth + x)]) + "\tG: " + to_string((int)backgroundRawImage[3 * (y * imageWidth + x) + 1]) + "\tB: " + to_string((int)backgroundRawImage[3 * (y * imageWidth + x) + 2]);
-
-			int theIndex{ -1 };
-			if (theColorTest.size() > 1)
-				for (size_t i = 0; i < theColorTest.size() - 1; i++)
-					if (theColorTest[i] == addedString) {
-						theIndex = i;
-						break;
-					}
-
-			if (theIndex == -1) {
-				theColorTest.push_back(addedString);
-				theColorTest2.push_back(1);
-			} else
-				theColorTest2[theIndex] += 1;
-		}
-	for (size_t i = 0; i < theColorTest.size() - 1; i++)
-		cout << theColorTest[i] << "\t  ::  " << theColorTest2[i] << "\n";
-
-	system("pause");*/
+	camPosOffset[0] = csbi.dwSize.X / 2;
+	camPosOffset[1] = csbi.dwSize.Y / 2;
 }
 
 void DoubleBuffer::WriteBuffer(string strInput, double rawX, double rawY, int col) {
 	char* input = &strInput[0];
 	size_t sizeInput = strlen(input);
-	int x{ static_cast<int>(round(rawX * 2)) }, y{ static_cast<int>(round(rawY)) };
+	int x{ static_cast<int>(round(rawX * 2)) - camPos[0] }, y{ static_cast<int>(round(rawY)) - camPos[1] };
 	int currentX{ x }, currentY{ y };
 
 	//check if image is offscreen
@@ -137,67 +111,51 @@ void DoubleBuffer::DisplayBuffer() {
 	SetConsoleCursorPosition(hConsole, coord);
 }
 
-void DoubleBuffer::loadBackground(WCHAR fileName) {
-	//loadBackground(L"level_one.png")
-	/*static Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-	static ULONG_PTR gdiplusToken;
-	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+void DoubleBuffer::DisplayBackground(vector<char> writeBack, vector<vector<int>> rectInp) {
+	vector<int> backPos;
+	backPos = { rectInp[0][0] - camPos[0], rectInp[0][1] - camPos[1] };
 
-	HBITMAP result = NULL;
+	vector<vector<int>> rectBack;
+	rectBack.push_back(vector<int>{ max(0, backPos[0]), max(0, backPos[1]) });
+	rectBack.push_back(vector<int>{ min(rectInp[1][0] + backPos[0], csbi.dwSize.X), min(rectInp[1][1] + backPos[1], csbi.dwSize.Y) });
 
-	Gdiplus::Bitmap* bitmap = new Gdiplus::Bitmap(fileName, false);
-	bitmap->GetHBITMAP(NULL, &result);
-	delete bitmap;
-
-	//read image and load into map from "result"
-
-	Gdiplus::GdiplusShutdown(gdiplusToken);*/
-}
-//https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file/38440684
-void DoubleBuffer::ReadBMP(string filename, unsigned char* &imageData, int &width, int &height) {
-	/*int i{ 0 };
-	FILE* f = fopen(&("backgrounds/" + filename + ".bmp")[0], "rb");
-	unsigned char info[54];
-	fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
-
-	// extract image height and width from header
-	width = *(int*)&info[18];
-	height = *(int*)&info[22];
-
-	int size = 3 * width * height;
-	unsigned char* data = new unsigned char[size]; // allocate 3 bytes per pixel
-	fread(data, sizeof(unsigned char), size, f); // read the rest of the data at once
-	fclose(f);
-
-	for (i = 0; i < size; i += 3) {
-		unsigned char tmp = data[i];
-		data[i] = data[i + 2];
-		data[i + 2] = tmp;
-	}
-
-	imageData = data;*/
+	for (size_t y = rectBack[0][1]; y < rectBack[1][1]; y++)
+		for (size_t x = rectBack[0][0]; x < rectBack[1][0]; x++)
+			writeScreen[x + y * csbi.dwSize.X] = writeBack[x - backPos[0] + (y - backPos[1]) * rectInp[1][0]];
 }
 
-/*
-https://stackoverflow.com/questions/1918263/reading-pixels-of-image-in-c
-#include <Magick++.h>
-#include <iostream>
+void DoubleBuffer::DisplayBackground(vector<char> writeBack, vector<int> colorBack, vector<vector<int>> rectInp) {
+	vector<int> backPos;
+	backPos = { rectInp[0][0] - camPos[0], rectInp[0][1] - camPos[1] };
+	
+	vector<vector<int>> rectBack;
+	rectBack.push_back(vector<int>{ max(0, backPos[0]), max(0, backPos[1]) });
+	rectBack.push_back(vector<int>{ min(rectInp[1][0] + backPos[0], csbi.dwSize.X), min(rectInp[1][1] + backPos[1], csbi.dwSize.Y) });
 
-using namespace Magick;
-using namespace std;
+	for (size_t y = rectBack[0][1]; y < rectBack[1][1]; y++)
+		for (size_t x = rectBack[0][0]; x < rectBack[1][0]; x++) {
+			writeScreen[x + y * csbi.dwSize.X] = writeBack[x - backPos[0] + (y - backPos[1]) * rectInp[1][0]];
+			colorScreen[x + y * csbi.dwSize.X] = colorBack[x - backPos[0] + (y - backPos[1]) * rectInp[1][0]];
+		}
 
-int main(int argc, char **argv) {
- try {
-  InitializeMagick(*argv);
-  Image img("C:/test.bmp");
-  ColorRGB rgb(img.pixelColor(0, 0));  // ie. pixel at pos x=0, y=0
-  cout << "red: " << rgb.red();
-  cout << ", green: " << rgb.green();
-  cout << ", blue: " << rgb.blue() << endl;
- }
-  catch ( Magick::Exception & error) {
-  cerr << "Caught Magick++ exception: " << error.what() << endl;
- }
- return 0;
+	colorOnFrame = true;
 }
-*/
+
+void DoubleBuffer::SetCamPos(vector<int> pos) {
+	camPos = { pos[0] * 2 - camPosOffset[0], pos[1] - camPosOffset[1] };
+
+	if (camPos[0] < camMaxValue[0][0])
+		camPos[0] = camMaxValue[0][0];
+	else if (camPos[0] + csbi.dwSize.X > camMaxValue[1][0])
+		camPos[0] = max(camMaxValue[1][0] - csbi.dwSize.X, camMaxValue[0][0]);
+
+	if (camPos[1] < camMaxValue[0][1])
+		camPos[1] = camMaxValue[0][1];
+	else if (camPos[1] + csbi.dwSize.Y > camMaxValue[1][1])
+		camPos[1] = max(camMaxValue[1][1] - csbi.dwSize.Y, camMaxValue[0][1]);
+}
+
+void DoubleBuffer::SetMaxCam(vector<int> inputMaxP1, vector<int> inputMaxP2) {
+	vector<int> inputMaxP2Mod = { max(inputMaxP1[0], inputMaxP2[0] - csbi.dwSize.X), max(inputMaxP1[1], inputMaxP2[1] - csbi.dwSize.Y) };
+	camMaxValue = {inputMaxP1, inputMaxP2};
+}

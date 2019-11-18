@@ -19,6 +19,10 @@ void MapCreatorCursor::Update() {
 		vel.y += 1;
 
 	vel = vel.Normalize() * Time::deltaTime;
+	
+	if (Input::GetKey(VK_CONTROL))
+		vel = vel * 1.5;
+	
 	pos = pos + vel * speed;
 
 	vel.Zero();
@@ -33,8 +37,6 @@ void MapCreatorCursor::Update() {
 	else if (pos.y > maxPos.y)
 		pos.y = maxPos.y;
 
-	/*string outputChar = "Pos: " + to_string(pos.x) + ", " + to_string(pos.y);
-	Game::shared_instance().buffer.WriteBuffer(outputChar, 0, 1, 5);*/
-
+	Game::shared_instance().buffer.SetCamPos({ static_cast<int>(round(pos.x)), static_cast<int>(round(pos.y)) });
 	Game::shared_instance().buffer.WriteBuffer(image, round(pos.x), pos.y, 20);
 }

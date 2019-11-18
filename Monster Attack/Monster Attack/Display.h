@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <gdiplus.h>
+#include "Vectors.h"
 
 using std::vector;
 using std::string;
@@ -21,12 +22,16 @@ public:
 
 	void WriteBuffer(string strInput, double x, double y, int color = 7);
 	void DisplayBuffer();
-	void loadBackground(WCHAR fileName);
-	void ReadBMP(string filename, unsigned char*& imageData, int& width, int& height);
+	void DisplayBackground(vector<char> writeBack, vector<vector<int>> rectInp);
+	void DisplayBackground(vector<char> writeBack, vector<int> colorBack, vector<vector<int>> rectBack);
+	void SetCamPos(vector<int> pos);
+	void SetMaxCam(vector<int> inputMaxP1, vector<int> inputMaxP2);
+	
 	HANDLE GetConsole() { return hConsole; }
 	CONSOLE_SCREEN_BUFFER_INFO GetCSBI() { return csbi; }
 	HWND GetHWND() { return wConsole; }
 	DWORD GetBufferSize() { return size; }
+	vector<int> GetCamPos() { return camPos; }
 private:
 	HANDLE hConsole;
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -38,4 +43,8 @@ private:
 	char* writeScreen;
 	int* colorScreen;
 	bool colorOnFrame{ false };
+
+	vector<int> camPos{ 0, 0 };
+	vector<int> camPosOffset{ 0, 0 };
+	vector<vector<int>> camMaxValue{ {0, 0}, {1, 1} };
 };

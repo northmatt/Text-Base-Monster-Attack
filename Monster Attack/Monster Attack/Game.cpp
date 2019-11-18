@@ -38,6 +38,7 @@ void Game::SwitchToScene(int index, bool addFromCurrentScene) {
 		currentSceneIndex = index;
 
 	currentScene = loadedScenes[currentSceneIndex];
+	currentScene->UpdateSwitch();
 }
 
 /*

@@ -8,14 +8,15 @@ public:
 	static MapCreator& shared_instance() { static MapCreator mapEdit; return mapEdit; }
 
 	MapCreator() { InitScene(); };
-	~MapCreator() {}
 
 	void InitScene();
 	void UpdateScene();
+	void UpdateSwitch();
 private:
-	unsigned int mapWidth{ 0 }, mapHeight{ 0 }, mapSize{ 0 };
-	string mapBorder;
-	char* writeScreen;
-	int* colorScreen;
+	vector<int> map;
+	unsigned int mapSize{ 0 };
+	string mapBorder{ "" };
+	vector<char> writeScreen;
+	vector<int> colorScreen;
 	vector<Entity*> entities;
 };
