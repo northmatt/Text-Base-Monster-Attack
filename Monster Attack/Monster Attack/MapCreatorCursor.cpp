@@ -43,6 +43,9 @@ void MapCreatorCursor::Update() {
 	if (Input::GetKeyDown(VK_NUMPAD4))
 		colorValInd = !colorValInd;
 
+	if (Input::GetKeyDown(VK_SPACE))
+		isDrawing = !isDrawing;
+
 	if (Input::GetKeyDown(VK_NUMPAD7))
 		colorValues[colorValInd][0] = !colorValues[colorValInd][0];
 	else if (Input::GetKeyDown(VK_NUMPAD8))
@@ -71,6 +74,48 @@ void MapCreatorCursor::Update() {
 		color = color | BACKGROUND_BLUE;
 	if (colorValues[1][3])
 		color = color | BACKGROUND_INTENSITY;
+
+	if (isDrawing)
+		for (size_t i = 0; i < 2; i++) {
+			Game::shared_instance().GetCurrentScene()->writeScreen[round(pos.x - 1) * 2 + i + round(pos.y - 1) * maxPos.x * 2] = ' ';
+			Game::shared_instance().GetCurrentScene()->colorScreen[round(pos.x - 1) * 2 + i + round(pos.y - 1) * maxPos.x * 2] = color;
+		}
+
+	if (Input::GetKeyDown('p')) {
+		vector<vector<int>> posList;
+		vector<vector<int>> movePoints{ {0, 1}, {2, 0}, {0, -1}, {-2, 0} };
+		char currentChar = Game::shared_instance().GetCurrentScene()->writeScreen[round(pos.x - 1) * 2 + round(pos.y - 1) * maxPos.x * 2];
+		int currentColor = Game::shared_instance().GetCurrentScene()->colorScreen[round(pos.x - 1) * 2 + round(pos.y - 1) * maxPos.x * 2];
+		posList.push_back({ static_cast<int>(round(pos.x - 1) * 2), static_cast<int>(round(pos.y - 1)) });
+
+		while (posList.size() > 0) {
+			vector<size_t> posToDel;
+
+			for (size_t i = 0; i > posList.size(); i++) {
+				for (vector<int> moveVec : movePoints) {
+					bool exists{ false };
+					vector<int> toAddVec{ posList[i][0] + moveVec[0], posList[i][0] + moveVec[1] };
+
+					for (vector<int> checkCol : posList)
+						if (toAddVec[0] == checkCol[0] && toAddVec[1] == checkCol[1]) {
+							exists = true;
+							break;
+						}
+
+					posToDel.push_back(i);
+
+					if (exists)
+						continue;
+
+					posList.push_back(toAddVec);
+				}
+			}
+
+			for (size_t i = posToDel.size(); i < 1; i++) {
+				posList.erase(posList.begin() + i - 1);
+			}
+		}
+	}
 
 	/*for (size_t y = 0; y < 2; y++) {
 		for (size_t x = 0; x < 4; x++) {

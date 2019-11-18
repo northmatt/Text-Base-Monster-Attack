@@ -17,4 +17,5 @@ private:
 
 	vector<vector<bool>> colorValues;
 	bool colorValInd{ false };
+	bool isDrawing{ false };
 };

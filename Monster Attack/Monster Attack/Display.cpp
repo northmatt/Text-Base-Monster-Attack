@@ -36,7 +36,7 @@ DoubleBuffer::DoubleBuffer() {
 	GetWindowRect(wConsole, &resSize);
 	SetCursorPos(resSize.right / 2, resSize.bottom);
 
-	writeScreen = new (nothrow) char[size] { ' ' };
+	writeScreen = new (nothrow) char[size + 1] { ' ' };
 	colorScreen = new (nothrow) int[size] { 7 };
 
 	camPosOffset[0] = csbi.dwSize.X / 2;
@@ -80,8 +80,8 @@ void DoubleBuffer::DisplayBuffer() {
 		//looks at the colors in the list which contain starting and ending index. Draw all characters in batches to reduce the couts as much as possible as it's slow
 		size_t lastCall{ 0 };
 		int intColor{ 7 };
-		for (size_t i = 0; i < size; i++)
-			if (colorScreen[i] != intColor || i == size - 1) {
+		for (size_t i = 0; i <= size; i++)
+			if (colorScreen[i] != intColor || i == size) {
 				//change color
 				SetConsoleTextAttribute(hConsole, intColor);
 
@@ -96,14 +96,14 @@ void DoubleBuffer::DisplayBuffer() {
 		SetConsoleTextAttribute(hConsole, 7);
 
 		//clear color buffer
-		for (size_t i = 0; i < size - 1; i++)
+		for (size_t i = 0; i < size; i++)
 			colorScreen[i] = 7;
 
 		colorOnFrame = false;
 	}
 	
 	//clear text buffer
-	for (size_t i = 0; i < size - 1; i++)
+	for (size_t i = 0; i < size; i++)
 		writeScreen[i] = ' ';
 
 	//clear the actual built-in cout buffer and reset cursor pos

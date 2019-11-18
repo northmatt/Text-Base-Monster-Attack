@@ -1,6 +1,10 @@
 ﻿#include "MapCreator.h"
 #include "MapCreatorCursor.h"
 
+#include <random>
+#include <time.h>
+using std::rand;
+
 void MapCreator::InitScene() {
 	map.resize(2);
 	cout << "map width: ";
@@ -20,11 +24,21 @@ void MapCreator::InitScene() {
 
 	mapBorder += string(map[0] + 4, '-');
 
-	entities.push_back(new MapCreatorCursor("  ", "cursor", map[0] / 2, map[1], 20));
+	entities.push_back(new MapCreatorCursor("@@", "cursor", map[0] / 2, map[1], 20));
 
 	//init and populate the map background
-	writeScreen.assign(mapSize, 'a');
-	colorScreen.assign(mapSize, 5);
+	writeScreen.assign(mapSize, ' ');
+	colorScreen.assign(mapSize, BACKGROUND_GREEN);
+
+	srand(time(0));
+	int numOfLakes = rand() % 10 + 3;
+
+	for (int i = 0; i < colorScreen.size() ; i += 2) {
+		if (rand() % 10 >= 9) {
+			colorScreen[i] = BACKGROUND_BLUE;
+			colorScreen[i + 1] = BACKGROUND_BLUE;
+		}
+	}
 
 	Game::shared_instance().buffer.SetMaxCam({ 0, 0 }, {map[0] + 4, map[1] + 2});
 }
