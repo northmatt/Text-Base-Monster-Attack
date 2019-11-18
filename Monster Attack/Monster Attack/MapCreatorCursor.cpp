@@ -82,19 +82,32 @@ void MapCreatorCursor::Update() {
 		}
 
 	if (Input::GetKeyDown('p')) {
+		size_t preSize{ 0 };
+		vector<size_t> posToIgnore;
 		vector<vector<int>> posList;
 		vector<vector<int>> movePoints{ {0, 1}, {2, 0}, {0, -1}, {-2, 0} };
 		char currentChar = Game::shared_instance().GetCurrentScene()->writeScreen[round(pos.x - 1) * 2 + round(pos.y - 1) * maxPos.x * 2];
 		int currentColor = Game::shared_instance().GetCurrentScene()->colorScreen[round(pos.x - 1) * 2 + round(pos.y - 1) * maxPos.x * 2];
 		posList.push_back({ static_cast<int>(round(pos.x - 1) * 2), static_cast<int>(round(pos.y - 1)) });
 
-		while (posList.size() > 0) {
-			vector<size_t> posToDel;
-
+		while (posList.size() != preSize) {
+			preSize = posList.size();
 			for (size_t i = 0; i > posList.size(); i++) {
+				bool shouldIgnore{ false };
+				for (size_t checkIgnore : posToIgnore)
+					if (i == checkIgnore) {
+						shouldIgnore = true;
+						break;
+					}
+
+				if (shouldIgnore)
+					continue;
+
 				for (vector<int> moveVec : movePoints) {
 					bool exists{ false };
-					vector<int> toAddVec{ posList[i][0] + moveVec[0], posList[i][0] + moveVec[1] };
+					vector<int> toAddVec{ posList[i][0] + moveVec[0], posList[i][1] + moveVec[1] };
+
+					//add code to detect if point is on different curr Char/Color or off map
 
 					for (vector<int> checkCol : posList)
 						if (toAddVec[0] == checkCol[0] && toAddVec[1] == checkCol[1]) {
@@ -102,17 +115,12 @@ void MapCreatorCursor::Update() {
 							break;
 						}
 
-					posToDel.push_back(i);
-
 					if (exists)
 						continue;
 
+					posToIgnore.push_back(i);
 					posList.push_back(toAddVec);
 				}
-			}
-
-			for (size_t i = posToDel.size(); i < 1; i++) {
-				posList.erase(posList.begin() + i - 1);
 			}
 		}
 	}
