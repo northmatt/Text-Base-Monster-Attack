@@ -99,6 +99,7 @@ void MapCreatorCursor::Update() {
 
 	string guiOverlay = "F(" + to_string(colorValues[0][0] * (1 + colorValues[0][3])) + ", " + to_string(colorValues[0][1] * (1 + colorValues[0][3])) + ", " + to_string(colorValues[0][2] * (1 + colorValues[0][3])) + ")";
 	guiOverlay += "  B(" + to_string(colorValues[1][0] * (1 + colorValues[1][3])) + ", " + to_string(colorValues[1][1] * (1 + colorValues[1][3])) + ", " + to_string(colorValues[1][2] * (1 + colorValues[1][3])) + ")";
+	guiOverlay += " Color: " + to_string(color);
 
 	Game::shared_instance().buffer.WriteBuffer(guiOverlay, 0, 0);
 

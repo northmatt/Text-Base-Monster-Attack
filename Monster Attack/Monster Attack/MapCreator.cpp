@@ -63,7 +63,7 @@ void MapCreator::Save(string fileName, vector<int> sizeMap, vector<char> writeMa
 		writeMapStr += curChar;
 
 	for (int curInt : colorMap)
-		colorMapStr += static_cast<char>(curInt);
+		colorMapStr += to_string(curInt) + " ";
 
 	theFile << sizeMap[0] << "\n" << sizeMap[1] << "\n" << writeMapStr << "\n" << colorMapStr;
 
@@ -96,9 +96,12 @@ void MapCreator::Load(string fileName) {
 			writeScreen.push_back(curChar);
 
 	getline(theFile, inp);
-	for (char curChar : inp)
-		if (curChar != '\n')
-			colorScreen.push_back(static_cast<int>(curChar));
+
+	string strBuffer;
+	stringstream ss(inp);
+
+	while (ss >> strBuffer)
+		colorScreen.push_back(atoi(strBuffer.c_str()));
 
 	theFile.close();
 

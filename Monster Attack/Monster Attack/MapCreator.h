@@ -1,11 +1,13 @@
 #pragma once
 
 #include <fstream>
+#include <sstream>
 #include "Scene.h"
 #include "Game.h"
 
 using std::ofstream;
 using std::ifstream;
+using std::stringstream;
 using std::getline;
 
 class MapCreator : public Scene {
