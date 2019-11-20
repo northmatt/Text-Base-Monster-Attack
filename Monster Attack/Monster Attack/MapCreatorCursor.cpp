@@ -107,7 +107,7 @@ void MapCreatorCursor::Update() {
 	Game::shared_instance().buffer.WriteBuffer(image, round(pos.x), pos.y, color);
 }
 
-void MapCreatorCursor::FillLoop(vector<int> pos, int direction, char oldChar, int oldColor) {\
+void MapCreatorCursor::FillLoop(vector<int> pos, int direction, char oldChar, int oldColor) {
 	//needed to do an iterative function for this recursive function as stack overflow error would happen
 	vector<vector<int>> movePoints{ {0, 1}, {2, 0}, {0, -1}, {-2, 0} };
 
@@ -132,7 +132,7 @@ void MapCreatorCursor::FillLoop(vector<int> pos, int direction, char oldChar, in
 		snapshotStack.pop();
 
 		for (size_t i = 0; i < movePoints.size(); i++)
-			if (i != direction) {
+			if (i != (currentSnapshot.direction >= 2 ? currentSnapshot.direction - 2 : currentSnapshot.direction + 2)) {
 				vector<int> newVec{ currentSnapshot.pos[0] + movePoints[i][0], currentSnapshot.pos[1] + movePoints[i][1] };
 
 				//add code to detect if point is on different curr Char/Color or off map
