@@ -11,34 +11,37 @@ MapCreatorCursor::MapCreatorCursor(string inImage, string inName, double inPosX,
 }
 
 void MapCreatorCursor::Update() {
-	if (Input::GetKey(37))
-		vel.x -= 1;
-	if (Input::GetKey(39))
-		vel.x += 1;
+	//movement
+	{
+		if (Input::GetKey(37))
+			vel.x -= 1;
+		if (Input::GetKey(39))
+			vel.x += 1;
 
-	if (Input::GetKey(38))
-		vel.y -= 1;
-	if (Input::GetKey(40))
-		vel.y += 1;
+		if (Input::GetKey(38))
+			vel.y -= 1;
+		if (Input::GetKey(40))
+			vel.y += 1;
 
-	vel = vel.Normalize() * Time::deltaTime;
-	
-	if (Input::GetKey(VK_CONTROL))
-		vel = vel * 1.5;
-	
-	pos = pos + vel * speed;
+		vel = vel.Normalize() * Time::deltaTime;
 
-	vel.Zero();
+		if (Input::GetKey(VK_CONTROL))
+			vel = vel * 1.5;
 
-	if (pos.x < 1)
-		pos.x = 1;
-	else if (pos.x > maxPos.x)
-		pos.x = maxPos.x;
+		pos = pos + vel * speed;
 
-	if (pos.y < 1)
-		pos.y = 1;
-	else if (pos.y > maxPos.y)
-		pos.y = maxPos.y;
+		vel.Zero();
+
+		if (pos.x < 1)
+			pos.x = 1;
+		else if (pos.x > maxPos.x)
+			pos.x = maxPos.x;
+
+		if (pos.y < 1)
+			pos.y = 1;
+		else if (pos.y > maxPos.y)
+			pos.y = maxPos.y;
+	}
 
 	//basic drawing
 	{
@@ -57,7 +60,7 @@ void MapCreatorCursor::Update() {
 		else if (Input::GetKeyDown(VK_NUMPAD5))
 			colorValues[colorValInd][3] = !colorValues[colorValInd][3];
 
-		color = 1;
+		color = 0;
 
 		if (colorValues[0][0])
 			color = color | FOREGROUND_RED;
@@ -94,24 +97,24 @@ void MapCreatorCursor::Update() {
 			FillLoop(currentPos, -1, currentChar, currentColor);
 	}
 
-	/*for (size_t y = 0; y < 2; y++) {
-		for (size_t x = 0; x < 4; x++) {
-			Game::shared_instance().buffer.WriteBuffer(to_string(colorValues[y][x]), 0, x + 4 * y);
-		}
-	}*/
+	string guiOverlay = "F(" + to_string(colorValues[0][0] * (1 + colorValues[0][3])) + ", " + to_string(colorValues[0][1] * (1 + colorValues[0][3])) + ", " + to_string(colorValues[0][2] * (1 + colorValues[0][3])) + ")";
+	guiOverlay += "  B(" + to_string(colorValues[1][0] * (1 + colorValues[1][3])) + ", " + to_string(colorValues[1][1] * (1 + colorValues[1][3])) + ", " + to_string(colorValues[1][2] * (1 + colorValues[1][3])) + ")";
+
+	Game::shared_instance().buffer.WriteBuffer(guiOverlay, 0, 0);
 
 	Game::shared_instance().buffer.SetCamPos({ static_cast<int>(round(pos.x)), static_cast<int>(round(pos.y)) });
 	Game::shared_instance().buffer.WriteBuffer(image, round(pos.x), pos.y, color);
 }
 
-void MapCreatorCursor::FillLoop(vector<int> pos, int direction, char oldChar, int oldColor) {
+void MapCreatorCursor::FillLoop(vector<int> pos, int direction, char oldChar, int oldColor) {\
+	//needed to do an iterative function for this recursive function as stack overflow error would happen
 	vector<vector<int>> movePoints{ {0, 1}, {2, 0}, {0, -1}, {-2, 0} };
 
 	struct SnapShotStruct {
 		vector<int> pos;
-		int direction;
-		char oldChar;
-		int oldColor;
+		int direction{ 0 };
+		char oldChar{ 0 };
+		int oldColor{ 0 };
 	};
 
 	stack<SnapShotStruct> snapshotStack;

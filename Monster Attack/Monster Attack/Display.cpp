@@ -156,6 +156,5 @@ void DoubleBuffer::SetCamPos(vector<int> pos) {
 }
 
 void DoubleBuffer::SetMaxCam(vector<int> inputMaxP1, vector<int> inputMaxP2) {
-	vector<int> inputMaxP2Mod = { max(inputMaxP1[0], inputMaxP2[0] - csbi.dwSize.X), max(inputMaxP1[1], inputMaxP2[1] - csbi.dwSize.Y) };
 	camMaxValue = {inputMaxP1, inputMaxP2};
 }
