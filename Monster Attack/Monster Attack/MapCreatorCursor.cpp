@@ -156,7 +156,6 @@ void MapCreatorCursor::FillLoop(vector<int> pos, int direction, char oldChar, in
 				newSnapshot.oldChar = oldColor;
 
 				snapshotStack.push(newSnapshot);
-				continue;
 			}
 	}
 }
