@@ -171,6 +171,8 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="MapCreator.h" />
     <ClInclude Include="MapCreatorCursor.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="Move.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="TestEntity.h" />
     <ClInclude Include="Time.h" />

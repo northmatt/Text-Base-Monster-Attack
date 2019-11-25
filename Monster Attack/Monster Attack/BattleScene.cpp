@@ -2,21 +2,291 @@
 #include "TestEntity.h"
 
 void BattleScene::InitScene() {
-	cout << "battleInit\n";
-	entities.push_back(new TestEnt("    \n    ", "Player", 3, 3));
+	//fire
+	Move flame_punch("Fire Punch", "None", "Fire", 20, 100, 1);
+	Move melt_armor("Melt Armor", "Destroy Armor", "Fire", 100, 100, 2);
+	Move volcanic_shield("Volcanic Shield", "Gain Armor", "Fire", 40, 100, 2);
+	//grass
+	Move grass_punch("Grass Punch", "None", "Grass", 20, 100, 1);
+	Move earth_bombardment("Earth Bombardment", "Destroy Armor", "Grass", 75, 100, 2);
+	Move shell_shield("Shell Shield", "Gain Armor", "Grass", 50, 100, 4);
+	//water
+	Move water_punch("Water Punch", "None", "Water", 20, 100, 1);
+	Move tsunami_slam("Tsunami Slam", "Destroy Armor", "Water", 100, 100, 3);
+	//dark
+	Move dark_punch("Dark Punch", "None", "Dark", 30, 100, 1);
+	Move self_sacrifice("Self Sacrifice", "Self Sacrifice", "Dark", 50, 100, 1);
+	Move dark_magic("Dark Magic", "Heal", "Dark", 20, 100, 1);
+	Move kill("Kill", "None", "Dark", 10000, 100, 1);
+	//light
+	Move light_punch("Light Punch", "None", "Light", 30, 100, 1);
+
+	//grass
+	Monster _1("Skorpislash", "Grass", 101, 70, 70, 80, grass_punch, shell_shield, earth_bombardment, kill);
+	Monster _2("Pigeonite", "Grass", 82, 80, 80, 80, grass_punch, dark_punch, flame_punch, kill);
+	Monster _3("Irobug", "Grass", 102, 70, 150, 80, grass_punch, light_punch, earth_bombardment, kill);
+	Monster _4("Slowphant", "Grass", 81, 80, 80, 80, grass_punch, light_punch, flame_punch, kill);
+	//fire
+	Monster _5("Skeleking", "Fire", 20, 100, 190, 40, flame_punch, dark_punch, self_sacrifice, dark_magic);
+	Monster _6("Flamepie", "Fire", 83, 80, 80, 80, flame_punch, dark_punch, flame_punch, kill);
+	Monster _7("Dragithe", "Fire", 105, 70, 70, 80, flame_punch, light_punch, volcanic_shield, kill);
+	Monster _8("Pheonix", "Fire", 86, 80, 80, 80, flame_punch, light_punch, melt_armor, kill);
+	//water
+	Monster _9("Quilling", "Water", 104, 70, 70, 80, water_punch, dark_punch, flame_punch, kill);
+	Monster _10("Gladiawhale", "Water", 85, 80, 80, 80, water_punch, dark_punch, flame_punch, kill);
+	Monster _11("Penguinite", "Water", 103, 70, 70, 80, water_punch, light_punch, flame_punch, kill);
+	Monster _12("Oystora", "Water", 84, 80, 80, 80, water_punch, light_punch, tsunami_slam, kill);
+
+
+	party1.mon[0] = _5;
+	party1.mon[1] = _3;
+	party1.mon[2] = _1;
+	party1.mon[3] = _7;
+	party1.mon[4] = _9;
+	party1.mon[5] = _11;
+	party1.currentMon = party1.mon[0];
+	party1.currentMonSlot = 0;
+
+	party2.mon[0] = _8;
+	party2.mon[1] = _12;
+	party2.mon[2] = _10;
+	party2.mon[3] = _6;
+	party2.mon[4] = _4;
+	party2.mon[5] = _2;
+	party2.currentMon = party2.mon[0];
+	party2.currentMonSlot = 0;
 }
 
 void BattleScene::UpdateScene() {
-	timeSinceStart += Time::deltaTime;
-	string outputChar = "Time: " + to_string(static_cast<int>(timeSinceStart));
-	Game::shared_instance().buffer.WriteBuffer(outputChar, 0, 0, 6);
+	cout << "\x1B[2J\x1B[H";
+	party2.currentMon.setHealthCurrent(playerTurn(true, party1.currentMon, party2.currentMon));
+	if (party2.currentMon.getHealthCurrent() <= 0) {
+		party2.mon[party2.currentMonSlot].alive = false;
+		for (int i = 0; i < 6; i++) {
+			if (party2.mon[i].alive) {
+				party2.currentMon = party2.mon[i];
+				party2.currentMonSlot = i;
+				break;
+			}
+		}
+	}
+	Sleep(2000);
+	cin.get();
+	cout << "\x1B[2J\x1B[H";
+	party1.currentMon.setHealthCurrent(playerTurn(false, party2.currentMon, party1.currentMon));
+	if (party1.currentMon.getHealthCurrent() <= 0) {
+		party1.mon[party1.currentMonSlot].alive = false;
+		for (int i = 0; i < 6; i++) {
+			if (party1.mon[i].alive) {
+				party1.currentMon = party1.mon[i];
+				party1.currentMonSlot = i;
+				break;
+			}
+		}
+	}
+	Sleep(2000);
+	cin.get();
+}
 
-	for (Entity* currentEnt : entities)
-		currentEnt->Update();
+void BattleScene::drawCurrentHealth(Party p1, Party p2) {
+	cout << "Player 1:\t\t";
+	for (int i = 0; i < 6; i++) {
+		if (p1.mon[i].alive == true) {
+			if (p1.mon[i].getName() == p1.currentMon.getName())
+				SetConsoleTextAttribute(hConsole, 15);
+			else
+				changeTextColor(p1.mon[i]);
+			cout << "o ";
+		} else {
+			changeTextColorDef();
+			cout << ". ";
+		}
+	}
+	changeTextColorDef();
+	cout << "\nCurrent Monster:\t";
+	changeTextColor(p1.currentMon);
+	cout << p1.currentMon.getName();
+	changeTextColorDef();
+	cout << "\nHealth:\t\t\t" << p1.currentMon.getHealthCurrent() << "/" << p1.currentMon.getHealthTotal();
 
-	//switch between scenes
-	if (Input::GetKeyDown('A'))
-		Game::shared_instance().SwitchToScene(-1, true);
-	else if (Input::GetKeyDown('D'))
-		Game::shared_instance().SwitchToScene(1, true);
+	cout << "\n\nPlayer 2:\t\t";
+	for (int i = 0; i < 6; i++) {
+		if (p2.mon[i].alive == true) {
+			if (p2.mon[i].getName() == p2.currentMon.getName())
+				SetConsoleTextAttribute(hConsole, 15);
+			else
+				changeTextColor(p2.mon[i]);
+			cout << "o ";
+		} else {
+			changeTextColorDef();
+			cout << ". ";
+		}
+	}
+	changeTextColorDef();
+	cout << "\nCurrent Monster:\t";
+	changeTextColor(p2.currentMon);
+	cout << p2.currentMon.getName();
+	changeTextColorDef();
+	cout << "\nHealth:\t\t\t" << p2.currentMon.getHealthCurrent() << "/" << p2.currentMon.getHealthTotal();
+}
+
+void BattleScene::showPlayerMoves(Move m1) {
+	changeTextColorMove(m1);
+	cout << "\n\n"
+		<< m1.getName()
+		<< "\nPower: " << m1.getPower()
+		<< "\nAccuracy: " << m1.getAccuracy() << '\n';
+	if (m1.getCooldown() > 1)
+		cout << m1.getCooldown() << " Turn Cooldown";
+	else if (m1.getCooldown() == 1)
+		cout << "No Cooldown";
+	else
+		cout << "Passive Ability";
+	changeTextColorDef();
+}
+
+int BattleScene::damageCalculator(bool player1Turn, Monster attacker, Monster defender, Move attack) {
+	//damage checks
+
+	//effect application
+	if (attack.getEffect() == "Destroy Armor") {
+		if (player1Turn)
+			party2.currentMon.setDefenceCurrent(party2.currentMon.getdefenceCurrent() * 0.7);
+		else
+			party1.currentMon.setDefenceCurrent(party1.currentMon.getdefenceCurrent() * 0.7);
+
+		cout << attacker.getName() << " has broken " << defender.getName() << "'s armor!\n";
+
+	}
+	if (attack.getEffect() == "Gain Armor") {
+		if (player1Turn)
+			party1.currentMon.setDefenceCurrent(party1.currentMon.getdefenceCurrent() * 1.2);
+		else
+			party2.currentMon.setDefenceCurrent(party2.currentMon.getdefenceCurrent() * 1.2);
+
+		cout << attacker.getName() << " has built up its armor!\n";
+	}
+
+	if (attack.getEffect() == "Self Sacrifice") {
+		if (player1Turn) {
+			party1.currentMon.setHealthCurrent(party1.currentMon.getHealthCurrent() / 1.5);
+			party1.currentMon.setAttackCurrent(party1.currentMon.getAttackCurrent() * 2);
+		} else {
+			party2.currentMon.setHealthCurrent(party2.currentMon.getHealthCurrent() / 1.5);
+			party2.currentMon.setAttackCurrent(party2.currentMon.getAttackCurrent() * 2);
+		}
+		cout << attacker.getName() << " has drained it's own life!\n";
+	}
+
+	if (attack.getEffect() == "Heal") {
+		if (player1Turn) {
+			party1.currentMon.setHealthCurrent(party1.currentMon.getHealthCurrent() + party1.currentMon.getHealthTotal() / 2.7);
+		} else {
+			party2.currentMon.setHealthCurrent(party2.currentMon.getHealthCurrent() + party1.currentMon.getHealthTotal() / 2.7);
+		}
+		cout << attacker.getName() << " has regenerated it's health!\n";
+	}
+
+
+	bool accuracycheck = false;
+	int damageAdvantage = 0.f;
+	if (rand() % 100 <= attack.getAccuracy()) {
+		accuracycheck = true;
+		if (defender.getType() == "Grass" && attack.getType() == "Fire" || defender.getType() == "Fire" && attack.getType() == "Water" || defender.getType() == "Water" && attack.getType() == "Grass") {
+			damageAdvantage += 2.0f;
+			cout << "SUPER EFFECTIVE HIT!";
+		} else if (defender.getType() == "Grass" && attack.getType() == "Water" || defender.getType() == "Fire" && attack.getType() == "Grass" || defender.getType() == "Water" && attack.getType() == "Fire") {
+			damageAdvantage += 1.0f;
+			cout << "WEAK HIT!";
+		} else {
+			damageAdvantage += 1.5f;
+			cout << "HIT!";
+		}
+	} else
+		cout << "MISS!";
+	int temp = defender.getHealthCurrent();
+	if (accuracycheck) {
+		temp -= (((1.2 * attacker.getAttackCurrent() / defender.getdefenceCurrent()) * attack.getPower()) * damageAdvantage);
+		cout << ' ' << (int)(((1.2 * attacker.getAttackCurrent() / defender.getdefenceCurrent()) * attack.getPower()) * damageAdvantage) << " DAMAGE DEALT!";
+	}
+	return temp;
+}
+
+int BattleScene::playerTurn(bool player1Turn, Monster p1, Monster p2) {
+	bool madeSelection = false;
+	int selection;
+
+
+	if (player1Turn) {
+		cout << "\nPlayer 1 Turn!\n\n";
+		if (p1.getMove1().getCooldownCurrent() > 1) {
+			party1.currentMon.getMove1().setCooldownCurrent(p1.getMove1().getCooldownCurrent() - 1);
+		}
+		if (p1.getMove2().getCooldownCurrent() > 1) {
+			party1.currentMon.getMove2().setCooldownCurrent(p1.getMove2().getCooldownCurrent() - 1);
+		}
+		if (p1.getMove3().getCooldownCurrent() > 1) {
+			party1.currentMon.getMove3().setCooldownCurrent(p1.getMove3().getCooldownCurrent() - 1);
+		}
+		if (p1.getMove4().getCooldownCurrent() > 1) {
+			party1.currentMon.getMove4().setCooldownCurrent(p1.getMove4().getCooldownCurrent() - 1);
+		}
+	} else {
+		cout << "\nPlayer 2 Turn!\n\n";
+		if (p2.getMove1().getCooldownCurrent() > 1) {
+			party2.currentMon.getMove1().setCooldownCurrent(p2.getMove1().getCooldownCurrent() - 1);
+		}
+		if (p2.getMove2().getCooldownCurrent() > 1) {
+			party2.currentMon.getMove2().setCooldownCurrent(p2.getMove2().getCooldownCurrent() - 1);
+		}
+		if (p2.getMove3().getCooldownCurrent() > 1) {
+			party2.currentMon.getMove3().setCooldownCurrent(p2.getMove3().getCooldownCurrent() - 1);
+		}
+		if (p2.getMove4().getCooldownCurrent() > 1) {
+			party2.currentMon.getMove4().setCooldownCurrent(p2.getMove4().getCooldownCurrent() - 1);
+		}
+	}
+
+	while (!madeSelection) {
+
+		drawCurrentHealth(party1, party2);
+
+		showPlayerMoves(p1.getMove1());
+		showPlayerMoves(p1.getMove2());
+		showPlayerMoves(p1.getMove3());
+		showPlayerMoves(p1.getMove4());
+
+		cout << "\n\nSelect move: ";
+		cin >> selection;
+
+		if (selection == 1) {
+			if (p1.getMove1().getCooldownCurrent() == 1) {
+				madeSelection = true;
+				party1.currentMon.getMove1().setCooldownCurrent(p1.getMove1().getCooldown());
+				p2.setHealthCurrent(damageCalculator(player1Turn, p1, p2, p1.getMove1()));
+
+			}
+		} else if (selection == 2) {
+			if (p1.getMove2().getCooldownCurrent() == 1) {
+				madeSelection = true;
+				party1.currentMon.getMove2().setCooldownCurrent(p1.getMove2().getCooldown());
+				p2.setHealthCurrent(damageCalculator(player1Turn, p1, p2, p1.getMove2()));
+			}
+		} else if (selection == 3) {
+			if (p1.getMove3().getCooldownCurrent() == 1) {
+				madeSelection = true;
+				party1.currentMon.getMove3().setCooldownCurrent(p1.getMove3().getCooldown());
+				p2.setHealthCurrent(damageCalculator(player1Turn, p1, p2, p1.getMove3()));
+			}
+		} else if (selection == 4) {
+			if (p1.getMove4().getCooldownCurrent() == 1) {
+				madeSelection = true;
+				party1.currentMon.getMove4().setCooldownCurrent(p1.getMove1().getCooldown());
+				p2.setHealthCurrent(damageCalculator(player1Turn, p1, p2, p1.getMove4()));
+			}
+		}
+
+	}
+
+	return p2.getHealthCurrent();
 }
