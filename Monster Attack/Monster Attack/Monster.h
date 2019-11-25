@@ -1,11 +1,14 @@
 #pragma once
-#include <iostream>
+
+#include <vector>
 #include "Move.h"
+
+using std::vector;
 
 class Monster {
 private:
 	string name, type;
-	int healthTotal, attackTotal, defenceTotal, speedTotal;
+	int healthTotal, attackTotal, defenceTotal, speedTotal, color;
 	int healthCurrent, attackCurrent, defenceCurrent, speedCurrent;
 	Move move1, move2, move3, move4;
 public:
@@ -21,6 +24,7 @@ public:
 	void setDefenceCurrent(int a) { defenceCurrent = a; }
 	void setSpeedTotal(int a) { speedTotal = a; }
 	void setSpeedCurrent(int a) { speedCurrent = a; }
+	void setColor(int col) { color = col; }
 	void setMove1(Move a) { move1 = a; }
 	void setMove2(Move a) { move2 = a; }
 	void setMove3(Move a) { move3 = a; }
@@ -36,6 +40,8 @@ public:
 	int getdefenceCurrent() { return defenceCurrent; }
 	int getSpeedTotal() { return speedTotal; }
 	int getSpeedCurrent() { return speedCurrent; }
+	vector<Move> getMoves() { return {move1, move2, move3, move4}; }
+	int getColor() { return color; }
 	Move getMove1() { return move1; }
 	Move getMove2() { return move2; }
 	Move getMove3() { return move3; }
@@ -44,14 +50,15 @@ public:
 	Monster() {
 		name = "NULL"; type = "NULL"; attackCurrent = 0; attackTotal = 0;
 		healthCurrent = 0; healthTotal = 0; defenceCurrent = 0; defenceTotal = 0;
-		speedCurrent = 0; speedTotal = 0;
+		speedCurrent = 0; speedTotal = 0; color = 0;
 	}
-	Monster(string _name, string _type, int health, int attack, int defence, int speed, Move m1, Move m2, Move m3, Move m4) {
+	Monster(string _name, string _type, int health, int attack, int defence, int speed, int col, Move m1, Move m2, Move m3, Move m4) {
 		setName(_name); setType(_type);
 		setHealthTotal((health * 4) + 220); setHealthCurrent(getHealthTotal());
 		setAttackTotal((attack * 2.2) + 10); setAttackCurrent(getAttackTotal());
 		setDefenceTotal((defence * 2) + 5); setDefenceCurrent(getDefenceTotal());
 		setSpeedTotal((speed) * 2.3 + 10); setSpeedCurrent(getSpeedTotal());
+		setColor(col);
 		setMove1(m1); setMove2(m2); setMove3(m3); setMove4(m4);
 	}
 };

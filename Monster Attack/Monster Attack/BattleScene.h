@@ -18,7 +18,7 @@ private:
 	};
 
 	void drawCurrentHealth(Party p1, Party p2);
-	void showPlayerMoves(Move m1);
+	void showPlayerMoves(vector<Move> ms);
 	int damageCalculator(bool player1Turn, Monster attacker, Monster defender, Move attack);
 	int playerTurn(bool player1Turn, Monster p1, Monster p2);
 
