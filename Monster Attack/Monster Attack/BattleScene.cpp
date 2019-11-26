@@ -3,40 +3,41 @@
 
 void BattleScene::InitScene() {
 	//fire
-	Move flame_punch("Fire Punch", "None", "Fire", 20, 100, 1, 7);
-	Move melt_armor("Melt Armor", "Destroy Armor", "Fire", 100, 100, 2, 7);
-	Move volcanic_shield("Volcanic Shield", "Gain Armor", "Fire", 40, 100, 2,  7);
+	Move flame_punch("Fire Punch", "None", "Fire", 20, 100, 1, FOREGROUND_RED);
+	Move melt_armor("Melt Armor", "Destroy Armor", "Fire", 100, 100, 2, FOREGROUND_RED);
+	Move volcanic_shield("Volcanic Shield", "Gain Armor", "Fire", 40, 100, 2, FOREGROUND_RED);
 	//grass
-	Move grass_punch("Grass Punch", "None", "Grass", 20, 100, 1, 7);
-	Move earth_bombardment("Earth Bombardment", "Destroy Armor", "Grass", 75, 100, 2, 7);
-	Move shell_shield("Shell Shield", "Gain Armor", "Grass", 50, 100, 4, 7);
+	Move grass_punch("Grass Punch", "None", "Grass", 20, 100, 1, FOREGROUND_GREEN);
+	Move earth_bombardment("Earth Bombardment", "Destroy Armor", "Grass", 75, 100, 2, FOREGROUND_GREEN);
+	Move shell_shield("Shell Shield", "Gain Armor", "Grass", 50, 100, 4, FOREGROUND_GREEN);
 	//water
-	Move water_punch("Water Punch", "None", "Water", 20, 100, 1, 7);
-	Move tsunami_slam("Tsunami Slam", "Destroy Armor", "Water", 100, 100, 3, 7);
+	Move water_punch("Water Punch", "None", "Water", 20, 100, 1, FOREGROUND_BLUE);
+	Move tsunami_slam("Tsunami Slam", "Destroy Armor", "Water", 100, 100, 3, FOREGROUND_BLUE);
 	//dark
-	Move dark_punch("Dark Punch", "None", "Dark", 30, 100, 1, 7);
-	Move self_sacrifice("Self Sacrifice", "Self Sacrifice", "Dark", 50, 100, 1, 7);
-	Move dark_magic("Dark Magic", "Heal", "Dark", 20, 100, 1, 7);
-	Move kill("Kill", "None", "Dark", 10000, 100, 1, 7);
+	Move dark_punch("Dark Punch", "None", "Dark", 30, 100, 1, FOREGROUND_INTENSITY);
+	Move self_sacrifice("Self Sacrifice", "Self Sacrifice", "Dark", 50, 100, 1, FOREGROUND_INTENSITY);
+	Move dark_magic("Dark Magic", "Heal", "Dark", 20, 100, 1, FOREGROUND_INTENSITY);
+	Move kill("Kill", "None", "Dark", 10000, 100, 1, FOREGROUND_INTENSITY);
 	//light
-	Move light_punch("Light Punch", "None", "Light", 30, 100, 1, 7);
+	Move light_punch("Light Punch", "None", "Light", 30, 100, 1, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 
 	//grass
-	Monster _1("Skorpislash", "Grass", 101, 70, 70, 80, 7, grass_punch, shell_shield, earth_bombardment, kill);
-	Monster _2("Pigeonite", "Grass", 82, 80, 80, 80, 7, grass_punch, dark_punch, flame_punch, kill);
-	Monster _3("Irobug", "Grass", 102, 70, 150, 80, 7, grass_punch, light_punch, earth_bombardment, kill);
-	Monster _4("Slowphant", "Grass", 81, 80, 80, 80, 7, grass_punch, light_punch, flame_punch, kill);
+	Monster _1("Skorpislash", "Grass", 101, 70, 70, 80, FOREGROUND_GREEN, grass_punch, shell_shield, earth_bombardment, kill);
+	Monster _2("Pigeonite", "Grass", 82, 80, 80, 80, FOREGROUND_GREEN, grass_punch, dark_punch, flame_punch, kill);
+	Monster _3("Irobug", "Grass", 102, 70, 150, 80, FOREGROUND_GREEN | FOREGROUND_INTENSITY, grass_punch, light_punch, earth_bombardment, kill);
+	Monster _4("Slowphant", "Grass", 81, 80, 80, 80, FOREGROUND_GREEN | FOREGROUND_INTENSITY, grass_punch, light_punch, flame_punch, kill);
 	//fire
-	Monster _5("Skeleking", "Fire", 20, 100, 190, 40, 7, flame_punch, dark_punch, self_sacrifice, dark_magic);
-	Monster _6("Flamepie", "Fire", 83, 80, 80, 80, 7, flame_punch, dark_punch, flame_punch, kill);
-	Monster _7("Dragithe", "Fire", 105, 70, 70, 80, 7, flame_punch, light_punch, volcanic_shield, kill);
-	Monster _8("Pheonix", "Fire", 86, 80, 80, 80, 7, flame_punch, light_punch, melt_armor, kill);
+	Monster _5("Skeleking", "Fire", 20, 100, 190, 40, FOREGROUND_RED, flame_punch, dark_punch, self_sacrifice, dark_magic);
+	Monster _6("Flamepie", "Fire", 83, 80, 80, 80, FOREGROUND_RED, flame_punch, dark_punch, flame_punch, kill);
+	Monster _7("Dragithe", "Fire", 105, 70, 70, 80, FOREGROUND_RED | FOREGROUND_INTENSITY, flame_punch, light_punch, volcanic_shield, kill);
+	Monster _8("Pheonix", "Fire", 86, 80, 80, 80, FOREGROUND_RED | FOREGROUND_INTENSITY, flame_punch, light_punch, melt_armor, kill);
 	//water
-	Monster _9("Quilling", "Water", 104, 70, 70, 80, 7, water_punch, dark_punch, flame_punch, kill);
-	Monster _10("Gladiawhale", "Water", 85, 80, 80, 80, 7, water_punch, dark_punch, flame_punch, kill);
-	Monster _11("Penguinite", "Water", 103, 70, 70, 80, 7, water_punch, light_punch, flame_punch, kill);
-	Monster _12("Oystora", "Water", 84, 80, 80, 80, 7, water_punch, light_punch, tsunami_slam, kill);
+	Monster _9("Quilling", "Water", 104, 70, 70, 80, FOREGROUND_GREEN, water_punch, dark_punch, flame_punch, kill);
+	Monster _10("Gladiawhale", "Water", 85, 80, 80, 80, FOREGROUND_GREEN, water_punch, dark_punch, flame_punch, kill);
+	Monster _11("Penguinite", "Water", 103, 70, 70, 80, FOREGROUND_GREEN | FOREGROUND_INTENSITY, water_punch, light_punch, flame_punch, kill);
+	Monster _12("Oystora", "Water", 84, 80, 80, 80, FOREGROUND_GREEN | FOREGROUND_INTENSITY, water_punch, light_punch, tsunami_slam, kill);
 
+	party1.name = "Player 1";
 	party1.mon[0] = _5;
 	party1.mon[1] = _3;
 	party1.mon[2] = _1;
@@ -46,6 +47,7 @@ void BattleScene::InitScene() {
 	party1.currentMon = party1.mon[0];
 	party1.currentMonSlot = 0;
 
+	party2.name = "Player 2";
 	party2.mon[0] = _8;
 	party2.mon[1] = _12;
 	party2.mon[2] = _10;
@@ -57,115 +59,120 @@ void BattleScene::InitScene() {
 }
 
 void BattleScene::UpdateScene() {
-	party2.currentMon.setHealthCurrent(playerTurn(true, party1.currentMon, party2.currentMon));
-	if (party2.currentMon.getHealthCurrent() <= 0) {
-		party2.mon[party2.currentMonSlot].alive = false;
-		for (int i = 0; i < 6; i++) {
-			if (party2.mon[i].alive) {
-				party2.currentMon = party2.mon[i];
-				party2.currentMonSlot = i;
-				break;
+	if (p1Turn) {
+		playerTurn(party1, party2);
+		if (party2.currentMon.getHealthCurrent() <= 0) {
+			party2.mon[party2.currentMonSlot].alive = false;
+			for (int i = 0; i < 6; i++) {
+				if (party2.mon[i].alive) {
+					party2.currentMon = party2.mon[i];
+					party2.currentMonSlot = i;
+					break;
+				}
+			}
+		}
+	} else {
+		playerTurn(party2, party1);
+		if (party1.currentMon.getHealthCurrent() <= 0) {
+			party1.mon[party1.currentMonSlot].alive = false;
+			for (int i = 0; i < 6; i++) {
+				if (party1.mon[i].alive) {
+					party1.currentMon = party1.mon[i];
+					party1.currentMonSlot = i;
+					break;
+				}
 			}
 		}
 	}
-	Sleep(2000);
-	party1.currentMon.setHealthCurrent(playerTurn(false, party2.currentMon, party1.currentMon));
-	if (party1.currentMon.getHealthCurrent() <= 0) {
-		party1.mon[party1.currentMonSlot].alive = false;
-		for (int i = 0; i < 6; i++) {
-			if (party1.mon[i].alive) {
-				party1.currentMon = party1.mon[i];
-				party1.currentMonSlot = i;
-				break;
-			}
-		}
-	}
-	Sleep(2000);
 }
 
 void BattleScene::drawCurrentHealth(Party p1, Party p2) {
-	Game::shared_instance().buffer.WriteBuffer("Player 1:", 0, 2);
-	for (int i = 0; i < 6; i++) {
-		if (p1.mon[i].alive == true) {
-			Game::shared_instance().buffer.WriteBuffer("o", 10 + i * 2, 2, p1.mon[i].getColor());
-		} else {
-			Game::shared_instance().buffer.WriteBuffer(".", 10 + i * 2, 2, p1.mon[i].getColor());
-		}
-	}
-	Game::shared_instance().buffer.WriteBuffer("Current Monster:", 0, 3);
-	Game::shared_instance().buffer.WriteBuffer(p1.currentMon.getName(), 17, 3, p1.currentMon.getColor());
-	Game::shared_instance().buffer.WriteBuffer("Health: " + to_string(p1.currentMon.getHealthCurrent()) + "/" + to_string(p1.currentMon.getHealthTotal()), 0, 4);
+	//({0, 2}, {15, 4})		({0, 6}, {15, 8})
+	vector<vector<int>> selBack{ {0, 2}, {40, 3} };
 
-	Game::shared_instance().buffer.WriteBuffer("Player 2:", 0, 6);
+	if (!p1Turn)
+		selBack[0][1] += 4;
+
+	string selBackHorz = string(selBack[1][0], ' ');
+	string selBackRect{ "" };
+
+	for (size_t i = 0; i < selBack[1][1]; i++)
+		selBackRect += selBackHorz + "\n";
+
+	Game::shared_instance().buffer.WriteBuffer(selBackRect, selBack[0][0], selBack[0][1], BACKGROUND_INTENSITY);
+
+	Game::shared_instance().buffer.WriteBuffer(p1.name + ":", 0, 2, 7, true);
 	for (int i = 0; i < 6; i++) {
 		if (p1.mon[i].alive == true) {
-			Game::shared_instance().buffer.WriteBuffer("o", 10 + i * 2, 6, p1.mon[i].getColor());
+			Game::shared_instance().buffer.WriteBuffer("o", 10 + i, 2, p1.mon[i].getColor(), true);
 		} else {
-			Game::shared_instance().buffer.WriteBuffer(".", 10 + i * 2, 6, p1.mon[i].getColor());
+			Game::shared_instance().buffer.WriteBuffer(".", 10 + i, 2, p1.mon[i].getColor(), true);
 		}
 	}
-	Game::shared_instance().buffer.WriteBuffer("Current Monster:", 0, 7);
-	Game::shared_instance().buffer.WriteBuffer(p1.currentMon.getName(), 17, 7, p1.currentMon.getColor());
-	Game::shared_instance().buffer.WriteBuffer("Health: " + to_string(p1.currentMon.getHealthCurrent()) + "/" + to_string(p1.currentMon.getHealthTotal()), 0, 8);
+	Game::shared_instance().buffer.WriteBuffer("Current Monster:", 0, 3, 7, true);
+	Game::shared_instance().buffer.WriteBuffer(p1.currentMon.getName(), 10, 3, p1.currentMon.getColor(), true);
+	Game::shared_instance().buffer.WriteBuffer("Health:             " + to_string(p1.currentMon.getHealthCurrent()) + "/" + to_string(p1.currentMon.getHealthTotal()), 0, 4, 7, true);
+
+	Game::shared_instance().buffer.WriteBuffer(p2.name + ":", 0, 6, 7, true);
+	for (int i = 0; i < 6; i++) {
+		if (p2.mon[i].alive == true) {
+			Game::shared_instance().buffer.WriteBuffer("o", 10 + i, 6, p2.mon[i].getColor(), true);
+		} else {
+			Game::shared_instance().buffer.WriteBuffer(".", 10 + i, 6, p2.mon[i].getColor(), true);
+		}
+	}
+	Game::shared_instance().buffer.WriteBuffer("Current Monster:", 0, 7, 7, true);
+	Game::shared_instance().buffer.WriteBuffer(p2.currentMon.getName(), 10, 7, p2.currentMon.getColor(), true);
+	Game::shared_instance().buffer.WriteBuffer("Health:             " + to_string(p2.currentMon.getHealthCurrent()) + "/" + to_string(p2.currentMon.getHealthTotal()), 0, 8, 7, true);
 }
 
 void BattleScene::showPlayerMoves(vector<Move> ms) {
-	changeTextColorMove(m1);
-	cout << "\n\n"
-		<< m1.getName()
-		<< "\nPower: " << m1.getPower()
-		<< "\nAccuracy: " << m1.getAccuracy() << '\n';
-	if (m1.getCooldown() > 1)
-		cout << m1.getCooldown() << " Turn Cooldown";
-	else if (m1.getCooldown() == 1)
-		cout << "No Cooldown";
-	else
-		cout << "Passive Ability";
-	changeTextColorDef();
+	for (size_t i = 0; i < ms.size(); i++) {
+		string mText{ "" };
+
+		mText += ms[i].getName() + "\nPower: " + to_string(ms[i].getPower()) + "\nAccuracy: " + to_string(ms[i].getAccuracy()) + '\n';
+			
+		if (ms[i].getCooldown() > 1)
+			mText += to_string(ms[i].getCooldown()) + " Turn Cooldown";
+		else if (ms[i].getCooldown() == 1)
+			mText += "No Cooldown";
+		else
+			mText += "Passive Ability";
+
+		Game::shared_instance().buffer.WriteBuffer(mText, 0, 10 + i * 5, ms[i].getColor());
+	}
 }
 
-int BattleScene::damageCalculator(bool player1Turn, Monster attacker, Monster defender, Move attack) {
+void BattleScene::damageCalculator(Monster &attacker, Monster &defender, Move attack) {
 	//damage checks
+
+	damageStr = "\n";
+	damageTime = 2;
 
 	//effect application
 	if (attack.getEffect() == "Destroy Armor") {
-		if (player1Turn)
-			party2.currentMon.setDefenceCurrent(party2.currentMon.getdefenceCurrent() * 0.7);
-		else
-			party1.currentMon.setDefenceCurrent(party1.currentMon.getdefenceCurrent() * 0.7);
+		defender.setDefenceCurrent(defender.getdefenceCurrent() * 0.7);
 
-		cout << attacker.getName() << " has broken " << defender.getName() << "'s armor!\n";
-
+		damageStr = attacker.getName() + " has broken " + defender.getName() + "'s armor!\n";
 	}
 	if (attack.getEffect() == "Gain Armor") {
-		if (player1Turn)
-			party1.currentMon.setDefenceCurrent(party1.currentMon.getdefenceCurrent() * 1.2);
-		else
-			party2.currentMon.setDefenceCurrent(party2.currentMon.getdefenceCurrent() * 1.2);
+		attacker.setDefenceCurrent(attacker.getdefenceCurrent() * 1.2);
 
-		cout << attacker.getName() << " has built up its armor!\n";
+		damageStr = attacker.getName() + " has built up its armor!\n";
 	}
 
 	if (attack.getEffect() == "Self Sacrifice") {
-		if (player1Turn) {
-			party1.currentMon.setHealthCurrent(party1.currentMon.getHealthCurrent() / 1.5);
-			party1.currentMon.setAttackCurrent(party1.currentMon.getAttackCurrent() * 2);
-		} else {
-			party2.currentMon.setHealthCurrent(party2.currentMon.getHealthCurrent() / 1.5);
-			party2.currentMon.setAttackCurrent(party2.currentMon.getAttackCurrent() * 2);
-		}
-		cout << attacker.getName() << " has drained it's own life!\n";
+		attacker.setHealthCurrent(attacker.getHealthCurrent() / 1.5);
+		attacker.setAttackCurrent(attacker.getAttackCurrent() * 2);
+
+		damageStr = attacker.getName() + " has drained it's own life!\n";
 	}
 
 	if (attack.getEffect() == "Heal") {
-		if (player1Turn) {
-			party1.currentMon.setHealthCurrent(party1.currentMon.getHealthCurrent() + party1.currentMon.getHealthTotal() / 2.7);
-		} else {
-			party2.currentMon.setHealthCurrent(party2.currentMon.getHealthCurrent() + party1.currentMon.getHealthTotal() / 2.7);
-		}
-		cout << attacker.getName() << " has regenerated it's health!\n";
-	}
+		attacker.setHealthCurrent(min(attacker.getHealthCurrent() + attacker.getHealthTotal() / 2.7, attacker.getHealthTotal()));
 
+		damageStr = attacker.getName() + " has regenerated it's health!\n";
+	}
 
 	bool accuracycheck = false;
 	int damageAdvantage = 0.f;
@@ -173,98 +180,94 @@ int BattleScene::damageCalculator(bool player1Turn, Monster attacker, Monster de
 		accuracycheck = true;
 		if (defender.getType() == "Grass" && attack.getType() == "Fire" || defender.getType() == "Fire" && attack.getType() == "Water" || defender.getType() == "Water" && attack.getType() == "Grass") {
 			damageAdvantage += 2.0f;
-			cout << "SUPER EFFECTIVE HIT!";
+			damageStr += "SUPER EFFECTIVE HIT!";
 		} else if (defender.getType() == "Grass" && attack.getType() == "Water" || defender.getType() == "Fire" && attack.getType() == "Grass" || defender.getType() == "Water" && attack.getType() == "Fire") {
 			damageAdvantage += 1.0f;
-			cout << "WEAK HIT!";
+			damageStr += "WEAK HIT!";
 		} else {
 			damageAdvantage += 1.5f;
-			cout << "HIT!";
+			damageStr += "HIT!";
 		}
 	} else
-		cout << "MISS!";
-	int temp = defender.getHealthCurrent();
+		damageStr = "MISS!";
+
 	if (accuracycheck) {
-		temp -= (((1.2 * attacker.getAttackCurrent() / defender.getdefenceCurrent()) * attack.getPower()) * damageAdvantage);
-		cout << ' ' << (int)(((1.2 * attacker.getAttackCurrent() / defender.getdefenceCurrent()) * attack.getPower()) * damageAdvantage) << " DAMAGE DEALT!";
+		int atck{ static_cast<int>((1.2 * attacker.getAttackCurrent() / defender.getdefenceCurrent()) * attack.getPower() * damageAdvantage) };
+		defender.setHealthCurrent(defender.getHealthCurrent() - atck);
+		damageStr += "\n" + to_string(atck) + " DAMAGE DEALT!";
 	}
-	return temp;
 }
 
-int BattleScene::playerTurn(bool player1Turn, Monster p1, Monster p2) {
-	bool madeSelection = false;
-	int selection;
-
-	if (player1Turn) {
-		Game::shared_instance().buffer.WriteBuffer("Player 1 Turn!", 0, 0);
-		if (p1.getMove1().getCooldownCurrent() > 1) {
-			party1.currentMon.getMove1().setCooldownCurrent(p1.getMove1().getCooldownCurrent() - 1);
-		}
-		if (p1.getMove2().getCooldownCurrent() > 1) {
-			party1.currentMon.getMove2().setCooldownCurrent(p1.getMove2().getCooldownCurrent() - 1);
-		}
-		if (p1.getMove3().getCooldownCurrent() > 1) {
-			party1.currentMon.getMove3().setCooldownCurrent(p1.getMove3().getCooldownCurrent() - 1);
-		}
-		if (p1.getMove4().getCooldownCurrent() > 1) {
-			party1.currentMon.getMove4().setCooldownCurrent(p1.getMove4().getCooldownCurrent() - 1);
-		}
-	} 
-	else {
-		Game::shared_instance().buffer.WriteBuffer("Player 2 Turn!", 0, 0);
-		if (p2.getMove1().getCooldownCurrent() > 1) {
-			party2.currentMon.getMove1().setCooldownCurrent(p2.getMove1().getCooldownCurrent() - 1);
-		}
-		if (p2.getMove2().getCooldownCurrent() > 1) {
-			party2.currentMon.getMove2().setCooldownCurrent(p2.getMove2().getCooldownCurrent() - 1);
-		}
-		if (p2.getMove3().getCooldownCurrent() > 1) {
-			party2.currentMon.getMove3().setCooldownCurrent(p2.getMove3().getCooldownCurrent() - 1);
-		}
-		if (p2.getMove4().getCooldownCurrent() > 1) {
-			party2.currentMon.getMove4().setCooldownCurrent(p2.getMove4().getCooldownCurrent() - 1);
-		}
-	}
+void BattleScene::playerTurn(Party &p1, Party &p2) {
+	int selection{ 0 };
+	Game::shared_instance().buffer.WriteBuffer(p1.name + " Turn!", 0, 0);
 
 	drawCurrentHealth(party1, party2);
 
-	showPlayerMoves(p1.getMoves());
+	showPlayerMoves(p1.currentMon.getMoves());
 
-	Game::shared_instance().buffer.WriteBuffer("Select move: ", 0, 2);
-	cin >> selection;
+	Game::shared_instance().buffer.WriteBuffer("Select move: ", 0, 30);
 
-	switch (selection) {
-	case 1:
-		if (p1.getMove1().getCooldownCurrent() == 1) {
-			madeSelection = true;
-			party1.currentMon.getMove1().setCooldownCurrent(p1.getMove1().getCooldown());
-			p2.setHealthCurrent(damageCalculator(player1Turn, p1, p2, p1.getMove1()));
+	if (Input::GetKeyDown('1') || Input::GetKeyDown(VK_NUMPAD1))
+		selection = 1;
+	if (Input::GetKeyDown('2') || Input::GetKeyDown(VK_NUMPAD2))
+		selection = 2;
+	if (Input::GetKeyDown('3') || Input::GetKeyDown(VK_NUMPAD3))
+		selection = 3;
+	if (Input::GetKeyDown('4') || Input::GetKeyDown(VK_NUMPAD4))
+		selection = 4;
+
+	if (1 <= selection && selection <= 4) {
+		p1Turn = !p1Turn;
+		if (p1.currentMon.getMove1().getCooldownCurrent() > 1) {
+			p1.currentMon.getMove1().setCooldownCurrent(p1.currentMon.getMove1().getCooldownCurrent() - 1);
 		}
-		break;
-	case 2:
-		if (p1.getMove2().getCooldownCurrent() == 1) {
-			madeSelection = true;
-			party1.currentMon.getMove2().setCooldownCurrent(p1.getMove2().getCooldown());
-			p2.setHealthCurrent(damageCalculator(player1Turn, p1, p2, p1.getMove2()));
+		if (p1.currentMon.getMove2().getCooldownCurrent() > 1) {
+			p1.currentMon.getMove2().setCooldownCurrent(p1.currentMon.getMove2().getCooldownCurrent() - 1);
 		}
-		break;
-	case 3:
-		if (p1.getMove3().getCooldownCurrent() == 1) {
-			madeSelection = true;
-			party1.currentMon.getMove3().setCooldownCurrent(p1.getMove3().getCooldown());
-			p2.setHealthCurrent(damageCalculator(player1Turn, p1, p2, p1.getMove3()));
+		if (p1.currentMon.getMove3().getCooldownCurrent() > 1) {
+			p1.currentMon.getMove3().setCooldownCurrent(p1.currentMon.getMove3().getCooldownCurrent() - 1);
 		}
-		break;
-	case 4:
-		if (p1.getMove4().getCooldownCurrent() == 1) {
-			madeSelection = true;
-			party1.currentMon.getMove4().setCooldownCurrent(p1.getMove1().getCooldown());
-			p2.setHealthCurrent(damageCalculator(player1Turn, p1, p2, p1.getMove4()));
+		if (p1.currentMon.getMove4().getCooldownCurrent() > 1) {
+			p1.currentMon.getMove4().setCooldownCurrent(p1.currentMon.getMove4().getCooldownCurrent() - 1);
 		}
-		break;
-	default:
-		break;
+
+		switch (selection) {
+		case 1:
+			if (p1.currentMon.getMove1().getCooldownCurrent() == 1) {
+				p1.currentMon.getMove1().setCooldownCurrent(p1.currentMon.getMove1().getCooldown());
+				damageCalculator(p1.currentMon, p2.currentMon, p1.currentMon.getMove1());
+			}
+			break;
+		case 2:
+			if (p1.currentMon.getMove2().getCooldownCurrent() == 1) {
+				p1.currentMon.getMove2().setCooldownCurrent(p1.currentMon.getMove2().getCooldown());
+				damageCalculator(p1.currentMon, p2.currentMon, p1.currentMon.getMove2());
+			}
+			break;
+		case 3:
+			if (p1.currentMon.getMove3().getCooldownCurrent() == 1) {
+				p1.currentMon.getMove3().setCooldownCurrent(p1.currentMon.getMove3().getCooldown());
+				damageCalculator(p1.currentMon, p2.currentMon, p1.currentMon.getMove3());
+			}
+			break;
+		case 4:
+			if (p1.currentMon.getMove4().getCooldownCurrent() == 1) {
+				p1.currentMon.getMove4().setCooldownCurrent(p1.currentMon.getMove1().getCooldown());
+				damageCalculator(p1.currentMon, p2.currentMon, p1.currentMon.getMove4());
+			}
+			break;
+		default:
+			break;
+		}
 	}
 
-	return p2.getHealthCurrent();
+	if (damageTime > 0) {
+		Game::shared_instance().buffer.WriteBuffer(damageStr, 0, 32);
+		damageTime -= Time::deltaTime;
+	}
+	else {
+		damageTime = 0;
+		damageStr = "";
+	}
 }

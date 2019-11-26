@@ -20,12 +20,13 @@ class DoubleBuffer {
 public:
 	DoubleBuffer();
 
-	void WriteBuffer(string strInput, double x, double y, int color = 7);
+	void WriteBuffer(string strInput, double x, double y, int color = 7, bool mergeColor = false);
 	void DisplayBuffer();
 	void DisplayBackground(vector<char> writeBack, vector<vector<int>> rectInp);
 	void DisplayBackground(vector<char> writeBack, vector<int> colorBack, vector<vector<int>> rectBack);
 	void SetCamPos(vector<int> pos);
 	void SetMaxCam(vector<int> inputMaxP1, vector<int> inputMaxP2);
+	void SetCurPos(SHORT x, SHORT y);
 	
 	HANDLE GetConsole() { return hConsole; }
 	CONSOLE_SCREEN_BUFFER_INFO GetCSBI() { return csbi; }

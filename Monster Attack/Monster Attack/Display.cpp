@@ -43,7 +43,7 @@ DoubleBuffer::DoubleBuffer() {
 	camPosOffset[1] = csbi.dwSize.Y / 2;
 }
 
-void DoubleBuffer::WriteBuffer(string strInput, double rawX, double rawY, int col) {
+void DoubleBuffer::WriteBuffer(string strInput, double rawX, double rawY, int col, bool mergeCol) {
 	char* input = &strInput[0];
 	size_t sizeInput = strlen(input);
 	int x{ static_cast<int>(round(rawX * 2)) - camPos[0] }, y{ static_cast<int>(round(rawY)) - camPos[1] };
@@ -61,8 +61,13 @@ void DoubleBuffer::WriteBuffer(string strInput, double rawX, double rawY, int co
 		} else {
 			//check if character is offscreen
 			if (0 <= currentX && currentX < csbi.dwSize.X && 0 <= currentY && currentY < csbi.dwSize.Y) {
-				writeScreen[currentX + (csbi.dwSize.X * currentY)] = input[i];
-				colorScreen[currentX + (csbi.dwSize.X * currentY)] = col;
+				int theIndex{ currentX + (csbi.dwSize.X * currentY) };
+				writeScreen[theIndex] = input[i];
+
+				if (mergeCol && colorScreen[theIndex] != 7)
+					colorScreen[theIndex] |= col;
+				else
+					colorScreen[theIndex] = col;
 
 				if (col != 7)
 					colorOnFrame = true;
@@ -157,4 +162,10 @@ void DoubleBuffer::SetCamPos(vector<int> pos) {
 
 void DoubleBuffer::SetMaxCam(vector<int> inputMaxP1, vector<int> inputMaxP2) {
 	camMaxValue = {inputMaxP1, inputMaxP2};
+}
+
+void DoubleBuffer::SetCurPos(SHORT x, SHORT y) {
+	cout.flush();
+	COORD cord{x, y};
+	SetConsoleCursorPosition(hConsole, cord);
 }

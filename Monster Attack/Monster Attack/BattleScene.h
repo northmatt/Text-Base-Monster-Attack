@@ -12,6 +12,7 @@ public:
 	void UpdateScene();
 private:
 	struct Party {
+		string name;
 		Monster mon[6];
 		Monster currentMon;
 		int currentMonSlot = 1;
@@ -19,8 +20,11 @@ private:
 
 	void drawCurrentHealth(Party p1, Party p2);
 	void showPlayerMoves(vector<Move> ms);
-	int damageCalculator(bool player1Turn, Monster attacker, Monster defender, Move attack);
-	int playerTurn(bool player1Turn, Monster p1, Monster p2);
+	void playerTurn(Party &p1, Party &p2);
+	void damageCalculator(Monster &attacker, Monster &defender, Move attack);
 
 	Party party1, party2;
+	bool p1Turn{ false };
+	string damageStr;
+	float damageTime;
 };
