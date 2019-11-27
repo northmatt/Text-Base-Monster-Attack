@@ -48,6 +48,8 @@ void DoubleBuffer::WriteBuffer(string strInput, double rawX, double rawY, int co
 	size_t sizeInput = strlen(input);
 
 	int x{ 0 }, y{ 0 };
+
+	//check if object is UI to know whether to consider camera position or not
 	if (isUI) {
 		x = static_cast<int>(round(rawX * 2));
 		y = static_cast<int>(round(rawY));
@@ -69,16 +71,19 @@ void DoubleBuffer::WriteBuffer(string strInput, double rawX, double rawY, int co
 			currentX = x;
 			currentY++;
 		} else {
-			//check if character is offscreen
+			//check if specific character is offscreen (one singlar part of image)
 			if (0 <= currentX && currentX < csbi.dwSize.X && 0 <= currentY && currentY < csbi.dwSize.Y) {
 				int theIndex{ currentX + (csbi.dwSize.X * currentY) };
 				writeScreen[theIndex] = input[i];
 
+				//check if the color should be overwritten or merged
 				if (mergeCol && colorScreen[theIndex] != 7)
 					colorScreen[theIndex] |= col;
 				else
 					colorScreen[theIndex] = col;
 
+				//7 is default color which more or less means colorless image. If a colorless image is displayed then it renders
+				//significantly faster so I have this bool for that
 				if (col != 7)
 					colorOnFrame = true;
 			}
@@ -130,6 +135,9 @@ void DoubleBuffer::DisplayBackground(vector<char> writeBack, vector<vector<int>>
 	vector<int> backPos;
 	backPos = { rectInp[0][0] - camPos[0], rectInp[0][1] - camPos[1] };
 
+
+	//rectInp = ((x, y), (w, h)) in world units
+	//rectBack = ((x, y), (w, h)) in camera units (basically with camera offset)
 	vector<vector<int>> rectBack;
 	rectBack.push_back(vector<int>{ max(0, backPos[0]), max(0, backPos[1]) });
 	rectBack.push_back(vector<int>{ min(rectInp[1][0] + backPos[0], csbi.dwSize.X), min(rectInp[1][1] + backPos[1], csbi.dwSize.Y) });
@@ -143,6 +151,8 @@ void DoubleBuffer::DisplayBackground(vector<char> writeBack, vector<int> colorBa
 	vector<int> backPos;
 	backPos = { rectInp[0][0] - camPos[0], rectInp[0][1] - camPos[1] };
 	
+	//rectInp = ((x, y), (w, h)) in world units
+	//rectBack = ((x, y), (w, h)) in camera units (basically with camera offset)
 	vector<vector<int>> rectBack;
 	rectBack.push_back(vector<int>{ max(0, backPos[0]), max(0, backPos[1]) });
 	rectBack.push_back(vector<int>{ min(rectInp[1][0] + backPos[0], csbi.dwSize.X), min(rectInp[1][1] + backPos[1], csbi.dwSize.Y) });
@@ -159,15 +169,17 @@ void DoubleBuffer::DisplayBackground(vector<char> writeBack, vector<int> colorBa
 void DoubleBuffer::SetCamPos(vector<int> pos) {
 	camPos = { pos[0] * 2 - camPosOffset[0], pos[1] - camPosOffset[1] };
 
+	//checks if camPos is past the max/min values
 	if (camPos[0] < camMaxValue[0][0])
 		camPos[0] = camMaxValue[0][0];
 	else if (camPos[0] + csbi.dwSize.X > camMaxValue[1][0])
-		camPos[0] = max(camMaxValue[1][0] - csbi.dwSize.X, camMaxValue[0][0]);
+		camPos[0] = max(camMaxValue[1][0] - csbi.dwSize.X, camMaxValue[0][0]); //make sure that camPos wont go past the min cam values when subtracting the screen size
+
 
 	if (camPos[1] < camMaxValue[0][1])
 		camPos[1] = camMaxValue[0][1];
 	else if (camPos[1] + csbi.dwSize.Y > camMaxValue[1][1])
-		camPos[1] = max(camMaxValue[1][1] - csbi.dwSize.Y, camMaxValue[0][1]);
+		camPos[1] = max(camMaxValue[1][1] - csbi.dwSize.Y, camMaxValue[0][1]); //make sure that camPos wont go past the min cam values when subtracting the screen size
 }
 
 void DoubleBuffer::SetMaxCam(vector<int> inputMaxP1, vector<int> inputMaxP2) {
