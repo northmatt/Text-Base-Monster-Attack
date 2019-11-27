@@ -43,10 +43,20 @@ DoubleBuffer::DoubleBuffer() {
 	camPosOffset[1] = csbi.dwSize.Y / 2;
 }
 
-void DoubleBuffer::WriteBuffer(string strInput, double rawX, double rawY, int col, bool mergeCol) {
+void DoubleBuffer::WriteBuffer(string strInput, double rawX, double rawY, int col, bool mergeCol, bool isUI) {
 	char* input = &strInput[0];
 	size_t sizeInput = strlen(input);
-	int x{ static_cast<int>(round(rawX * 2)) - camPos[0] }, y{ static_cast<int>(round(rawY)) - camPos[1] };
+
+	int x{ 0 }, y{ 0 };
+	if (isUI) {
+		x = static_cast<int>(round(rawX * 2));
+		y = static_cast<int>(round(rawY));
+	}
+	else {
+		x = static_cast<int>(round(rawX * 2)) - camPos[0];
+		y = static_cast<int>(round(rawY)) - camPos[1];
+	}
+	
 	int currentX{ x }, currentY{ y };
 
 	//check if image is offscreen

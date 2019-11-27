@@ -20,7 +20,7 @@ class DoubleBuffer {
 public:
 	DoubleBuffer();
 
-	void WriteBuffer(string strInput, double x, double y, int color = 7, bool mergeColor = false);
+	void WriteBuffer(string strInput, double x, double y, int color = 7, bool mergeColor = false, bool isUI = false);
 	void DisplayBuffer();
 	void DisplayBackground(vector<char> writeBack, vector<vector<int>> rectInp);
 	void DisplayBackground(vector<char> writeBack, vector<int> colorBack, vector<vector<int>> rectBack);

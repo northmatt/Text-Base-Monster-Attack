@@ -48,16 +48,31 @@ void MapCreatorCursor::Update() {
 		if (Input::GetKeyDown(VK_NUMPAD4))
 			colorValInd = !colorValInd;
 
-		if (Input::GetKeyDown(VK_SPACE))
+		if (Input::GetKeyDown(VK_NUMPAD6))
 			isDrawing = !isDrawing;
+
+		//fill function
+		if (Input::GetKeyDown(VK_NUMPAD1)) {
+			vector<int> currentPos{ static_cast<int>(round(pos.x - 1) * 2), static_cast<int>(round(pos.y - 1)), 0 };
+			char currentChar = Game::shared_instance().GetCurrentScene()->writeScreen[currentPos[0] + currentPos[1] * maxPos.x * 2];
+			int currentColor = Game::shared_instance().GetCurrentScene()->colorScreen[currentPos[0] + currentPos[1] * maxPos.x * 2];
+
+			if (currentColor != color)
+				FillLoop(currentPos, -1, currentChar, currentColor);
+		}
+
+		if (Input::GetKeyDown(VK_OEM_PLUS)) {
+			spawnPoint[0] = round(pos.x) * 2;
+			spawnPoint[1] = round(pos.y);
+		}
 
 		if (Input::GetKeyDown(VK_NUMPAD7))
 			colorValues[colorValInd][0] = !colorValues[colorValInd][0];
-		else if (Input::GetKeyDown(VK_NUMPAD8))
+		if (Input::GetKeyDown(VK_NUMPAD8))
 			colorValues[colorValInd][1] = !colorValues[colorValInd][1];
-		else if (Input::GetKeyDown(VK_NUMPAD9))
+		if (Input::GetKeyDown(VK_NUMPAD9))
 			colorValues[colorValInd][2] = !colorValues[colorValInd][2];
-		else if (Input::GetKeyDown(VK_NUMPAD5))
+		if (Input::GetKeyDown(VK_NUMPAD5))
 			colorValues[colorValInd][3] = !colorValues[colorValInd][3];
 
 		color = 0;
@@ -87,21 +102,11 @@ void MapCreatorCursor::Update() {
 			}
 	}
 
-	//fill function
-	if (Input::GetKeyDown('P')) {
-		vector<int> currentPos{ static_cast<int>(round(pos.x - 1) * 2), static_cast<int>(round(pos.y - 1)), 0 };
-		char currentChar = Game::shared_instance().GetCurrentScene()->writeScreen[currentPos[0] + currentPos[1] * maxPos.x * 2];
-		int currentColor = Game::shared_instance().GetCurrentScene()->colorScreen[currentPos[0] + currentPos[1] * maxPos.x * 2];
-
-		if (currentColor != color)
-			FillLoop(currentPos, -1, currentChar, currentColor);
-	}
-
 	string guiOverlay = "F(" + to_string(colorValues[0][0] * (1 + colorValues[0][3])) + ", " + to_string(colorValues[0][1] * (1 + colorValues[0][3])) + ", " + to_string(colorValues[0][2] * (1 + colorValues[0][3])) + ")";
 	guiOverlay += "  B(" + to_string(colorValues[1][0] * (1 + colorValues[1][3])) + ", " + to_string(colorValues[1][1] * (1 + colorValues[1][3])) + ", " + to_string(colorValues[1][2] * (1 + colorValues[1][3])) + ")";
 	guiOverlay += " Color: " + to_string(color);
 
-	Game::shared_instance().buffer.WriteBuffer(guiOverlay, 0, 0);
+	Game::shared_instance().buffer.WriteBuffer(guiOverlay, 0, 0, isDrawing ? 7 : 8, false, true);
 
 	Game::shared_instance().buffer.SetCamPos({ static_cast<int>(round(pos.x)), static_cast<int>(round(pos.y)) });
 	Game::shared_instance().buffer.WriteBuffer(image, round(pos.x), pos.y, color);
