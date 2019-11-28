@@ -21,7 +21,7 @@ private:
 	void drawCurrentHealth(Party p1, Party p2);
 	void showPlayerMoves(vector<Move> ms);
 	void playerTurn(Party &p1, Party &p2);
-	void damageCalculator(Monster &attacker, Monster &defender, Move attack);
+	void damageCalculator(Monster &attacker, Monster &defender, Move attack, bool checkPassive = true);
 
 	Party party1, party2;
 	bool p1Turn{ false };

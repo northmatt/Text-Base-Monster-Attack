@@ -3,39 +3,39 @@
 
 void BattleScene::InitScene() {
 	//fire
-	Move flame_punch("Fire Punch", "None", "Fire", 20, 100, 1, FOREGROUND_RED);
-	Move melt_armor("Melt Armor", "Destroy Armor", "Fire", 100, 100, 2, FOREGROUND_RED);
-	Move volcanic_shield("Volcanic Shield", "Gain Armor", "Fire", 40, 100, 2, FOREGROUND_RED);
+	Move flame_punch("Fire Punch", "None", "Fire", 20, 100, 0, 0, FOREGROUND_RED);
+	Move melt_armor("Melt Armor", "Destroy Armor", "Fire", 100, 100, 2, 0, FOREGROUND_RED);
+	Move volcanic_shield("Volcanic Shield", "Gain Armor", "Fire", 40, 100, 2, 0, FOREGROUND_RED);
 	//grass
-	Move grass_punch("Grass Punch", "None", "Grass", 20, 100, 1, FOREGROUND_GREEN);
-	Move earth_bombardment("Earth Bombardment", "Destroy Armor", "Grass", 75, 100, 2, FOREGROUND_GREEN);
-	Move shell_shield("Shell Shield", "Gain Armor", "Grass", 50, 100, 4, FOREGROUND_GREEN);
+	Move grass_punch("Grass Punch", "None", "Grass", 20, 100, 0, 0, FOREGROUND_GREEN);
+	Move earth_bombardment("Earth Bombardment", "Destroy Armor", "Grass", 75, 100, 1, 0, FOREGROUND_GREEN);
+	Move shell_shield("Shell Shield", "Gain Armor", "Grass", 50, 100, 4, 0, FOREGROUND_GREEN);
 	//water
-	Move water_punch("Water Punch", "None", "Water", 20, 100, 1, FOREGROUND_BLUE);
-	Move tsunami_slam("Tsunami Slam", "Destroy Armor", "Water", 100, 100, 3, FOREGROUND_BLUE);
+	Move water_punch("Water Punch", "None", "Water", 20, 100, 0, 0, FOREGROUND_BLUE);
+	Move tsunami_slam("Tsunami Slam", "Destroy Armor", "Water", 100, 100, 3, 0, FOREGROUND_BLUE);
 	//dark
-	Move dark_punch("Dark Punch", "None", "Dark", 30, 100, 1, FOREGROUND_INTENSITY);
-	Move self_sacrifice("Self Sacrifice", "Self Sacrifice", "Dark", 50, 100, 1, FOREGROUND_INTENSITY);
-	Move dark_magic("Dark Magic", "Heal", "Dark", 20, 100, 1, FOREGROUND_INTENSITY);
-	Move kill("Kill", "None", "Dark", 10000, 100, 1, FOREGROUND_INTENSITY);
+	Move dark_punch("Dark Punch", "None", "Dark", 30, 100, 0, 0, FOREGROUND_INTENSITY);
+	Move self_sacrifice("Self Sacrifice", "Self Sacrifice", "Dark", 50, 100, 1, 0, FOREGROUND_INTENSITY);
+	Move dark_magic("Dark Magic", "Heal", "Dark", 20, 100, 1, 0, FOREGROUND_INTENSITY);
+	Move kill("Kill", "None", "Dark", 10000, 100, 0, 3, FOREGROUND_INTENSITY);
 	//light
-	Move light_punch("Light Punch", "None", "Light", 30, 100, 1, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+	Move light_punch("Light Punch", "None", "Light", 30, 100, 0, 0, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 
 	//grass
-	Monster _1("Skorpislash", "Grass", 101, 70, 70, 80, FOREGROUND_GREEN, grass_punch, shell_shield, earth_bombardment, kill);
-	Monster _2("Pigeonite", "Grass", 82, 80, 80, 80, FOREGROUND_GREEN, grass_punch, dark_punch, flame_punch, kill);
-	Monster _3("Irobug", "Grass", 102, 70, 150, 80, FOREGROUND_GREEN | FOREGROUND_INTENSITY, grass_punch, light_punch, earth_bombardment, kill);
-	Monster _4("Slowphant", "Grass", 81, 80, 80, 80, FOREGROUND_GREEN | FOREGROUND_INTENSITY, grass_punch, light_punch, flame_punch, kill);
+	Monster _1("Skorpislash", "Grass", "Light", 101, 70, 70, 80, FOREGROUND_GREEN, grass_punch, shell_shield, earth_bombardment, kill);
+	Monster _2("Pigeonite", "Grass", "Dark", 82, 80, 80, 80, FOREGROUND_GREEN, grass_punch, dark_punch, flame_punch, kill);
+	Monster _3("Irobug", "Grass", "Light", 102, 70, 150, 80, FOREGROUND_GREEN | FOREGROUND_INTENSITY, grass_punch, light_punch, earth_bombardment, kill);
+	Monster _4("Slowphant", "Grass", "Dark", 81, 80, 80, 80, FOREGROUND_GREEN | FOREGROUND_INTENSITY, grass_punch, light_punch, flame_punch, kill);
 	//fire
-	Monster _5("Skeleking", "Fire", 20, 100, 190, 40, FOREGROUND_RED, flame_punch, dark_punch, self_sacrifice, dark_magic);
-	Monster _6("Flamepie", "Fire", 83, 80, 80, 80, FOREGROUND_RED, flame_punch, dark_punch, flame_punch, kill);
-	Monster _7("Dragithe", "Fire", 105, 70, 70, 80, FOREGROUND_RED | FOREGROUND_INTENSITY, flame_punch, light_punch, volcanic_shield, kill);
-	Monster _8("Pheonix", "Fire", 86, 80, 80, 80, FOREGROUND_RED | FOREGROUND_INTENSITY, flame_punch, light_punch, melt_armor, kill);
+	Monster _5("Skeleking", "Fire", "Light", 20, 100, 190, 40, FOREGROUND_RED, flame_punch, dark_punch, self_sacrifice, dark_magic);
+	Monster _6("Flamepie", "Fire", "Dark", 83, 80, 80, 80, FOREGROUND_RED, flame_punch, dark_punch, flame_punch, kill);
+	Monster _7("Dragithe", "Fire", "Light", 105, 70, 70, 80, FOREGROUND_RED | FOREGROUND_INTENSITY, flame_punch, light_punch, volcanic_shield, kill);
+	Monster _8("Pheonix", "Fire", "Dark", 86, 80, 80, 80, FOREGROUND_RED | FOREGROUND_INTENSITY, flame_punch, light_punch, melt_armor, kill);
 	//water
-	Monster _9("Quilling", "Water", 104, 70, 70, 80, FOREGROUND_GREEN, water_punch, dark_punch, flame_punch, kill);
-	Monster _10("Gladiawhale", "Water", 85, 80, 80, 80, FOREGROUND_GREEN, water_punch, dark_punch, flame_punch, kill);
-	Monster _11("Penguinite", "Water", 103, 70, 70, 80, FOREGROUND_GREEN | FOREGROUND_INTENSITY, water_punch, light_punch, flame_punch, kill);
-	Monster _12("Oystora", "Water", 84, 80, 80, 80, FOREGROUND_GREEN | FOREGROUND_INTENSITY, water_punch, light_punch, tsunami_slam, kill);
+	Monster _9("Quilling", "Water", "Light", 104, 70, 70, 80, FOREGROUND_GREEN, water_punch, dark_punch, flame_punch, kill);
+	Monster _10("Gladiawhale", "Water", "Dark", 85, 80, 80, 80, FOREGROUND_GREEN, water_punch, dark_punch, flame_punch, kill);
+	Monster _11("Penguinite", "Water", "Light", 103, 70, 70, 80, FOREGROUND_GREEN | FOREGROUND_INTENSITY, water_punch, light_punch, flame_punch, kill);
+	Monster _12("Oystora", "Water", "Dark", 84, 80, 80, 80, FOREGROUND_GREEN | FOREGROUND_INTENSITY, water_punch, light_punch, tsunami_slam, kill);
 
 	party1.name = "Player 1";
 	party1.mon[0] = _5;
@@ -132,9 +132,9 @@ void BattleScene::showPlayerMoves(vector<Move> ms) {
 
 		mText += ms[i].getName() + "\nPower: " + to_string(ms[i].getPower()) + "\nAccuracy: " + to_string(ms[i].getAccuracy()) + '\n';
 			
-		if (ms[i].getCooldown() > 1)
+		if (ms[i].getCooldown() > 0)
 			mText += to_string(ms[i].getCooldown()) + " Turn Cooldown";
-		else if (ms[i].getCooldown() == 1)
+		else if (ms[i].getCooldown() == 0)
 			mText += "No Cooldown";
 		else
 			mText += "Passive Ability";
@@ -143,11 +143,15 @@ void BattleScene::showPlayerMoves(vector<Move> ms) {
 	}
 }
 
-void BattleScene::damageCalculator(Monster &attacker, Monster &defender, Move attack) {
+void BattleScene::damageCalculator(Monster &attacker, Monster &defender, Move attack, bool checkPassive) {
 	//damage checks
 
 	damageStr = "\n";
 	damageTime = 2;
+
+	if (attacker.getPassiveReset() > 0 && checkPassive) {
+		damageCalculator(attacker, defender, attacker.getMovePassive(), false);
+	}
 
 	//effect application
 	if (attack.getEffect() == "Destroy Armor") {
@@ -218,47 +222,82 @@ void BattleScene::playerTurn(Party &p1, Party &p2) {
 		selection = 4;
 
 	if (1 <= selection && selection <= 4) {
-		p1Turn = !p1Turn;
-		if (p1.currentMon.getMove1().getCooldownCurrent() > 1) {
-			p1.currentMon.getMove1().setCooldownCurrent(p1.currentMon.getMove1().getCooldownCurrent() - 1);
-		}
-		if (p1.currentMon.getMove2().getCooldownCurrent() > 1) {
-			p1.currentMon.getMove2().setCooldownCurrent(p1.currentMon.getMove2().getCooldownCurrent() - 1);
-		}
-		if (p1.currentMon.getMove3().getCooldownCurrent() > 1) {
-			p1.currentMon.getMove3().setCooldownCurrent(p1.currentMon.getMove3().getCooldownCurrent() - 1);
-		}
-		if (p1.currentMon.getMove4().getCooldownCurrent() > 1) {
-			p1.currentMon.getMove4().setCooldownCurrent(p1.currentMon.getMove4().getCooldownCurrent() - 1);
-		}
+		bool tookTurn = false;
 
 		switch (selection) {
 		case 1:
-			if (p1.currentMon.getMove1().getCooldownCurrent() == 1) {
-				p1.currentMon.getMove1().setCooldownCurrent(p1.currentMon.getMove1().getCooldown());
-				damageCalculator(p1.currentMon, p2.currentMon, p1.currentMon.getMove1());
+			if (p1.currentMon.getMove1()->getCooldownCurrent() == 0) {
+				tookTurn = true;
+				p1.currentMon.getMove1()->setCooldownCurrent(p1.currentMon.getMove1()->getCooldown() + 1);
+				damageCalculator(p1.currentMon, p2.currentMon, *p1.currentMon.getMove1());
+				
+				if (p1.currentMon.getMove1()->getLength() > 1) {
+					p1.currentMon.setMovePassive(*p1.currentMon.getMove1());
+					p1.currentMon.setPassiveReset(p1.currentMon.getMove1()->getLength() + 1);
+				}
 			}
 			break;
 		case 2:
-			if (p1.currentMon.getMove2().getCooldownCurrent() == 1) {
-				p1.currentMon.getMove2().setCooldownCurrent(p1.currentMon.getMove2().getCooldown());
-				damageCalculator(p1.currentMon, p2.currentMon, p1.currentMon.getMove2());
+			if (p1.currentMon.getMove2()->getCooldownCurrent() == 0) {
+				tookTurn = true;
+				p1.currentMon.getMove2()->setCooldownCurrent(p1.currentMon.getMove2()->getCooldown() + 1);
+				damageCalculator(p1.currentMon, p2.currentMon, *p1.currentMon.getMove2());
+
+				if (p1.currentMon.getMove2()->getLength() > 1) {
+					p1.currentMon.setMovePassive(*p1.currentMon.getMove2());
+					p1.currentMon.setPassiveReset(p1.currentMon.getMove2()->getLength());
+				}
 			}
 			break;
 		case 3:
-			if (p1.currentMon.getMove3().getCooldownCurrent() == 1) {
-				p1.currentMon.getMove3().setCooldownCurrent(p1.currentMon.getMove3().getCooldown());
-				damageCalculator(p1.currentMon, p2.currentMon, p1.currentMon.getMove3());
+			if (p1.currentMon.getMove3()->getCooldownCurrent() == 0) {
+				tookTurn = true;
+				p1.currentMon.getMove3()->setCooldownCurrent(p1.currentMon.getMove3()->getCooldown() + 1);
+				damageCalculator(p1.currentMon, p2.currentMon, *p1.currentMon.getMove3());
+
+				if (p1.currentMon.getMove3()->getLength() > 1) {
+					p1.currentMon.setMovePassive(*p1.currentMon.getMove3());
+					p1.currentMon.setPassiveReset(p1.currentMon.getMove3()->getLength() + 1);
+				}
 			}
 			break;
 		case 4:
-			if (p1.currentMon.getMove4().getCooldownCurrent() == 1) {
-				p1.currentMon.getMove4().setCooldownCurrent(p1.currentMon.getMove1().getCooldown());
-				damageCalculator(p1.currentMon, p2.currentMon, p1.currentMon.getMove4());
+			if (p1.currentMon.getMove4()->getCooldownCurrent() == 0) {
+				tookTurn = true;
+				p1.currentMon.getMove4()->setCooldownCurrent(p1.currentMon.getMove1()->getCooldown() + 1);
+				damageCalculator(p1.currentMon, p2.currentMon, *p1.currentMon.getMove4());
+
+				if (p1.currentMon.getMove4()->getLength() > 1) {
+					p1.currentMon.setMovePassive(*p1.currentMon.getMove4());
+					p1.currentMon.setPassiveReset(p1.currentMon.getMove4()->getLength() + 1);
+				}
 			}
 			break;
 		default:
 			break;
+		}
+
+		if (tookTurn) {
+			p1Turn = !p1Turn;
+			if (p1.currentMon.getMove1()->getCooldownCurrent() > 0) {
+				p1.currentMon.getMove1()->setCooldownCurrent(p1.currentMon.getMove1()->getCooldownCurrent() - 1);
+			}
+			if (p1.currentMon.getMove2()->getCooldownCurrent() > 0) {
+				p1.currentMon.getMove2()->setCooldownCurrent(p1.currentMon.getMove2()->getCooldownCurrent() - 1);
+			}
+			if (p1.currentMon.getMove3()->getCooldownCurrent() > 0) {
+				p1.currentMon.getMove3()->setCooldownCurrent(p1.currentMon.getMove3()->getCooldownCurrent() - 1);
+			}
+			if (p1.currentMon.getMove4()->getCooldownCurrent() > 0) {
+				p1.currentMon.getMove4()->setCooldownCurrent(p1.currentMon.getMove4()->getCooldownCurrent() - 1);
+			}
+			if (p1.currentMon.getPassiveReset() > 0) {
+				p1.currentMon.setPassiveReset(p1.currentMon.getPassiveReset() - 1);
+
+				if (p1.currentMon.getPassiveReset() == 0) {
+					p1.currentMon.setMovePassive(Move());
+				}
+			}
 		}
 	}
 
