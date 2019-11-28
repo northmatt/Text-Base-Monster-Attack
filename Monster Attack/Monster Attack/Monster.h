@@ -10,9 +10,12 @@ private:
 	string name, type, lightType;
 	int healthTotal, attackTotal, defenceTotal, speedTotal, color, passiveReset;
 	int healthCurrent, attackCurrent, defenceCurrent, speedCurrent;
+	int attackTemp, defenceTemp, speedTemp;
 	Move move1, move2, move3, move4, movePassive;
 public:
 	bool alive = true;
+	//resetTempMods
+	void ResetTemp() { attackTemp = 1; defenceTemp = 1; speedTemp = 1; };
 	//set
 	void setName(string a) { name = a; }
 	void setType(string a) { type = a; }
@@ -32,18 +35,21 @@ public:
 	void setMove3(Move a) { move3 = a; }
 	void setMove4(Move a) { move4 = a; }
 	void setMovePassive(Move a) { movePassive = a; }
+	void setAttackTemp(int a) { attackTemp = a; }
+	void setDefenceTemp(int a) { defenceTemp = a; }
+	void setSpeedTemp(int a) { speedTemp = a; }
 	//get
 	string getName() { return name; }
 	string getType() { return type; }
 	string getLightType() { return lightType; }
 	int getHealthTotal() { return healthTotal; }
 	int getHealthCurrent() { return healthCurrent; }
-	int getAttackTotal() { return attackTotal; }
-	int getAttackCurrent() { return attackCurrent; }
-	int getDefenceTotal() { return defenceTotal; }
-	int getdefenceCurrent() { return defenceCurrent; }
-	int getSpeedTotal() { return speedTotal; }
-	int getSpeedCurrent() { return speedCurrent; }
+	int getAttackTotal() { return attackTotal * attackTemp; }
+	int getAttackCurrent() { return attackCurrent * attackTemp; }
+	int getDefenceTotal() { return defenceTotal * defenceTemp; }
+	int getdefenceCurrent() { return defenceCurrent * defenceTemp; }
+	int getSpeedTotal() { return speedTotal * speedTemp; }
+	int getSpeedCurrent() { return speedCurrent * speedTemp; }
 	vector<Move> getMoves() { return {move1, move2, move3, move4}; }
 	int getColor() { return color; }
 	int getPassiveReset() { return passiveReset; }
@@ -56,9 +62,10 @@ public:
 	Monster() {
 		name = "NULL"; type = "NULL"; lightType = "NULL"; attackCurrent = 0; attackTotal = 0;
 		healthCurrent = 0; healthTotal = 0; defenceCurrent = 0; defenceTotal = 0;
-		speedCurrent = 0; speedTotal = 0; color = 0;
+		speedCurrent = 0; speedTotal = 0; color = 0; ResetTemp();
 	}
 	Monster(string _name, string _type, string _lType, int health, int attack, int defence, int speed, int col, Move m1, Move m2, Move m3, Move m4) {
+		ResetTemp();
 		setName(_name); setType(_type); setLightType(_lType);
 		setHealthTotal((health * 4) + 220); setHealthCurrent(getHealthTotal());
 		setAttackTotal((attack * 2.2) + 10); setAttackCurrent(getAttackTotal());

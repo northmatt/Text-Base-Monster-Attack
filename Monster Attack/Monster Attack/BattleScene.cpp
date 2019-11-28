@@ -18,6 +18,7 @@ void BattleScene::InitScene() {
 	Move self_sacrifice("Self Sacrifice", "Self Sacrifice", "Dark", 50, 100, 1, 0, FOREGROUND_INTENSITY);
 	Move dark_magic("Dark Magic", "Heal", "Dark", 20, 100, 1, 0, FOREGROUND_INTENSITY);
 	Move kill("Kill", "None", "Dark", 10000, 100, 0, 3, FOREGROUND_INTENSITY);
+	Move superPower("suuppper", "super", "Dark", 0, 100, 0, 3, FOREGROUND_INTENSITY);
 	//light
 	Move light_punch("Light Punch", "None", "Light", 30, 100, 0, 0, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 
@@ -30,7 +31,7 @@ void BattleScene::InitScene() {
 	Monster _5("Skeleking", "Fire", "Light", 20, 100, 190, 40, FOREGROUND_RED, flame_punch, dark_punch, self_sacrifice, dark_magic);
 	Monster _6("Flamepie", "Fire", "Dark", 83, 80, 80, 80, FOREGROUND_RED, flame_punch, dark_punch, flame_punch, kill);
 	Monster _7("Dragithe", "Fire", "Light", 105, 70, 70, 80, FOREGROUND_RED | FOREGROUND_INTENSITY, flame_punch, light_punch, volcanic_shield, kill);
-	Monster _8("Pheonix", "Fire", "Dark", 86, 80, 80, 80, FOREGROUND_RED | FOREGROUND_INTENSITY, flame_punch, light_punch, melt_armor, kill);
+	Monster _8("Pheonix", "Fire", "Dark", 86, 80, 80, 80, FOREGROUND_RED | FOREGROUND_INTENSITY, flame_punch, light_punch, melt_armor, superPower);
 	//water
 	Monster _9("Quilling", "Water", "Light", 104, 70, 70, 80, FOREGROUND_GREEN, water_punch, dark_punch, flame_punch, kill);
 	Monster _10("Gladiawhale", "Water", "Dark", 85, 80, 80, 80, FOREGROUND_GREEN, water_punch, dark_punch, flame_punch, kill);
@@ -131,8 +132,10 @@ void BattleScene::showPlayerMoves(vector<Move> ms) {
 		string mText{ "" };
 
 		mText += ms[i].getName() + "\nPower: " + to_string(ms[i].getPower()) + "\nAccuracy: " + to_string(ms[i].getAccuracy()) + '\n';
-			
-		if (ms[i].getCooldown() > 0)
+		
+		if (ms[i].getCooldownCurrent() > 0)
+			mText += to_string(ms[i].getCooldownCurrent()) + " Turns until cooldown expires";
+		else if (ms[i].getCooldown() > 0)
 			mText += to_string(ms[i].getCooldown()) + " Turn Cooldown";
 		else if (ms[i].getCooldown() == 0)
 			mText += "No Cooldown";
@@ -146,9 +149,13 @@ void BattleScene::showPlayerMoves(vector<Move> ms) {
 void BattleScene::damageCalculator(Monster &attacker, Monster &defender, Move attack, bool checkPassive) {
 	//damage checks
 
+	//reset the attackers bonus stats, if they can still get it the stats will be applied again later on
+	attacker.ResetTemp();
+
 	damageStr = "\n";
 	damageTime = 2;
 
+	//apply the bonus stats again, make sure that it deosnt become an endless recursive function using the 'checkPassive' bool
 	if (attacker.getPassiveReset() > 0 && checkPassive) {
 		damageCalculator(attacker, defender, attacker.getMovePassive(), false);
 	}
@@ -169,13 +176,17 @@ void BattleScene::damageCalculator(Monster &attacker, Monster &defender, Move at
 		attacker.setHealthCurrent(attacker.getHealthCurrent() / 1.5);
 		attacker.setAttackCurrent(attacker.getAttackCurrent() * 2);
 
-		damageStr = attacker.getName() + " has drained it's own life!\n";
+		damageStr = attacker.getName() + " has drained it's own life to gain more power!\n";
 	}
 
 	if (attack.getEffect() == "Heal") {
 		attacker.setHealthCurrent(min(attacker.getHealthCurrent() + attacker.getHealthTotal() / 2.7, attacker.getHealthTotal()));
 
 		damageStr = attacker.getName() + " has regenerated it's health!\n";
+	}
+
+	if (attack.getEffect() == "super") {
+		attacker.setDefenceTemp(100);
 	}
 
 	bool accuracycheck = false;
