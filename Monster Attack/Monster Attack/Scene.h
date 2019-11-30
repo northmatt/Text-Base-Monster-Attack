@@ -19,7 +19,7 @@ public:
 	Scene(string name);
 
 	//want virtual so that classes that inherinent the Scene class will run the inherinented class instead of the original Scene class (this one)
-	void InitScene();
+	virtual void InitScene();
 	virtual void UpdateScene();
 	virtual void UpdateSwitch();
 

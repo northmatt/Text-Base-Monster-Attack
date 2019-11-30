@@ -10,14 +10,13 @@ using std::ifstream;
 using std::stringstream;
 using std::getline;
 
-class MapCreator : public Scene {
+class MapLevel : public Scene {
 public:
-	MapCreator() { InitScene(); };
+	MapLevel() { InitScene(); };
 
 	void InitScene();
 	void UpdateScene();
 	void UpdateSwitch();
 
-	void Save(string fileName, vector<int> sizeMap, vector<char> writeMap, vector<int> colorMap);
 	void Load(string fileName);
 };

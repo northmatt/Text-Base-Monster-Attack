@@ -88,6 +88,11 @@ void BattleScene::InitScene() {
 }
 
 void BattleScene::UpdateScene() {
+	if (Input::GetKeyDown(VK_ESCAPE)) {
+		Game::shared_instance().SwitchToScene(1);
+		return;
+	}
+
 	if (p1Turn) {
 		playerTurn(party1, party2);
 		if (party2.currentMon.getHealthCurrent() <= 0) {

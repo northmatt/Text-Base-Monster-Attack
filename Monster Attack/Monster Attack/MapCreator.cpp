@@ -26,7 +26,6 @@ void MapCreator::InitScene() {
 	writeScreen.assign(mapSize, ' ');
 	colorScreen.assign(mapSize, BACKGROUND_GREEN);
 
-	Game::shared_instance().buffer.SetMaxCam({ 0, 0 }, {map[0] + 4, map[1] + 2});
 	Game::shared_instance().buffer.SetMaxCam({ 0, 0 }, { map[0] + 4, map[1] + 2 });
 }
 
@@ -51,7 +50,7 @@ void MapCreator::UpdateSwitch() {
 void MapCreator::Save(string fileName, vector<int> sizeMap, vector<char> writeMap, vector<int> colorMap) {
 	ofstream theFile;
 
-	theFile.open("maps/" + fileName);
+	theFile.open("assets/maps/" + fileName);
 
 	if (!theFile.is_open())
 		return;
@@ -73,7 +72,7 @@ void MapCreator::Save(string fileName, vector<int> sizeMap, vector<char> writeMa
 void MapCreator::Load(string fileName) {
 	ifstream theFile;
 
-	theFile.open("maps/" + fileName);
+	theFile.open("assets/maps/" + fileName);
 
 	if (!theFile.is_open())
 		return;
