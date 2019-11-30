@@ -8,7 +8,7 @@ void BattleScene::InitScene() {
 	Move Berries("Poison Berries", "Poision", "Grass", false, 20, 70, 4, 3, FOREGROUND_GREEN);
 	Move Thorns("Thorns", "Thorns", "Grass", true, 40, 80, 0, 0, FOREGROUND_GREEN);
 	Move ThornThrow("Thorn Throw", "None", "Grass", false, 150, 80, 5, 0, FOREGROUND_GREEN);
-	Move VineBlock("Vine Block", "Block", "Grass", true, 50, 90, 2, 2, FOREGROUND_GREEN);
+	Move VineBlock("Vine Block", "Block", "Grass", true, 50, 90, 3, 3, FOREGROUND_GREEN);
 
 	//fire
 	Move BurnTouch("Burn Touch", "Burn", "Fire", false, 20, 30, 2, 1, FOREGROUND_RED);
@@ -16,31 +16,31 @@ void BattleScene::InitScene() {
 	Move FireSpin("Fire Spin", "Burn", "Fire", false, 25, 90, 4, 2, FOREGROUND_RED);
 	Move Overheat("Overheat", "Overheat", "Fire", true, 75, 100, 0, 0, FOREGROUND_RED);
 	Move ShadowFire("Shadow Fire", "None", "Fire", false, 150, 80, 5, 0, FOREGROUND_RED);
-	Move HeatWave("Heat Wave", "Extreme Heat", "Fire", false, 10, 80, 3, 2, FOREGROUND_RED);
+	Move HeatWave("Heat Wave", "Extreme Heat", "Fire", false, 10, 80, 3, 3, FOREGROUND_RED);
 
 	//water
 	Move GoodCurrent("Good Current", "Speedy Water", "Water", true, 10, 100, 0, 3, FOREGROUND_BLUE);
 	Move RainStorm("Rain Storm", "None", "Water", false, 40, 100, 0, 0, FOREGROUND_BLUE);
-	Move Surf("Surf", "Speed", "Water", true, 20, 100, 2, 2, FOREGROUND_BLUE);
-	Move MuddyWater("Muddy Water", "SlowWater", "Water", false, 0, 100, 99999, 0, FOREGROUND_BLUE);
+	Move Surf("Surf", "Speed", "Water", true, 20, 100, 3, 3, FOREGROUND_BLUE);
+	Move MuddyWater("Muddy Water", "Slow Water", "Water", false, 20, 100, 0, 2, FOREGROUND_BLUE);
 	Move StormyNight("Stormy Night", "None", "Water", false, 40, 100, 0, 0, FOREGROUND_BLUE);
-	Move Drown("Drown", "Slow", "Water", false, 0, 90, 3, 2, FOREGROUND_BLUE);
+	Move Drown("Drown", "Drowned", "Water", false, 15, 90, 3, 3, FOREGROUND_BLUE);
 
 	//dark
 	Move LettuceScythe("Lettuce Scythe", "None", "Dark", false, 40, 100, 0, 0, FOREGROUND_INTENSITY);
-	Move ThornCage("Thorn Cage", "Bleeding", "Dark", false, 17, 80, 4, 3, FOREGROUND_INTENSITY);
+	Move ThornCage("Thorn Cage", "Bleeding", "Dark", false, 17, 80, 4, 2, FOREGROUND_INTENSITY);
 	Move ShadowClaw("Shadow Claw", "None", "Dark", false, 40, 100, 0, 0, FOREGROUND_INTENSITY);
-	Move Shroud("Shroud", "Speed", "Dark", true, 20, 100, 2, 2, FOREGROUND_INTENSITY);
-	Move KrakenSummon("Kraken Summon", "Kraken", "Dark", false, 350, 30, 0, 0, FOREGROUND_INTENSITY);
-	Move Sharpen("Sharpen", "Sharpen", "Dark", true, 0, 100, 2, 1, FOREGROUND_INTENSITY);
+	Move Shroud("Shroud", "Speed", "Dark", true, 20, 100, 3, 3, FOREGROUND_INTENSITY);
+	Move KrakenSummon("Kraken Summon", "Kraken", "Dark", false, 200, 30, 3, 0, FOREGROUND_INTENSITY);
+	Move Sharpen("Sharpen", "Sharpen", "Dark", true, 15, 100, 3, 3, FOREGROUND_INTENSITY);
 
 	//light
 	Move Beam("Beam of Light", "None", "Light", false, 120, 90, 5, 0, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 	Move Kale("Kimble Kale", "Heal", "Light", true, 3, 100, 7, 0, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 	Move BlazingSun("Blazing Sun", "None", "Light", false, 120, 90, 5, 0, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-	Move BlindingLight("Blinding Light", "Blind", "Light", false, 50, 100, 2, 2, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+	Move BlindingLight("Blinding Light", "Blind", "Light", false, 50, 100, 2, 1, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 	Move ThunderStorm("Thunder Storm", "None", "Light", false, 150, 80, 5, 0, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-	Move SuctionCups("Suction Cups", "Lifesteal", "Light", false, 30, 90, 2, 0, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+	Move SuctionCups("Suction Cups", "Lifesteal", "Light", false, 40, 90, 2, 0, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 
 	//monsters
 	Monster _1("Nugget Lord", "Grass", "Light", 100, 50, 100, 50, FOREGROUND_GREEN | FOREGROUND_INTENSITY, Beam, Whip, Berries, Kale, Photosynthesis);
@@ -67,7 +67,7 @@ void BattleScene::InitScene() {
 	Monster _12("Oystora", "Water", "Dark", 84, 80, 80, 80, FOREGROUND_GREEN | FOREGROUND_INTENSITY, water_punch, light_punch, tsunami_slam, kill, light_punch);*/
 
 	party1.name = "Player 1";
-	party1.mon[0] = _5;
+	party1.mon[0] = _6;
 	party1.mon[1] = _5;
 	party1.mon[2] = _1;
 	party1.mon[3] = _2;
@@ -77,7 +77,7 @@ void BattleScene::InitScene() {
 	party1.currentMonSlot = 0;
 
 	party2.name = "Player 2";
-	party2.mon[0] = _5;
+	party2.mon[0] = _6;
 	party2.mon[1] = _1;
 	party2.mon[2] = _5;
 	party2.mon[3] = _6;
@@ -143,7 +143,7 @@ void BattleScene::drawCurrentHealth(Party p1, Party p2) {
 		}
 		Game::shared_instance().buffer.WriteBuffer("Current Monster:", 0, 3 + x, 7, true);
 		Game::shared_instance().buffer.WriteBuffer(pCurrent.currentMon.getName(), 10, 3 + x, pCurrent.currentMon.getColor(), true);
-		Game::shared_instance().buffer.WriteBuffer("Health:             " + to_string(pCurrent.currentMon.getHealthCurrent()) + "/" + to_string(pCurrent.currentMon.getHealthTotal()) + "   s: " + to_string(pCurrent.currentMon.getSpeedCurrent()) + ", d: " + to_string(pCurrent.currentMon.getdefenceCurrent()) + ", a: " + to_string(pCurrent.currentMon.getAttackCurrent()), 0, 4 + x, 7, true);
+		Game::shared_instance().buffer.WriteBuffer("Health:             " + to_string(pCurrent.currentMon.getHealthCurrent()) + "/" + to_string(pCurrent.currentMon.getHealthTotal()) /*+ "   s: " + to_string(pCurrent.currentMon.getSpeedCurrent()) + ", d: " + to_string(pCurrent.currentMon.getdefenceCurrent()) + ", a: " + to_string(pCurrent.currentMon.getAttackCurrent())*/, 0, 4 + x, 7, true);
 
 		string effStr{ "Effects: " };
 
@@ -235,6 +235,10 @@ void BattleScene::damageCalculator(Monster &attacker, Monster &defender, Move *a
 			damageStr = "Passive: Speedy Water\n";
 			return;
 		}
+		if (attack->getEffect() == "Slow Water") {
+			damageStr = "Passive: Slow Water\n";
+			return;
+		}
 	}
 
 	//for effects that affect the attacker but not the defender
@@ -254,7 +258,7 @@ void BattleScene::damageCalculator(Monster &attacker, Monster &defender, Move *a
 		if (attack->getEffect() == "Block") {
 			if (checkType != 2) {
 				attacker.addEffect(*attack);
-				tempStr += attacker.getName() + " has increased defense\n";
+				tempStr += attacker.getName() + " has increased defense!\n";
 				attacker.addDefenceTemp(attack->getPower() / 100.f);
 			}
 
@@ -264,11 +268,21 @@ void BattleScene::damageCalculator(Monster &attacker, Monster &defender, Move *a
 		if (attack->getEffect() == "Speed") {
 			if (checkType != 2) {
 				attacker.addEffect(*attack);
-				tempStr += attacker.getName() + " has increased in speed\n";
+				tempStr += attacker.getName() + " has increased in speed!\n";
 				attacker.addSpeedTemp(attack->getPower() / 100.f);
 			}
 
 			defender.addSpeedTemp(attack->getPower() / 100.f);
+		}
+
+		if (attack->getEffect() == "Sharpen") {
+			if (checkType != 2) {
+				attacker.addEffect(*attack);
+				tempStr += attacker.getName() + " has sharpened its claws!\n";
+				attacker.addAttackTemp(attack->getPower() / 100.f);
+			}
+
+			defender.addAttackTemp(attack->getPower() / 100.f);
 		}
 
 		if (attack->getEffect() == "Speedy Water") {
@@ -284,29 +298,41 @@ void BattleScene::damageCalculator(Monster &attacker, Monster &defender, Move *a
 
 	if (checkType != 2) {
 		if (rand() % 100 > attack->getAccuracy()* attacker.getSpeedCurrent() / defender.getSpeedCurrent()) {
-			damageStr += "MISS!\n";
+			if (attack->getEffect() == "Kraken") {
+				int atck{ static_cast<int>((1.2 * attacker.getAttackCurrent() / attacker.getdefenceCurrent()) * attack->getPower() * 1.5) };
+				attacker.setHealthCurrent(attacker.getHealthCurrent() - atck);
+				damageStr += attacker.getName() + " has been attacked by its own kraken!";
+				damageStr += "  " + to_string(atck) + " DAMAGE DEALT!\n";
+			} else
+				damageStr += "MISS!\n";
+	
 			return;
 		}
 
 		//adding effects
 		if (attack->getEffect() == "Poision") {
 			defender.addEffect(*attack);
-			damageStr += defender.getName() + " has been poisioned\n";
+			damageStr += defender.getName() + " has been poisioned!\n";
 		}
 
 		if (attack->getEffect() == "Bleeding") {
 			defender.addEffect(*attack);
-			damageStr += defender.getName() + " is now Bleeding\n";
+			damageStr += defender.getName() + " is now Bleeding!\n";
 		}
 
 		if (attack->getEffect() == "Burn") {
 			defender.addEffect(*attack);
-			damageStr += defender.getName() + " has been set on fire\n";
+			damageStr += defender.getName() + " has been set on fire!\n";
 		}
 
 		if (attack->getEffect() == "Blind") {
 			defender.addEffect(*attack);
-			damageStr += defender.getName() + " has been blinded\n";
+			damageStr += defender.getName() + " has been blinded!\n";
+		}
+
+		if (attack->getEffect() == "Drowned") {
+			defender.addEffect(*attack);
+			damageStr += defender.getName() + " has been drowned!\n";
 		}
 
 		if (attack->getType() == "Fire" && defender.getMovePassive()->getEffect() == "Overheat")
@@ -314,7 +340,14 @@ void BattleScene::damageCalculator(Monster &attacker, Monster &defender, Move *a
 
 		if (attack->getEffect() == "Extreme Heat") {
 			defender.addEffect(*attack);
-			damageStr += defender.getName() + " has been slowed by the heat wave\n";
+			damageStr += defender.getName() + " has been slowed by the heat wave!\n";
+		}
+
+		if (attacker.getMovePassive()->getEffect() == "Slow Water" && attack->getEffect() != "Slow Water") {
+			if (attack->getType() == "Water")
+				defender.addEffect(*attacker.getMovePassive());
+			else
+				damageStr = "\n";
 		}
 	}
 	else {
@@ -325,6 +358,13 @@ void BattleScene::damageCalculator(Monster &attacker, Monster &defender, Move *a
 		if (attack->getEffect() == "Extreme Heat") {
 			defender.addSpeedTemp(-attack->getPower() / 100.f);
 			return;
+		}
+		if (attack->getEffect() == "Slow Water") {
+			defender.addSpeedTemp(-attack->getPower() / 100.f);
+			return;
+		}
+		if (attack->getEffect() == "Drowned") {
+			defender.addSpeedTemp(-attack->getPower() / 100.f);
 		}
 	}
 
