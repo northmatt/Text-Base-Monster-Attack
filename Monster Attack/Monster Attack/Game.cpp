@@ -8,6 +8,7 @@
 void Game::InitGame() {
 	cout << "Game Init (press 'q' to quit) (use arrow keys) (use 'a' or 'd')\n";
 
+	//loads the scenes into memory
 	loadedScenes.push_back(new Titlescreen());
 	loadedScenes.push_back(new Pausescreen());
 	loadedScenes.push_back(new BattleScene());
