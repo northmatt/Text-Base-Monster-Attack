@@ -1,8 +1,5 @@
 #pragma once
 
-#include <string>
-#include <iostream>
-#include <Windows.h>
 #include "Input.h"
 #include "Time.h"
 #include "entity.h"
@@ -22,8 +19,9 @@ public:
 	virtual void InitScene();
 	virtual void UpdateScene();
 	virtual void UpdateSwitch();
+	virtual void BeforeUpdateSwitch() {}
 
-	vector<int> map;
+	vector<int> map{ 0, 0 };
 	unsigned int mapSize{ 0 };
 	string mapBorder{ "" };
 	vector<char> writeScreen;

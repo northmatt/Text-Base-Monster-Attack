@@ -19,7 +19,7 @@ private:
 	Vec2 maxPos;
 
 	vector<vector<bool>> colorValues;
-	vector<int> spawnPoint{ 0, 0 };
+	vector<int> spawnPoint{ 1, 1 };
 	bool colorValInd{ false };
 	bool isDrawing{ false };
 };

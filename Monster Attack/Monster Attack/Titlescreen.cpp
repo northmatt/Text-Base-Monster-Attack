@@ -8,6 +8,11 @@ void Titlescreen::InitScene() {
 void Titlescreen::UpdateScene() {
 	Game::shared_instance().buffer.WriteBuffer(title, centerOfScreen - 46, 1);
 
+	if (Input::GetKeyDown(VK_F3)) {
+		Game::shared_instance().SwitchToScene(2, false, true);
+		return;
+	}
+
 	if (Input::GetKeyDown(38)) {
 		selection--;
 
@@ -25,10 +30,10 @@ void Titlescreen::UpdateScene() {
 	if (Input::GetKeyDown(VK_RETURN)) {
 		switch (selection) {
 		case 0:
-			Game::shared_instance().SwitchToScene(3, false, true);
+			Game::shared_instance().SwitchToScene(4, false, true);
 			return;
 		case 1:
-			Game::shared_instance().SwitchToScene(2, false, true);
+			Game::shared_instance().SwitchToScene(3, false, true);
 			return;
 		case 2:
 			Game::shared_instance().isRunning = false;

@@ -3,11 +3,31 @@
 
 void MapLevel::InitScene() {
 	Load("saveFile");
+	Monsters mons;
+
+	BattlePlayer* thePlayer = nullptr;
+	thePlayer = new BattlePlayer;
+	thePlayer->name = "Player 1";
+	thePlayer->mon[0] = mons._1;
+	thePlayer->currentMonSlot = 0;
+	Game::shared_instance().SetMainPlayer(thePlayer);
+
+	BattlePlayer* theEnemy = nullptr;
+	theEnemy = new BattlePlayer;
+	theEnemy->name = "Player 2";
+	theEnemy->mon[0] = mons._2;
+	theEnemy->currentMonSlot = 0;
+	Game::shared_instance().SetMainEnemy(theEnemy);
 }
 
 void MapLevel::UpdateScene() {
 	if (Input::GetKeyDown(VK_ESCAPE)) {
 		Game::shared_instance().SwitchToScene(1);
+		return;
+	}
+
+	if (Input::GetKeyDown(VK_F1)) {
+		Game::shared_instance().SwitchToScene(5);
 		return;
 	}
 
@@ -34,21 +54,31 @@ void MapLevel::Load(string fileName) {
 	string inp;
 	writeScreen.clear();
 	colorScreen.clear();
-	map.clear();
 	entities.clear();
 
 	getline(theFile, inp);
-	map.push_back(atoi(inp.c_str()));
+	map[0] = atoi(inp.c_str());
 
 	getline(theFile, inp);
-	map.push_back(atoi(inp.c_str()));
+	map[1] = atoi(inp.c_str());
 
 	mapSize = map[0] * map[1];
+	entities.push_back(new MapLevelCursor("@@", "cursor", map[0] / 2, map[1]));
+	Game::shared_instance().buffer.SetMaxCam({ 0, 0 }, { map[0] + 4, map[1] + 2 });
 
 	getline(theFile, inp);
-	for (char curChar : inp)
-		if (curChar != '\n')
-			writeScreen.push_back(curChar);
+	for (size_t i = 0; i < mapSize; i++) {
+		char curChar = inp[i];
+		if (curChar == 'P') {
+			//index = (pos.x - 1) + ( (pos.y - 1) * map[0] )
+			//pos.y = index / map[0]
+			//
+			entities[0]->pos.y = i / map[0] + 1;
+			entities[0]->pos.x = (i - (entities[0]->pos.y - 1) * map[0]) / 2;
+			writeScreen.push_back(' ');
+		} else if (curChar != '\n')
+				writeScreen.push_back(curChar);
+	}
 
 	getline(theFile, inp);
 
@@ -68,6 +98,4 @@ void MapLevel::Load(string fileName) {
 		mapBorder += borderVert;
 
 	mapBorder += string(map[0] + 4, '-');
-
-	entities.push_back(new MapLevelCursor("@@", "cursor", map[0] / 2, map[1]));
 }

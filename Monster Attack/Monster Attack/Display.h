@@ -5,7 +5,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <gdiplus.h>
 #include "Vectors.h"
 
 using std::vector;

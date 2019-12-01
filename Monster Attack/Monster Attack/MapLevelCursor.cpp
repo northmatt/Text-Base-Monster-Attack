@@ -1,7 +1,5 @@
 #include "MapLevelCursor.h"
 
-#include "TestEntity.h"
-
 MapLevelCursor::MapLevelCursor(string inImage, string inName, double inPosX, double inPosY) {
 	pos = Vec2{ 1, 1 };
 	image = inImage;

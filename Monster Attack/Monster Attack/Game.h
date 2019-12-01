@@ -1,9 +1,6 @@
 #pragma once
 
-#include <vector>
-#include "Input.h"
 #include "Scene.h"
-#include "Time.h"
 #include "Display.h"
 
 using std::vector;
@@ -18,6 +15,10 @@ public:
 	Scene* GetCurrentScene() { return currentScene; }
 	int GetCurrentSceneIndex() { return currentSceneIndex; }
 	int GetLastSceneIndex() { return lastSceneIndex; }
+	Entity* GetMainPlayer() { return MainPlayer; }
+	Entity* GetMainEnemy() { return Enemy; }
+	void SetMainPlayer(Entity* _MP) { MainPlayer = _MP; }
+	void SetMainEnemy(Entity* _MP) { Enemy = _MP; }
 	DoubleBuffer buffer;
 	bool isRunning{ true };
 private:
@@ -25,5 +26,6 @@ private:
 	int currentSceneIndex{ 0 };
 	int lastSceneIndex{ 0 };
 	vector<Scene*> loadedScenes;
-	Entity* MainPlayer{ nullptr };
+	Entity* MainPlayer;
+	Entity* Enemy;
 };

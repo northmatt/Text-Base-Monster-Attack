@@ -1,19 +1,22 @@
 #include "Game.h"
-#include "BattleScene.h"
-#include "MapCreator.h"
-#include "MapLevel.h"
 #include "Titlescreen.h"
 #include "Pausescreen.h"
+#include "MapCreator.h"
+#include "BattleScene.h"
+#include "MapLevel.h"
+#include "BattleSceneAI.h"
+
 
 void Game::InitGame() {
-	cout << "Game Init (press 'q' to quit) (use arrow keys) (use 'a' or 'd')\n";
+	srand(time(0));
 
 	//loads the scenes into memory
 	loadedScenes.push_back(new Titlescreen());
 	loadedScenes.push_back(new Pausescreen());
+	loadedScenes.push_back(new MapCreator());
 	loadedScenes.push_back(new BattleScene());
 	loadedScenes.push_back(new MapLevel());
-	//loadedScenes.push_back(new MapCreator());
+	loadedScenes.push_back(new BattleSceneAI());
 
 	currentScene = loadedScenes[0];
 }
@@ -35,6 +38,7 @@ bool Game::UpdateGame() {
 
 void Game::SwitchToScene(int index, bool addFromCurrentScene, bool resetScene) {
 	lastSceneIndex = currentSceneIndex;
+	currentScene->BeforeUpdateSwitch();
 
 	if (addFromCurrentScene) {
 		currentSceneIndex += index;

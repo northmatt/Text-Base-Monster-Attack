@@ -2,7 +2,6 @@
 #include "MapCreatorCursor.h"
 
 void MapCreator::InitScene() {
-	map.resize(2);
 	cout << "map width: ";
 	cin >> map[0];
 	cout << "map height: ";
@@ -30,6 +29,11 @@ void MapCreator::InitScene() {
 }
 
 void MapCreator::UpdateScene() {
+	if (Input::GetKeyDown(VK_ESCAPE)) {
+		Game::shared_instance().SwitchToScene(1);
+		return;
+	}
+
 	Game::shared_instance().buffer.WriteBuffer(mapBorder, 0, 0, 6);
 	Game::shared_instance().buffer.DisplayBackground(writeScreen, colorScreen, { {2, 1},  {map[0], map[1]} });
 

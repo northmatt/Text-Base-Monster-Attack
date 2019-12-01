@@ -1,47 +1,82 @@
-#include "BattleScene.h"
+#include "BattleSceneAI.h"
+#include "BattlePlayer.h"
 
-void BattleScene::InitScene() {
-	Monsters mons;
-	vector<Monster> monsters{ mons._1, mons._2, mons._3, mons._4, mons._5, mons._6 };
-
-	/*int ranNum = 1296 + 432 + 108 + 24 + 5;
-	int curNum = 0;
-	for (int i = 6; i >= 1; i--) {
-		if (i > 0)
-			curNum = ranNum / pow(6, i - 1);
-		else
-			curNum = ranNum;
-
-		ranNum -= curNum * pow(6, i - 1);
-		cout << curNum;
-	}
-	cout << endl;
-	system("pause");*/
-	
-	auto rng = std::default_random_engine{ static_cast<unsigned int>(rand()) };
-	std::shuffle(std::begin(monsters), std::end(monsters), rng);
-	party1.name = "Player 1";
-	party1.mon[0] = monsters[0];
-	party1.mon[1] = monsters[1];
-	party1.mon[2] = monsters[2];
-	party1.mon[3] = monsters[3];
-	party1.mon[4] = monsters[4];
-	party1.mon[5] = monsters[5];
-	party1.currentMonSlot = 0;
-
-	rng = std::default_random_engine{ static_cast<unsigned int>(rand()) };
-	std::shuffle(std::begin(monsters), std::end(monsters), rng);
-	party2.name = "Player 2";
-	party2.mon[0] = monsters[0];
-	party2.mon[1] = monsters[1];
-	party2.mon[2] = monsters[2];
-	party2.mon[3] = monsters[3];
-	party2.mon[4] = monsters[4];
-	party2.mon[5] = monsters[5];
-	party2.currentMonSlot = 0;
+void BattleSceneAI::InitScene() {
 }
 
-void BattleScene::UpdateScene() {
+void BattleSceneAI::BeforeUpdateSwitch() {
+	damageStr = "";
+	damageTime = 0;
+
+	BattlePlayer* thePlayer = nullptr;
+	thePlayer = new BattlePlayer;
+	thePlayer->name = party1.name;
+	thePlayer->mon[0] = party1.mon[0];
+	thePlayer->mon[1] = party1.mon[1];
+	thePlayer->mon[2] = party1.mon[2];
+	thePlayer->mon[3] = party1.mon[3];
+	thePlayer->mon[4] = party1.mon[4];
+	thePlayer->mon[5] = party1.mon[5];
+	thePlayer->currentMonSlot = party1.currentMonSlot;
+	Game::shared_instance().SetMainPlayer(thePlayer);
+}
+
+void BattleSceneAI::UpdateSwitch() {
+	BattlePlayer* thePlayer;
+	thePlayer = static_cast<BattlePlayer*>(Game::shared_instance().GetMainPlayer());
+
+	Monsters mons;
+	if (thePlayer->name == "") {
+		party1.name = "Player 1";
+		party1.mon[0] = mons._3;
+		party1.mon[1] = mons._5;
+		party1.mon[2] = mons._1;
+		party1.mon[3] = mons._2;
+		party1.mon[4] = mons._6;
+		party1.mon[5] = mons._4;
+		party1.currentMonSlot = 0;
+		return;
+	}
+
+	party1.name = thePlayer->name;
+	party1.mon[0] = thePlayer->mon[0];
+	party1.mon[1] = thePlayer->mon[1];
+	party1.mon[2] = thePlayer->mon[2];
+	party1.mon[3] = thePlayer->mon[3];
+	party1.mon[4] = thePlayer->mon[4];
+	party1.mon[5] = thePlayer->mon[5];
+	party1.currentMonSlot = thePlayer->currentMonSlot;
+
+
+	BattlePlayer* theEnemy;
+	theEnemy = static_cast<BattlePlayer*>(Game::shared_instance().GetMainEnemy());
+
+	if (theEnemy->name == "") {
+		party2.name = "Player 2";
+		party2.mon[0] = mons._3;
+		party2.mon[1] = mons._5;
+		party2.mon[2] = mons._1;
+		party2.mon[3] = mons._2;
+		party2.mon[4] = mons._6;
+		party2.mon[5] = mons._4;
+		party2.currentMonSlot = 0;
+		return;
+	}
+
+	party2.name = theEnemy->name;
+	party2.mon[0] = theEnemy->mon[0];
+	party2.mon[1] = theEnemy->mon[1];
+	party2.mon[2] = theEnemy->mon[2];
+	party2.mon[3] = theEnemy->mon[3];
+	party2.mon[4] = theEnemy->mon[4];
+	party2.mon[5] = theEnemy->mon[5];
+	party2.currentMonSlot = theEnemy->currentMonSlot;
+
+	Game::shared_instance().buffer.SetMaxCam({ 0, 0 }, { 1, 1 });
+	Game::shared_instance().buffer.SetCamPos({ 0, 0 });
+}
+
+void BattleSceneAI::UpdateScene() {
 	if (Input::GetKeyDown(VK_ESCAPE)) {
 		Game::shared_instance().SwitchToScene(1);
 		return;
@@ -51,7 +86,25 @@ void BattleScene::UpdateScene() {
 		playerTurn(party1, party2);
 		if (party2.GetCurMon()->getHealthCurrent() <= 0) {
 			party2.GetCurMon()->alive = false;
-			for (int i = 0; i < 6; i++) {
+			for (int i = 0; i <= 6; i++) {
+				if (i == 6) {
+					int ranNum{ 0 };
+					if (party2.currentMonSlot > 0)
+						ranNum = rand() % party2.currentMonSlot;
+
+					for (size_t x = 0; x < 6; x++) {
+						if (party1.mon[x].getName() == "NULL")
+							for (size_t y = 0; y <= x; y++) {
+								if (y == x) {
+									party1.mon[y] = party2.mon[ranNum];
+									party1.mon[y].resetAll();
+								} else if (party1.mon[y].getName() == party2.mon[ranNum].getName())
+									break;
+							}
+					}
+
+					Game::shared_instance().SwitchToScene(4);
+				}
 				if (party2.mon[i].alive) {
 					party2.currentMonSlot = i;
 					break;
@@ -62,8 +115,10 @@ void BattleScene::UpdateScene() {
 		playerTurn(party2, party1);
 		if (party1.GetCurMon()->getHealthCurrent() <= 0) {
 			party1.GetCurMon()->alive = false;
-			for (int i = 0; i < 6; i++) {
-				if (party1.mon[i].alive) {
+			for (int i = 0; i <= 6; i++) {
+				if (i == 6)
+					Game::shared_instance().SwitchToScene(0);
+				else if (party1.mon[i].alive) {
 					party1.currentMonSlot = i;
 					break;
 				}
@@ -72,7 +127,7 @@ void BattleScene::UpdateScene() {
 	}
 }
 
-void BattleScene::drawCurrentHealth(Party p1, Party p2) {
+void BattleSceneAI::drawCurrentHealth(Party p1, Party p2) {
 	//({0, 2}, {15, 4})		({0, 6}, {15, 8})
 	vector<vector<int>> selBack{ {0, 2}, {40, 4} };
 
@@ -115,7 +170,7 @@ void BattleScene::drawCurrentHealth(Party p1, Party p2) {
 	}
 }
 
-void BattleScene::showPlayerMoves(vector<Move> ms) {
+void BattleSceneAI::showPlayerMoves(vector<Move> ms) {
 	for (size_t i = 0; i < ms.size() - 1; i++) {
 		string mText{ "" };
 
@@ -134,7 +189,7 @@ void BattleScene::showPlayerMoves(vector<Move> ms) {
 	}
 }
 
-void BattleScene::damageCalculator(Monster *attacker, Monster *defender, Move *attack, int checkType) {
+void BattleSceneAI::damageCalculator(Monster *attacker, Monster *defender, Move *attack, int checkType) {
 	//damage checks
 
 	string tempStr{ "" };
@@ -203,7 +258,7 @@ void BattleScene::damageCalculator(Monster *attacker, Monster *defender, Move *a
 		bool curAcc = rand() % 100 < attacker->getSpeedCurrent() * attack->getAccuracy() / 100;
 
 		if (attack->getEffect() == "Heal" && curAcc) {
-			attacker->addHealth(attacker->getHealthTotal() * attack->getPower() / 100.f);
+			attacker->addHealth(attacker->getHealthTotal() * attack->getPower() / 100);
 			tempStr += attacker->getName() + " has regenerated it's health!\n";
 		}
 
@@ -352,24 +407,27 @@ void BattleScene::damageCalculator(Monster *attacker, Monster *defender, Move *a
 		damageStr += tempStr;
 }
 
-void BattleScene::playerTurn(Party &p1, Party &p2) {
+void BattleSceneAI::playerTurn(Party &p1, Party &p2) {
 	int selection{ 0 };
 	Game::shared_instance().buffer.WriteBuffer(p1.name + " Turn!", 0, 0);
 
 	drawCurrentHealth(party1, party2);
 
-	showPlayerMoves(p1.GetCurMon()->getMoves());
+	showPlayerMoves(party1.GetCurMon()->getMoves());
 
 	Game::shared_instance().buffer.WriteBuffer("Select move: ", 0, 36);
 
-	if (Input::GetKeyDown('1') || Input::GetKeyDown(VK_NUMPAD1))
-		selection = 1;
-	if (Input::GetKeyDown('2') || Input::GetKeyDown(VK_NUMPAD2))
-		selection = 2;
-	if (Input::GetKeyDown('3') || Input::GetKeyDown(VK_NUMPAD3))
-		selection = 3;
-	if (Input::GetKeyDown('4') || Input::GetKeyDown(VK_NUMPAD4))
-		selection = 4;
+	if (p1Turn) {
+		if (Input::GetKeyDown('1') || Input::GetKeyDown(VK_NUMPAD1))
+			selection = 1;
+		if (Input::GetKeyDown('2') || Input::GetKeyDown(VK_NUMPAD2))
+			selection = 2;
+		if (Input::GetKeyDown('3') || Input::GetKeyDown(VK_NUMPAD3))
+			selection = 3;
+		if (Input::GetKeyDown('4') || Input::GetKeyDown(VK_NUMPAD4))
+			selection = 4;
+	} else if (damageTime <= 2.5)
+		selection = rand() % 4 + 1;
 
 	if (1 <= selection && selection <= 4) {
 		bool tookTurn = false;

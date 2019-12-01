@@ -2,8 +2,9 @@
 
 #include <fstream>
 #include <sstream>
-#include "Scene.h"
 #include "Game.h"
+#include "Monsters.h"
+#include "BattlePlayer.h"
 
 using std::ofstream;
 using std::ifstream;
@@ -12,7 +13,7 @@ using std::getline;
 
 class MapLevel : public Scene {
 public:
-	MapLevel() { InitScene(); };
+	MapLevel() { }
 
 	void InitScene();
 	void UpdateScene();

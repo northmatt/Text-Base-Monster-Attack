@@ -12,7 +12,7 @@ using std::getline;
 
 class MapCreator : public Scene {
 public:
-	MapCreator() { InitScene(); };
+	MapCreator() { };
 
 	void InitScene();
 	void UpdateScene();

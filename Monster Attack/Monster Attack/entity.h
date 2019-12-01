@@ -12,7 +12,7 @@ public:
 
 	virtual void Update() {}
 
-	string name;
+	string name{ "" };
 	Vec2 pos;
 	string image{ "" };
 	int color{ 0 };

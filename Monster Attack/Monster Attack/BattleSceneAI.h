@@ -1,16 +1,17 @@
 #pragma once
 
-#include <algorithm>
-#include <random>
 #include "Game.h"
 #include "Monsters.h"
 
-class BattleScene : public Scene {
+class BattleSceneAI : public Scene {
 public:
-	BattleScene() { }
+	BattleSceneAI() { InitScene(); };
 
 	void InitScene();
 	void UpdateScene();
+	void BeforeUpdateSwitch();
+	void UpdateSwitch();
+
 private:
 	void drawCurrentHealth(Party p1, Party p2);
 	void showPlayerMoves(vector<Move> ms);
@@ -18,7 +19,7 @@ private:
 	void damageCalculator(Monster *attacker, Monster *defender, Move *attack, int checkType = 0);
 
 	Party party1, party2;
-	bool p1Turn{ false };
+	bool p1Turn{ true };
 	string damageStr;
 	double damageTime;
 };

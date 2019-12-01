@@ -151,7 +151,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BattlePlayer.cpp" />
     <ClCompile Include="BattleScene.cpp" />
+    <ClCompile Include="BattleSceneAI.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -162,12 +164,13 @@
     <ClCompile Include="MapLevelCursor.cpp" />
     <ClCompile Include="Pausescreen.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="TestEntity.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Titlescreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BattlePlayer.h" />
     <ClInclude Include="BattleScene.h" />
+    <ClInclude Include="BattleSceneAI.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="Game.h" />
@@ -178,10 +181,10 @@
     <ClInclude Include="MapLevel.h" />
     <ClInclude Include="MapLevelCursor.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="Monsters.h" />
     <ClInclude Include="Move.h" />
     <ClInclude Include="Pausescreen.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="TestEntity.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Titlescreen.h" />
     <ClInclude Include="Vectors.h" />

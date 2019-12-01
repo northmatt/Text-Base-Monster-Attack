@@ -14,7 +14,7 @@ private:
 	Move move1, move2, move3, move4, movePassive;
 	vector<Move> currentEffects;
 public:
-	bool alive = true;
+	bool alive = false;
 	//resetTempMods
 	void ResetTemp() { attackTemp = 1.f; defenceTemp = 1.f; speedTemp = 1.f; };
 	//set
@@ -49,7 +49,15 @@ public:
 
 		currentEffects.push_back(a);
 	}
-	void removeEffect(int i) { currentEffects.erase(currentEffects.begin() + i); }
+	void removeEffect(size_t i) { currentEffects.erase(currentEffects.begin() + i); }
+	void resetAll() {
+		ResetTemp();
+		setHealthCurrent(getHealthTotal());
+		setAttackCurrent(getAttackTotal());
+		setDefenceCurrent(getDefenceTotal());
+		setSpeedCurrent(getSpeedTotal());
+		alive = true;
+	}
 	//get
 	string getName() { return name; }
 	string getType() { return type; }
@@ -70,7 +78,7 @@ public:
 	Move* getMove4() { return &move4; }
 	Move* getMovePassive() { return &movePassive; }
 	vector<Move>* getEffects() { return &currentEffects; }
-	Move* getEffect(int i) { return &currentEffects[i]; }
+	Move* getEffect(size_t i) { return &currentEffects[i]; }
 	float getAttackTemp() { return attackTemp; }
 	float getDefenceTemp() { return defenceTemp; }
 	float getSpeedTemp() { return speedTemp; }
@@ -89,5 +97,6 @@ public:
 		setSpeedTotal((speed) * 2.3 + 10); setSpeedCurrent(getSpeedTotal());
 		setColor(col);
 		setMove1(m1); setMove2(m2); setMove3(m3); setMove4(m4); setMovePassive(mp);
+		alive = true;
 	}
 };

@@ -61,9 +61,15 @@ void MapCreatorCursor::Update() {
 				FillLoop(currentPos, -1, currentChar, currentColor);
 		}
 
-		if (Input::GetKeyDown(VK_OEM_PLUS)) {
-			spawnPoint[0] = round(pos.x) * 2;
+		if (Input::GetKeyDown(VK_NUMPAD3)) {
+			for (size_t i = 0; i < 2; i++)
+				Game::shared_instance().GetCurrentScene()->writeScreen[round(spawnPoint[0] - 1) * 2 + i + round(spawnPoint[1] - 1) * maxPos.x * 2] = ' ';
+
+			spawnPoint[0] = round(pos.x);
 			spawnPoint[1] = round(pos.y);
+
+			for (size_t i = 0; i < 2; i++)
+				Game::shared_instance().GetCurrentScene()->writeScreen[round(spawnPoint[0] - 1) * 2 + i + round(spawnPoint[1] - 1) * maxPos.x * 2] = 'P';
 		}
 
 		if (Input::GetKeyDown(VK_NUMPAD7))
