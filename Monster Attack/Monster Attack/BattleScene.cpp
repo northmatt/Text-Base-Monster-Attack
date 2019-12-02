@@ -3,20 +3,6 @@
 void BattleScene::InitScene() {
 	Monsters mons;
 	vector<Monster> monsters{ mons._1, mons._2, mons._3, mons._4, mons._5, mons._6 };
-
-	/*int ranNum = 1296 + 432 + 108 + 24 + 5;
-	int curNum = 0;
-	for (int i = 6; i >= 1; i--) {
-		if (i > 0)
-			curNum = ranNum / pow(6, i - 1);
-		else
-			curNum = ranNum;
-
-		ranNum -= curNum * pow(6, i - 1);
-		cout << curNum;
-	}
-	cout << endl;
-	system("pause");*/
 	
 	auto rng = std::default_random_engine{ static_cast<unsigned int>(rand()) };
 	std::shuffle(std::begin(monsters), std::end(monsters), rng);
@@ -74,7 +60,7 @@ void BattleScene::UpdateScene() {
 
 void BattleScene::drawCurrentHealth(Party p1, Party p2) {
 	//({0, 2}, {15, 4})		({0, 6}, {15, 8})
-	vector<vector<int>> selBack{ {0, 2}, {40, 4} };
+	vector<vector<int>> selBack{ {1, 2}, {40, 4} };
 
 	if (!p1Turn)
 		selBack[0][1] += selBack[1][1] + 1;
@@ -90,7 +76,7 @@ void BattleScene::drawCurrentHealth(Party p1, Party p2) {
 	Party parties[2]{ p1, p2 };
 	for (int x = 0; x < selBack[1][1] + 2; x += selBack[1][1] + 1) {
 		Party pCurrent = parties[x / (selBack[1][1] + 1)];
-		Game::shared_instance().buffer.WriteBuffer(pCurrent.name + ":", 0, 2 + x, 7, true);
+		Game::shared_instance().buffer.WriteBuffer(pCurrent.name + ":", 1, 2 + x, 7, true);
 		for (int i = 0; i < 6; i++) {
 			if (pCurrent.mon[i].alive == true) {
 				Game::shared_instance().buffer.WriteBuffer("o", 10 + i, 2 + x, pCurrent.mon[i].getColor(), true);
@@ -98,9 +84,9 @@ void BattleScene::drawCurrentHealth(Party p1, Party p2) {
 				Game::shared_instance().buffer.WriteBuffer(".", 10 + i, 2 + x, pCurrent.mon[i].getColor(), true);
 			}
 		}
-		Game::shared_instance().buffer.WriteBuffer("Current Monster:", 0, 3 + x, 7, true);
+		Game::shared_instance().buffer.WriteBuffer("Current Monster:", 1, 3 + x, 7, true);
 		Game::shared_instance().buffer.WriteBuffer(pCurrent.GetCurMon()->getName(), 10, 3 + x, pCurrent.GetCurMon()->getColor(), true);
-		Game::shared_instance().buffer.WriteBuffer("Health:             " + to_string(pCurrent.GetCurMon()->getHealthCurrent()) + "/" + to_string(pCurrent.GetCurMon()->getHealthTotal()) /*+ "   s: " + to_string(pCurrent.GetCurMon()->getSpeedCurrent()) + ", d: " + to_string(pCurrent.GetCurMon()->getdefenceCurrent()) + ", a: " + to_string(pCurrent.GetCurMon()->getAttackCurrent())*/, 0, 4 + x, 7, true);
+		Game::shared_instance().buffer.WriteBuffer("Health:           " + to_string(pCurrent.GetCurMon()->getHealthCurrent()) + "/" + to_string(pCurrent.GetCurMon()->getHealthTotal()) /*+ "   s: " + to_string(pCurrent.GetCurMon()->getSpeedCurrent()) + ", d: " + to_string(pCurrent.GetCurMon()->getdefenceCurrent()) + ", a: " + to_string(pCurrent.GetCurMon()->getAttackCurrent())*/, 1, 4 + x, 7, true);
 
 		string effStr{ "Effects: " };
 
@@ -111,7 +97,7 @@ void BattleScene::drawCurrentHealth(Party p1, Party p2) {
 				effStr += ", ";
 		}
 
-		Game::shared_instance().buffer.WriteBuffer(effStr, 0, 5 + x, 7, true);
+		Game::shared_instance().buffer.WriteBuffer(effStr, 1, 5 + x, 7, true);
 	}
 }
 
@@ -122,7 +108,7 @@ void BattleScene::showPlayerMoves(vector<Move> ms) {
 		mText += ms[i].getName() + "\nPower: " + to_string(ms[i].getPower()) + "\nAccuracy: " + to_string(ms[i].getAccuracy()) + '\n';
 		
 		if (ms[i].getCooldownCurrent() > 0)
-			mText += to_string(ms[i].getCooldownCurrent()) + " Turns until cooldown expires\n";
+			mText += "Cooldown: " + to_string(ms[i].getCooldownCurrent()) + " turns left\n";
 		else if (ms[i].getCooldown() > 0)
 			mText += to_string(ms[i].getCooldown()) + " Turn Cooldown\n";
 		else if (ms[i].getCooldown() == 0)
@@ -130,7 +116,7 @@ void BattleScene::showPlayerMoves(vector<Move> ms) {
 
 		mText += "Effect: " + ms[i].getEffect();
 
-		Game::shared_instance().buffer.WriteBuffer(mText, 0, 12 + static_cast<int>(i) * 6, ms[i].getColor());
+		Game::shared_instance().buffer.WriteBuffer(mText, 1, 14 + static_cast<int>(i) * 6, ms[i].getColor());
 	}
 }
 
@@ -141,28 +127,28 @@ void BattleScene::damageCalculator(Monster *attacker, Monster *defender, Move *a
 
 	//apply the bonus stats again, make sure that it deosnt become an endless recursive function using the 'checkPassive' bool
 	if (checkType == 0) {
-		damageStr = "\n";
+		damageStr = "\n\n";
 		damageTime = 5;
 		if (attacker->getMovePassive()->getCooldownCurrent() == 0) {
 			damageCalculator(attacker, defender, attacker->getMovePassive(), 1);
 			attacker->getMovePassive()->setCooldownCurrent(attacker->getMovePassive()->getCooldown() + 1);
 		}
 
-		if (damageStr == "Passive: ")
-			damageStr = "\n";
+		if (damageStr == "-Passive:\n  ")
+			damageStr = "\n\n";
 
-		if (damageStr == "Passive: Overheat\n") {
+		if (damageStr == "-Passive:\n  Overheat\n") {
 			if (attack->getType() == "Fire")
 				attacker->addAttackTemp(attacker->getMovePassive()->getPower() / 100.f);
 			else
-				damageStr = "\n";
+				damageStr = "\n\n";
 		}
 
-		if (damageStr == "Passive: Speedy Water\n") {
+		if (damageStr == "-Passive:\n  Speedy Water\n") {
 			if (attack->getType() == "Water")
 				attacker->addEffect(*attacker->getMovePassive());
 			else
-				damageStr = "\n";
+				damageStr = "\n\n";
 		}
 
 		if (attacker->getEffects()->size() > 0) {
@@ -179,21 +165,21 @@ void BattleScene::damageCalculator(Monster *attacker, Monster *defender, Move *a
 			}
 		}
 
-		damageStr += "Attack: ";
+		damageStr += "-Attack:\n  ";
 	}
 	else if (checkType == 1) {
-		damageStr = "Passive: ";
+		damageStr = "-Passive:\n  ";
 
 		if (attack->getEffect() == "Overheat") {
-			damageStr = "Passive: Overheat\n";
+			damageStr = "-Passive:\n  Overheat\n";
 			return;
 		}
 		if (attack->getEffect() == "Speedy Water") {
-			damageStr = "Passive: Speedy Water\n";
+			damageStr = "-Passive:\n  Speedy Water\n";
 			return;
 		}
 		if (attack->getEffect() == "Slow Water") {
-			damageStr = "Passive: Slow Water\n";
+			damageStr = "-Passive:\n  Slow Water\n";
 			return;
 		}
 	}
@@ -258,8 +244,8 @@ void BattleScene::damageCalculator(Monster *attacker, Monster *defender, Move *a
 			if (attack->getEffect() == "Kraken") {
 				int atck{ static_cast<int>((1.2 * attacker->getAttackCurrent() / attacker->getdefenceCurrent()) * attack->getPower() * 1.5) };
 				attacker->setHealthCurrent(attacker->getHealthCurrent() - atck);
-				damageStr += attacker->getName() + " has been attacked by its own kraken!";
-				damageStr += "  " + to_string(atck) + " DAMAGE DEALT!\n";
+				damageStr += attacker->getName() + " has been attacked by its own kraken!\n  ";
+				damageStr += to_string(atck) + " DAMAGE DEALT!\n";
 			} else
 				damageStr += "MISS!\n";
 	
@@ -269,27 +255,27 @@ void BattleScene::damageCalculator(Monster *attacker, Monster *defender, Move *a
 		//adding effects
 		if (attack->getEffect() == "Poision") {
 			defender->addEffect(*attack);
-			damageStr += defender->getName() + " has been poisioned!\n";
+			damageStr += defender->getName() + " has been poisioned!\n  ";
 		}
 
 		if (attack->getEffect() == "Bleeding") {
 			defender->addEffect(*attack);
-			damageStr += defender->getName() + " is now Bleeding!\n";
+			damageStr += defender->getName() + " is now Bleeding!\n  ";
 		}
 
 		if (attack->getEffect() == "Burn") {
 			defender->addEffect(*attack);
-			damageStr += defender->getName() + " has been set on fire!\n";
+			damageStr += defender->getName() + " has been set on fire!\n  ";
 		}
 
 		if (attack->getEffect() == "Blind") {
 			defender->addEffect(*attack);
-			damageStr += defender->getName() + " has been blinded!\n";
+			damageStr += defender->getName() + " has been blinded!\n  ";
 		}
 
 		if (attack->getEffect() == "Drowned") {
 			defender->addEffect(*attack);
-			damageStr += defender->getName() + " has been drowned!\n";
+			damageStr += defender->getName() + " has been drowned!\n  ";
 		}
 
 		if (attack->getType() == "Fire" && defender->getMovePassive()->getEffect() == "Overheat")
@@ -297,14 +283,14 @@ void BattleScene::damageCalculator(Monster *attacker, Monster *defender, Move *a
 
 		if (attack->getEffect() == "Extreme Heat") {
 			defender->addEffect(*attack);
-			damageStr += defender->getName() + " has been slowed by the heat wave!\n";
+			damageStr += defender->getName() + " has been slowed by the heat wave!\n  ";
 		}
 
 		if (attacker->getMovePassive()->getEffect() == "Slow Water" && attack->getEffect() != "Slow Water") {
 			if (attack->getType() == "Water")
 				defender->addEffect(*attacker->getMovePassive());
 			else
-				damageStr = "\n";
+				damageStr = "\n\n-Attack:\n  ";
 		}
 	}
 	else {
@@ -353,14 +339,17 @@ void BattleScene::damageCalculator(Monster *attacker, Monster *defender, Move *a
 }
 
 void BattleScene::playerTurn(Party &p1, Party &p2) {
+	p2.GetCurMon()->setCurrentImage(0);
+	Game::shared_instance().buffer.WriteBuffer(p2.GetCurMon()->getImage(), 53, 2, p2.GetCurMon()->getColor());
+	p1.GetCurMon()->setCurrentImage(1);
+	Game::shared_instance().buffer.WriteBuffer(p1.GetCurMon()->getImage(), 13, 17, p1.GetCurMon()->getColor());
+
 	int selection{ 0 };
-	Game::shared_instance().buffer.WriteBuffer(p1.name + " Turn!", 0, 0);
 
 	drawCurrentHealth(party1, party2);
 
+	Game::shared_instance().buffer.WriteBuffer("Select move: ", 0, 12);
 	showPlayerMoves(p1.GetCurMon()->getMoves());
-
-	Game::shared_instance().buffer.WriteBuffer("Select move: ", 0, 36);
 
 	if (Input::GetKeyDown('1') || Input::GetKeyDown(VK_NUMPAD1))
 		selection = 1;
@@ -430,7 +419,7 @@ void BattleScene::playerTurn(Party &p1, Party &p2) {
 	}
 
 	if (damageTime > 0) {
-		Game::shared_instance().buffer.WriteBuffer(damageStr, 0, 38);
+		Game::shared_instance().buffer.WriteBuffer(damageStr, 1, 38);
 		damageTime -= Time::deltaTime;
 	}
 	else {

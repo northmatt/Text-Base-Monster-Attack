@@ -33,12 +33,14 @@ bool Game::UpdateGame() {
 
 	buffer.DisplayBuffer();
 
+	if (switchingToScene > 0)
+		internalSwitchScene();
+
 	return isRunning;
 }
 
 void Game::SwitchToScene(int index, bool addFromCurrentScene, bool resetScene) {
 	lastSceneIndex = currentSceneIndex;
-	currentScene->BeforeUpdateSwitch();
 
 	if (addFromCurrentScene) {
 		currentSceneIndex += index;
@@ -51,11 +53,22 @@ void Game::SwitchToScene(int index, bool addFromCurrentScene, bool resetScene) {
 	} else
 		currentSceneIndex = index;
 
+	if (resetScene)
+		switchingToScene = 2;
+	else
+		switchingToScene = 1;
+}
+
+void Game::internalSwitchScene() {
+	currentScene->BeforeUpdateSwitch();
+
 	currentScene = loadedScenes[currentSceneIndex];
 	currentScene->UpdateSwitch();
 
-	if (resetScene)
+	if (switchingToScene == 2)
 		currentScene->InitScene();
+
+	switchingToScene = 0;
 }
 
 /*

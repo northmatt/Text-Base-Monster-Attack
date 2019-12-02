@@ -1,23 +1,7 @@
 #include "MapLevel.h"
-#include "MapLevelCursor.h"
 
 void MapLevel::InitScene() {
 	Load("saveFile");
-	Monsters mons;
-
-	BattlePlayer* thePlayer = nullptr;
-	thePlayer = new BattlePlayer;
-	thePlayer->name = "Player 1";
-	thePlayer->mon[0] = mons._1;
-	thePlayer->currentMonSlot = 0;
-	Game::shared_instance().SetMainPlayer(thePlayer);
-
-	BattlePlayer* theEnemy = nullptr;
-	theEnemy = new BattlePlayer;
-	theEnemy->name = "Player 2";
-	theEnemy->mon[0] = mons._2;
-	theEnemy->currentMonSlot = 0;
-	Game::shared_instance().SetMainEnemy(theEnemy);
 }
 
 void MapLevel::UpdateScene() {
@@ -26,16 +10,14 @@ void MapLevel::UpdateScene() {
 		return;
 	}
 
-	if (Input::GetKeyDown(VK_F1)) {
-		Game::shared_instance().SwitchToScene(5);
-		return;
-	}
-
 	Game::shared_instance().buffer.WriteBuffer(mapBorder, 0, 0, 6);
 	Game::shared_instance().buffer.DisplayBackground(writeScreen, colorScreen, { {2, 1},  {map[0], map[1]} });
 
-	for (Entity* currentEnt : entities)
-		currentEnt->Update();
+	for (size_t i = 0; i < entities.size(); i++)
+		entities[i]->Update(i);
+
+	addEntities();
+	removeEntities();
 }
 
 void MapLevel::UpdateSwitch() {
@@ -70,9 +52,6 @@ void MapLevel::Load(string fileName) {
 	for (size_t i = 0; i < mapSize; i++) {
 		char curChar = inp[i];
 		if (curChar == 'P') {
-			//index = (pos.x - 1) + ( (pos.y - 1) * map[0] )
-			//pos.y = index / map[0]
-			//
 			entities[0]->pos.y = i / map[0] + 1;
 			entities[0]->pos.x = (i - (entities[0]->pos.y - 1) * map[0]) / 2;
 			writeScreen.push_back(' ');

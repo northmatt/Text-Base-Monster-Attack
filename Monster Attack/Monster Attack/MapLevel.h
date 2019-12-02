@@ -3,8 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include "Game.h"
-#include "Monsters.h"
-#include "BattlePlayer.h"
+#include "MapLevelCursor.h"
 
 using std::ofstream;
 using std::ifstream;

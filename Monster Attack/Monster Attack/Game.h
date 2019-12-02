@@ -22,9 +22,11 @@ public:
 	DoubleBuffer buffer;
 	bool isRunning{ true };
 private:
+	void internalSwitchScene();
 	Scene* currentScene{ nullptr };
 	int currentSceneIndex{ 0 };
 	int lastSceneIndex{ 0 };
+	int switchingToScene{ 0 };
 	vector<Scene*> loadedScenes;
 	Entity* MainPlayer;
 	Entity* Enemy;

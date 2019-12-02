@@ -34,8 +34,22 @@ public:
 	bool getSelfEffect() { return isSelfEffect; }
 	//constructor
 	Move() { name = "NULL", effect = "NULL", type = "NULL", power = 0; accuracy = 0; cooldown = 0; length = 0; color = 0; }
-	Move(string _name, string _effect, string _type, bool _selfEffect, int _power, int _accuracy, int _cooldown, int _length, int _color) {
+	Move(string _name, string _effect, string _type, bool _selfEffect, int _power, int _accuracy, int _cooldown, int _length) {
 		setName(_name); setEffect(_effect); setType(_type); setPower(_power); setAccuracy(_accuracy); setCooldown(_cooldown);
-		setCooldownCurrent(0); setLength(_length); setColor(_color); setSelfEffect(_selfEffect);
+		setCooldownCurrent(0); setLength(_length); setSelfEffect(_selfEffect);
+		
+		int _color = 0;
+		if (_type == "Fire")
+			_color = FOREGROUND_RED;
+		if (_type == "Grass")
+			_color = FOREGROUND_GREEN;
+		if (_type == "Water")
+			_color = FOREGROUND_BLUE;
+		if (_type == "Dark")
+			_color = FOREGROUND_INTENSITY;
+		if (_type == "Light")
+			_color = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+
+		setColor(_color);
 	}
 };

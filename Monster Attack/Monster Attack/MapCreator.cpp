@@ -37,8 +37,8 @@ void MapCreator::UpdateScene() {
 	Game::shared_instance().buffer.WriteBuffer(mapBorder, 0, 0, 6);
 	Game::shared_instance().buffer.DisplayBackground(writeScreen, colorScreen, { {2, 1},  {map[0], map[1]} });
 
-	for (Entity* currentEnt : entities)
-		currentEnt->Update();
+	for (size_t i = 0; i < entities.size(); i++)
+		entities[i]->Update(i);
 
 	if (Input::GetKeyDown('S'))
 		Save("saveFile", map, writeScreen, colorScreen);

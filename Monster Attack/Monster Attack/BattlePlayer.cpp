@@ -10,4 +10,26 @@ BattlePlayer::BattlePlayer(string _name, int CurMonIndex, Monster _m1, Monster _
 	mon[3] = _m4;
 	mon[4] = _m5;
 	mon[5] = _m6;
+
+	FindNumMons();
+}
+
+void BattlePlayer::healMons() {
+	healed = true;
+	currentMonSlot = 0;
+	for (size_t i = 0; i < 6; i++) {
+		if (mon[i].getName() == "NULL")
+			return;
+
+		mon[i].resetAll();
+	}
+}
+
+void BattlePlayer::FindNumMons() {
+	for (size_t i = 0; i < 6; i++) {
+		if (mon[i].getName() == "NULL")
+			return;
+
+		numOfMonsters = i + 1;
+	}
 }

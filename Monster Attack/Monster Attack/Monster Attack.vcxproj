@@ -164,6 +164,7 @@
     <ClCompile Include="MapLevelCursor.cpp" />
     <ClCompile Include="Pausescreen.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="TextBox.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Titlescreen.cpp" />
   </ItemGroup>
@@ -185,6 +186,7 @@
     <ClInclude Include="Move.h" />
     <ClInclude Include="Pausescreen.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="TextBox.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Titlescreen.h" />
     <ClInclude Include="Vectors.h" />
