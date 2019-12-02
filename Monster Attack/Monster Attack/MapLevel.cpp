@@ -21,6 +21,7 @@ void MapLevel::UpdateScene() {
 }
 
 void MapLevel::UpdateSwitch() {
+	Game::shared_instance().PlayMusic("19-infiltrating-shinra");
 	Game::shared_instance().buffer.SetMaxCam({ 0, 0 }, { map[0] + 4, map[1] + 2 });
 	Game::shared_instance().buffer.SetCamPos({ 1, 1 });
 }

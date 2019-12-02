@@ -22,4 +22,5 @@ private:
 	bool p1Turn{ true };
 	string damageStr;
 	double damageTime;
+	int selection{ 0 };
 };

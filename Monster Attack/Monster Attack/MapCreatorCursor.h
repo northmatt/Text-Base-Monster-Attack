@@ -11,7 +11,7 @@ class MapCreatorCursor : public Entity {
 public:
 	MapCreatorCursor(string inImage, string inName, double inPosX, double inPosY, int col);
 
-	void Update();
+	void Update(size_t _index) override;
 	void FillLoop(vector<int> pos, int direction, char oldChar, int oldColor);
 private:
 	Vec2 vel;

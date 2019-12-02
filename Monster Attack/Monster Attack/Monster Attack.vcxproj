@@ -157,16 +157,20 @@
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="IntroScreen.cpp" />
+    <ClCompile Include="LoseScreen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapCreator.cpp" />
     <ClCompile Include="MapCreatorCursor.cpp" />
     <ClCompile Include="MapLevel.cpp" />
     <ClCompile Include="MapLevelCursor.cpp" />
+    <ClCompile Include="MultiplayerWin.cpp" />
     <ClCompile Include="Pausescreen.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="TextBox.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Titlescreen.cpp" />
+    <ClCompile Include="WinScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BattlePlayer.h" />
@@ -176,6 +180,8 @@
     <ClInclude Include="entity.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="IntroScreen.h" />
+    <ClInclude Include="LoseScreen.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="MapCreator.h" />
     <ClInclude Include="MapCreatorCursor.h" />
@@ -184,12 +190,14 @@
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Monsters.h" />
     <ClInclude Include="Move.h" />
+    <ClInclude Include="MultiplayerWin.h" />
     <ClInclude Include="Pausescreen.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="TextBox.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Titlescreen.h" />
     <ClInclude Include="Vectors.h" />
+    <ClInclude Include="WinScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

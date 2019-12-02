@@ -2,6 +2,7 @@
 
 void Titlescreen::InitScene() {
 	LoadIntoString("titlescreen.txt", title);
+	Game::shared_instance().PlayMusic("13-judgement-day", false);
 	centerOfScreen = Game::shared_instance().buffer.GetCSBI().dwSize.X / 4.f;
 }
 
@@ -30,7 +31,7 @@ void Titlescreen::UpdateScene() {
 	if (Input::GetKeyDown(VK_RETURN)) {
 		switch (selection) {
 		case 0:
-			Game::shared_instance().SwitchToScene(4, false, true);
+			Game::shared_instance().SwitchToScene(9);
 			return;
 		case 1:
 			Game::shared_instance().SwitchToScene(3, false, true);
@@ -51,6 +52,7 @@ void Titlescreen::UpdateScene() {
 }
 
 void Titlescreen::UpdateSwitch() {
+	Game::shared_instance().PlayMusic("13-judgement-day");
 	selection = 0;
 	Game::shared_instance().buffer.SetMaxCam({ 0, 0 }, { 1, 1 });
 	Game::shared_instance().buffer.SetCamPos({1, 1});

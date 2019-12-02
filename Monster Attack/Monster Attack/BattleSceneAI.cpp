@@ -68,6 +68,11 @@ void BattleSceneAI::UpdateSwitch() {
 	party2.mon[5] = theEnemy->mon[5];
 	party2.currentMonSlot = theEnemy->currentMonSlot;
 
+	if (party2.mon[0].getName() == "ERROR")
+		Game::shared_instance().PlayMusic("16-one-winged-angel");
+	else
+		Game::shared_instance().PlayMusic("14-jenova-absolute");
+
 	Game::shared_instance().buffer.SetMaxCam({ 0, 0 }, { 1, 1 });
 	Game::shared_instance().buffer.SetCamPos({ 0, 0 });
 }
@@ -84,6 +89,11 @@ void BattleSceneAI::UpdateScene() {
 			party2.GetCurMon()->alive = false;
 			for (int i = 0; i <= 6; i++) {
 				if (i == 6) {
+					if (party2.GetCurMon()->getType() == "Error") {
+						Game::shared_instance().SwitchToScene(8);
+						return;
+					}
+
 					party1.GetCurMon()->resetAll(true);
 					int ranNum{ 0 };
 					if (party2.currentMonSlot > 0)
@@ -114,7 +124,7 @@ void BattleSceneAI::UpdateScene() {
 			party1.GetCurMon()->alive = false;
 			for (int i = 0; i <= 6; i++) {
 				if (i == 6)
-					Game::shared_instance().SwitchToScene(0);
+					Game::shared_instance().SwitchToScene(7);
 				else if (party1.mon[i].alive) {
 					party1.currentMonSlot = i;
 					break;
@@ -182,7 +192,7 @@ void BattleSceneAI::showPlayerMoves(vector<Move> ms) {
 
 		mText += "Effect: " + ms[i].getEffect();
 
-		Game::shared_instance().buffer.WriteBuffer(mText, 1, 14 + static_cast<int>(i) * 6, ms[i].getColor());
+		Game::shared_instance().buffer.WriteBuffer(mText, 1, 14 + static_cast<int>(i) * 6, ms[i].getColor(), true);
 	}
 }
 
@@ -259,7 +269,7 @@ void BattleSceneAI::damageCalculator(Monster* attacker, Monster* defender, Move*
 				monEnd = i;
 			}
 
-			int monSelect{ 0 };
+			int monSelect{ monStart };
 			if (monEnd != monStart)
 				monSelect = rand() % (monEnd - monStart) + monStart;
 
@@ -392,7 +402,7 @@ void BattleSceneAI::damageCalculator(Monster* attacker, Monster* defender, Move*
 				monEnd = i;
 			}
 
-			int monSelect{ 0 };
+			int monSelect{ monStart };
 			if (monEnd != monStart)
 				monSelect = rand() % (monEnd - monStart) + monStart;
 
@@ -455,26 +465,58 @@ void BattleSceneAI::playerTurn(Party &p1, Party &p2) {
 	party1.GetCurMon()->setCurrentImage(1);
 	Game::shared_instance().buffer.WriteBuffer(party1.GetCurMon()->getImage(), 13, 17, party1.GetCurMon()->getColor());
 
-	int selection{ 0 };
-
 	drawCurrentHealth(party1, party2);
 
 	Game::shared_instance().buffer.WriteBuffer("Select move: ", 1, 12);
+
+	bool selected{ false };
+	if (p1Turn) {
+		selected = Input::GetKeyDown(VK_RETURN) || Input::GetKeyDown(VK_SPACE);
+		if (Input::GetKeyDown('1') || Input::GetKeyDown(VK_NUMPAD1)) {
+			selection = 1;
+			selected = true;
+		}
+		if (Input::GetKeyDown('2') || Input::GetKeyDown(VK_NUMPAD2)) {
+			selection = 2;
+			selected = true;
+		}
+		if (Input::GetKeyDown('3') || Input::GetKeyDown(VK_NUMPAD3)) {
+			selection = 3;
+			selected = true;
+		}
+		if (Input::GetKeyDown('4') || Input::GetKeyDown(VK_NUMPAD4)) {
+			selection = 4;
+			selected = true;
+		}
+		if (Input::GetKeyDown('S') || Input::GetKeyDown(VK_DOWN)) {
+			selection++;
+
+			if (selection > 4)
+				selection = 1;
+		}
+		if (Input::GetKeyDown('W') || Input::GetKeyDown(VK_UP)) {
+			selection--;
+
+			if (selection < 1)
+				selection = 4;
+		}
+		if (selection > 0 && !selected) {
+			string horzLength(22, ' ');
+			string backBox{ "" };
+			for (size_t i = 0; i < 5; i++)
+				backBox += horzLength + "\n";
+
+			Game::shared_instance().buffer.WriteBuffer(backBox, 1, 8 + 6 * selection, BACKGROUND_INTENSITY);
+		}
+	} 
+	else if (damageTime <= 4) {
+		selection = rand() % 4 + 1;
+		selected = true;
+	}
+
 	showPlayerMoves(party1.GetCurMon()->getMoves());
 
-	if (p1Turn) {
-		if (Input::GetKeyDown('1') || Input::GetKeyDown(VK_NUMPAD1))
-			selection = 1;
-		if (Input::GetKeyDown('2') || Input::GetKeyDown(VK_NUMPAD2))
-			selection = 2;
-		if (Input::GetKeyDown('3') || Input::GetKeyDown(VK_NUMPAD3))
-			selection = 3;
-		if (Input::GetKeyDown('4') || Input::GetKeyDown(VK_NUMPAD4))
-			selection = 4;
-	} else if (damageTime <= 4)
-		selection = rand() % 4 + 1;
-
-	if (1 <= selection && selection <= 4) {
+	if (1 <= selection && selection <= 4 && selected) {
 		bool tookTurn = false;
 
 		switch (selection) {
@@ -511,6 +553,7 @@ void BattleSceneAI::playerTurn(Party &p1, Party &p2) {
 		}
 
 		if (tookTurn) {
+			selection = 0;
 			p1Turn = !p1Turn;
 			if (p1.GetCurMon()->getMove1()->getCooldownCurrent() > 0) {
 				p1.GetCurMon()->getMove1()->setCooldownCurrent(p1.GetCurMon()->getMove1()->getCooldownCurrent() - 1);

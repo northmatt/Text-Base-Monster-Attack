@@ -1,0 +1,10 @@
+You found some magical nuggets and you started to experiment with them on your ship. However you accidently unleashed a powerful nugget that if left alone could destroy the world.
+Unfortunately for you the evil nugget destroyed and left your ship leaving you to swin after it. You finally got to the shore and you think you seen the nugget hide itself in the mountains.
+However due to your ship being wrecked you lost most of your own nuggets. You now must tame more nuggets and beat the evil nugget.
+
+-Instructions: move around on the grassy part of the map for a random battle encounter. The forest areas (dark green) have high spawn rates.
+If you look around on the mountain you'll eventually find the evil nugget. The pink sqaures near spawn are for restoring your personal nuggets' health.
+Pressing Ctrl will speed up movement and battle actions/waittime. To pick an action use 1/2/3/4 (numpad works) on the keyboard. Alternatively you can use
+up/down arrow keys or w/s keys (added in due to keeping it the same as multiplayer keys) to select an attack and return/space to accept the selected attack.
+There are different types of nuggets; fire, water, and grass. Each having an advantage. In those catagories you have subcatagories of light/dark creatures.
+Once again each having its own advantage.

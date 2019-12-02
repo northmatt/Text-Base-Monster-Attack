@@ -25,6 +25,7 @@ void BattleScene::InitScene() {
 	party2.mon[4] = monsters[4];
 	party2.mon[5] = monsters[5];
 	party2.currentMonSlot = 0;
+	p1Turn = ((rand() % 2) == 0) ? true : false;
 }
 
 void BattleScene::UpdateScene() {
@@ -37,8 +38,15 @@ void BattleScene::UpdateScene() {
 		playerTurn(party1, party2);
 		if (party2.GetCurMon()->getHealthCurrent() <= 0) {
 			party2.GetCurMon()->alive = false;
-			for (int i = 0; i < 6; i++) {
-				if (party2.mon[i].alive) {
+			for (int i = 0; i <= 6; i++) {
+				if (i == 6) {
+					BattlePlayer* thePlayer = nullptr;
+					thePlayer = new BattlePlayer;
+					thePlayer->name = party1.name;
+					Game::shared_instance().SetMainPlayer(thePlayer);
+					Game::shared_instance().SwitchToScene(6);
+				}
+				else if (party2.mon[i].alive) {
 					party2.currentMonSlot = i;
 					break;
 				}
@@ -48,8 +56,15 @@ void BattleScene::UpdateScene() {
 		playerTurn(party2, party1);
 		if (party1.GetCurMon()->getHealthCurrent() <= 0) {
 			party1.GetCurMon()->alive = false;
-			for (int i = 0; i < 6; i++) {
-				if (party1.mon[i].alive) {
+			for (int i = 0; i <= 6; i++) {
+				if (i == 6) {
+					BattlePlayer* thePlayer = nullptr;
+					thePlayer = new BattlePlayer;
+					thePlayer->name = party2.name;
+					Game::shared_instance().SetMainPlayer(thePlayer);
+					Game::shared_instance().SwitchToScene(6);
+				}
+				else if (party1.mon[i].alive) {
 					party1.currentMonSlot = i;
 					break;
 				}
@@ -116,7 +131,7 @@ void BattleScene::showPlayerMoves(vector<Move> ms) {
 
 		mText += "Effect: " + ms[i].getEffect();
 
-		Game::shared_instance().buffer.WriteBuffer(mText, 1, 14 + static_cast<int>(i) * 6, ms[i].getColor());
+		Game::shared_instance().buffer.WriteBuffer(mText, 1, 14 + static_cast<int>(i) * 6, ms[i].getColor(), true);
 	}
 }
 
@@ -344,23 +359,88 @@ void BattleScene::playerTurn(Party &p1, Party &p2) {
 	p1.GetCurMon()->setCurrentImage(1);
 	Game::shared_instance().buffer.WriteBuffer(p1.GetCurMon()->getImage(), 13, 17, p1.GetCurMon()->getColor());
 
-	int selection{ 0 };
-
 	drawCurrentHealth(party1, party2);
 
 	Game::shared_instance().buffer.WriteBuffer("Select move: ", 0, 12);
+
+	bool selected{ false };
+	{
+		if (p1Turn) {
+			selected = Input::GetKeyDown(VK_SPACE);
+			if (Input::GetKeyDown('1')) {
+				selection = 1;
+				selected = true;
+			}
+			if (Input::GetKeyDown('2')) {
+				selection = 2;
+				selected = true;
+			}
+			if (Input::GetKeyDown('3')) {
+				selection = 3;
+				selected = true;
+			}
+			if (Input::GetKeyDown('4')) {
+				selection = 4;
+				selected = true;
+			}
+			if (Input::GetKeyDown('S')) {
+				selection++;
+
+				if (selection > 4)
+					selection = 1;
+			}
+			if (Input::GetKeyDown('W')) {
+				selection--;
+
+				if (selection < 1)
+					selection = 4;
+			}
+		} 
+		else {
+			selected = Input::GetKeyDown(VK_RETURN);
+			if (Input::GetKeyDown(VK_NUMPAD1)) {
+				selection = 1;
+				selected = true;
+			}
+			if (Input::GetKeyDown(VK_NUMPAD2)) {
+				selection = 2;
+				selected = true;
+			}
+			if (Input::GetKeyDown(VK_NUMPAD3)) {
+				selection = 3;
+				selected = true;
+			}
+			if (Input::GetKeyDown(VK_NUMPAD4)) {
+				selection = 4;
+				selected = true;
+			}
+			if (Input::GetKeyDown(VK_DOWN)) {
+				selection++;
+
+				if (selection > 4)
+					selection = 1;
+			}
+			if (Input::GetKeyDown(VK_UP)) {
+				selection--;
+
+				if (selection < 1)
+					selection = 4;
+			}
+		}
+
+		if (selection > 0 && !selected) {
+			string horzLength(22, ' ');
+			string backBox{ "" };
+			for (size_t i = 0; i < 5; i++)
+				backBox += horzLength + "\n";
+
+			Game::shared_instance().buffer.WriteBuffer(backBox, 1, 8 + 6 * selection, /*BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE |*/ BACKGROUND_INTENSITY );
+		}
+	}
+
 	showPlayerMoves(p1.GetCurMon()->getMoves());
 
-	if (Input::GetKeyDown('1') || Input::GetKeyDown(VK_NUMPAD1))
-		selection = 1;
-	if (Input::GetKeyDown('2') || Input::GetKeyDown(VK_NUMPAD2))
-		selection = 2;
-	if (Input::GetKeyDown('3') || Input::GetKeyDown(VK_NUMPAD3))
-		selection = 3;
-	if (Input::GetKeyDown('4') || Input::GetKeyDown(VK_NUMPAD4))
-		selection = 4;
-
-	if (1 <= selection && selection <= 4) {
+	if (1 <= selection && selection <= 4 && selected) {
 		bool tookTurn = false;
 
 		switch (selection) {
@@ -397,6 +477,7 @@ void BattleScene::playerTurn(Party &p1, Party &p2) {
 		}
 
 		if (tookTurn) {
+			selection = 0;
 			p1Turn = !p1Turn;
 			if (p1.GetCurMon()->getMove1()->getCooldownCurrent() > 0) {
 				p1.GetCurMon()->getMove1()->setCooldownCurrent(p1.GetCurMon()->getMove1()->getCooldownCurrent() - 1);

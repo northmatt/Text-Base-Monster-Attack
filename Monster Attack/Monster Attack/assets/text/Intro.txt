@@ -1,0 +1,16 @@
+IIIIIIIIII                         tttt                                              
+I        I                      ttt   t                                              
+I        I                      t     t                                              
+II      II                      t     t                                              
+  I    Innnn  nnnnnnnn    ttttttt     ttttttt   rrrrr   rrrrrrrrr      ooooooooooo   
+  I    In   nn        nn  t                 t   r    rrr         r   oo           oo 
+  I    In              nn t                 t   r                 r o               o
+  I    Inn               ntttttt       tttttt   rr      rrrrr      ro     ooooo     o
+  I    I  n     nnnn     n      t     t          r     r     r     ro    o     o    o
+  I    I  n    n    n    n      t     t          r     r     rrrrrrro    o     o    o
+  I    I  n    n    n    n      t     t          r     r            o    o     o    o
+  I    I  n    n    n    n      t     t    ttttttr     r            o    o     o    o
+II      IIn    n    n    n      t      tttt     tr     r            o     ooooo     o
+I        In    n    n    n      tt              tr     r            o               o
+I        In    n    n    n        tt           ttr     r             oo           oo 
+IIIIIIIIIInnnnnn    nnnnnn          ttttttttttt  rrrrrrr               ooooooooooo   

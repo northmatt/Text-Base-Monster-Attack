@@ -46,9 +46,9 @@ public:
 		if (_type == "Water")
 			_color = FOREGROUND_BLUE;
 		if (_type == "Dark")
-			_color = FOREGROUND_INTENSITY;
+			_color = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
 		if (_type == "Light")
-			_color = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+			_color = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
 
 		setColor(_color);
 	}

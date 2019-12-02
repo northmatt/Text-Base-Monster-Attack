@@ -2,6 +2,9 @@
 
 #include "Scene.h"
 #include "Display.h"
+#include <Mmsystem.h>
+#include <mciapi.h>
+#pragma comment(lib, "Winmm.lib")
 
 using std::vector;
 
@@ -19,6 +22,7 @@ public:
 	Entity* GetMainEnemy() { return Enemy; }
 	void SetMainPlayer(Entity* _MP) { MainPlayer = _MP; }
 	void SetMainEnemy(Entity* _MP) { Enemy = _MP; }
+	void PlayMusic(string songName, bool stopOld = true);
 	DoubleBuffer buffer;
 	bool isRunning{ true };
 private:

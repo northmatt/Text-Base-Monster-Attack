@@ -10,7 +10,7 @@ MapCreatorCursor::MapCreatorCursor(string inImage, string inName, double inPosX,
 	colorValues.assign(2, { false, false, false, false });
 }
 
-void MapCreatorCursor::Update() {
+void MapCreatorCursor::Update(size_t _index) {
 	//movement
 	{
 		if (Input::GetKey(37))

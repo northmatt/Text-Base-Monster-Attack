@@ -13,14 +13,14 @@ MapLevelCursor::MapLevelCursor(string inImage, string inName, double inPosX, dou
 	thePlayer = new BattlePlayer;
 	thePlayer->name = "Player 1";
 	thePlayer->mon[0] = monsters[rand() % 2];
-	thePlayer->mon[1] = monsters[rand() % 2];
+
 	thePlayer->currentMonSlot = 0;
 	thePlayer->FindNumMons();
 	Game::shared_instance().SetMainPlayer(thePlayer);
 }
 
 void MapLevelCursor::Update(size_t i) {
-	if (Input::GetKeyDown(VK_F1)) {
+	/*if (Input::GetKeyDown(VK_F1)) {
 		LoadMonster();
 		Game::shared_instance().SwitchToScene(5);
 	}
@@ -32,7 +32,7 @@ void MapLevelCursor::Update(size_t i) {
 
 	if (Input::GetKeyDown(VK_F3)) {
 		static_cast<BattlePlayer*>(Game::shared_instance().GetMainPlayer())->healed = false;
-	}
+	}*/
 
 	//movement
 	{
@@ -119,18 +119,22 @@ void MapLevelCursor::LoadMonster(bool _isBoss) {
 void MapLevelCursor::LoadBattle() {
 	double ranNumCheck{ 0 };
 	int backCol{ 0 };
+	bool isBoss{ false };
 	backCol = Game::shared_instance().GetCurrentScene()->colorScreen[round(pos.x - 1) * 2 + round(pos.y - 1) * maxPos.x * 2];
 	if (backCol == BACKGROUND_GREEN) {
-		ranNumCheck = 2;
+		ranNumCheck = 1;
 	} else if (backCol == (BACKGROUND_GREEN | BACKGROUND_INTENSITY)) {
-		ranNumCheck = 4;
-	} else
+		ranNumCheck = 3;
+	} else if (backCol == (BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE) || backCol == (BACKGROUND_INTENSITY)) {
+		ranNumCheck = 8;
+		isBoss = true;
+	}
+	else
 		return;
 
 	int ranNum{ rand() % 100 };
-
 	if (ranNum <= ranNumCheck) {
-		LoadMonster();
+		LoadMonster(isBoss);
 		Game::shared_instance().SwitchToScene(5);
 	}
 }

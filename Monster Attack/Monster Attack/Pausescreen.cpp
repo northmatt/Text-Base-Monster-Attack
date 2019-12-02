@@ -46,6 +46,7 @@ void Pausescreen::UpdateScene() {
 }
 
 void Pausescreen::UpdateSwitch() {
+	Game::shared_instance().PlayMusic("21-the-north-cave");
 	selection = 0;
 	Game::shared_instance().buffer.SetMaxCam({ 0, 0 }, { 1, 1 });
 	Game::shared_instance().buffer.SetCamPos({ 1, 1 });
